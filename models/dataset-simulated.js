@@ -19,8 +19,8 @@ let database = [
 			largespalda: 45,
 			cadera: 85,
 			entrepierna: 79,
-			estatura: 173,
-		},
+			estatura: 173
+		}
 	},
 	{
 		name: 2,
@@ -38,8 +38,8 @@ let database = [
 			largespalda: 45,
 			cadera: 90,
 			entrepierna: 78,
-			estatura: 170,
-		},
+			estatura: 170
+		}
 	},
 	{
 		name: 3,
@@ -57,8 +57,8 @@ let database = [
 			largespalda: 45,
 			cadera: 93,
 			entrepierna: 81,
-			estatura: 182,
-		},
+			estatura: 182
+		}
 	},
 	{
 		name: 4,
@@ -76,8 +76,8 @@ let database = [
 			largespalda: 46,
 			cadera: 100,
 			entrepierna: 82,
-			estatura: 175,
-		},
+			estatura: 175
+		}
 	},
 	{
 		name: 5,
@@ -95,8 +95,8 @@ let database = [
 			largespalda: 46,
 			cadera: 105,
 			entrepierna: 82,
-			estatura: 178,
-		},
+			estatura: 178
+		}
 	},
 	{
 		name: 6,
@@ -114,8 +114,8 @@ let database = [
 			largespalda: 46,
 			cadera: 109,
 			entrepierna: 79,
-			estatura: 174,
-		},
+			estatura: 174
+		}
 	},
 	{
 		name: 7,
@@ -133,8 +133,8 @@ let database = [
 			largespalda: 46,
 			cadera: 113,
 			entrepierna: 83,
-			estatura: 181,
-		},
+			estatura: 181
+		}
 	},
 	{
 		name: 8,
@@ -152,8 +152,8 @@ let database = [
 			largespalda: 46,
 			cadera: 117,
 			entrepierna: 81,
-			estatura: 179,
-		},
+			estatura: 179
+		}
 	},
 	{
 		name: 9,
@@ -171,8 +171,8 @@ let database = [
 			largespalda: 47,
 			cadera: 124,
 			entrepierna: 79,
-			estatura: 181,
-		},
+			estatura: 181
+		}
 	},
 	//------- ASTM PETIT
 	{
@@ -191,8 +191,8 @@ let database = [
 			largespalda: 39,
 			cadera: 97,
 			entrepierna: 71,
-			estatura: 155,
-		},
+			estatura: 155
+		}
 	},
 	{
 		name: 11,
@@ -210,8 +210,8 @@ let database = [
 			largespalda: 39,
 			cadera: 102,
 			entrepierna: 72,
-			estatura: 158,
-		},
+			estatura: 158
+		}
 	},
 	{
 		name: 12,
@@ -229,8 +229,8 @@ let database = [
 			largespalda: 39,
 			cadera: 118,
 			entrepierna: 69,
-			estatura: 153,
-		},
+			estatura: 153
+		}
 	},
 	{
 		name: 13,
@@ -248,8 +248,8 @@ let database = [
 			largespalda: 39,
 			cadera: 85,
 			entrepierna: 69,
-			estatura: 156,
-		},
+			estatura: 156
+		}
 	},
 	{
 		name: 14,
@@ -267,8 +267,8 @@ let database = [
 			largespalda: 39,
 			cadera: 92,
 			entrepierna: 72,
-			estatura: 173,
-		},
+			estatura: 173
+		}
 	},
 	{
 		name: 15,
@@ -286,8 +286,8 @@ let database = [
 			largespalda: 40,
 			cadera: 108,
 			entrepierna: 70,
-			estatura: 171,
-		},
+			estatura: 171
+		}
 	},
 	//------- ASTM MISSY
 	{
@@ -306,8 +306,8 @@ let database = [
 			largespalda: 40,
 			cadera: 93,
 			entrepierna: 67,
-			estatura: 162,
-		},
+			estatura: 162
+		}
 	},
 	{
 		name: 17,
@@ -325,8 +325,8 @@ let database = [
 			largespalda: 41,
 			cadera: 100,
 			entrepierna: 74,
-			estatura: 168,
-		},
+			estatura: 168
+		}
 	},
 	{
 		name: 18,
@@ -344,8 +344,8 @@ let database = [
 			largespalda: 41,
 			cadera: 102,
 			entrepierna: 72,
-			estatura: 163,
-		},
+			estatura: 163
+		}
 	},
 	{
 		name: 19,
@@ -363,8 +363,8 @@ let database = [
 			largespalda: 41,
 			cadera: 106,
 			entrepierna: 75,
-			estatura: 177,
-		},
+			estatura: 177
+		}
 	},
 	{
 		name: 20,
@@ -382,8 +382,8 @@ let database = [
 			largespalda: 42,
 			cadera: 110,
 			entrepierna: 70,
-			estatura: 169,
-		},
+			estatura: 169
+		}
 	},
 	{
 		name: 21,
@@ -401,8 +401,8 @@ let database = [
 			largespalda: 40,
 			cadera: 90,
 			entrepierna: 69,
-			estatura: 154,
-		},
+			estatura: 154
+		}
 	},
 	{
 		name: 22,
@@ -420,8 +420,8 @@ let database = [
 			largespalda: 41,
 			cadera: 96,
 			entrepierna: 78,
-			estatura: 167,
-		},
+			estatura: 167
+		}
 	},
 	{
 		iname: 23,
@@ -439,8 +439,8 @@ let database = [
 			largespalda: 41,
 			cadera: 104,
 			entrepierna: 68,
-			estatura: 152,
-		},
+			estatura: 152
+		}
 	},
 	{
 		name: 24,
@@ -458,8 +458,8 @@ let database = [
 			largespalda: 42,
 			cadera: 112,
 			entrepierna: 72,
-			estatura: 167,
-		},
+			estatura: 167
+		}
 	},
 	{
 		name: 25,
@@ -477,8 +477,8 @@ let database = [
 			largespalda: 42,
 			cadera: 122,
 			entrepierna: 73,
-			estatura: 165,
-		},
+			estatura: 165
+		}
 	},
 	//------- ASTM PLUS
 	{
@@ -497,8 +497,8 @@ let database = [
 			largespalda: 42,
 			cadera: 116,
 			entrepierna: 72,
-			estatura: 165,
-		},
+			estatura: 165
+		}
 	},
 	{
 		name: 27,
@@ -516,8 +516,8 @@ let database = [
 			largespalda: 42,
 			cadera: 129,
 			entrepierna: 70,
-			estatura: 160,
-		},
+			estatura: 160
+		}
 	},
 	{
 		name: 28,
@@ -535,8 +535,8 @@ let database = [
 			largespalda: 42,
 			cadera: 140,
 			entrepierna: 69,
-			estatura: 160,
-		},
+			estatura: 160
+		}
 	},
 	{
 		name: 29,
@@ -554,8 +554,8 @@ let database = [
 			largespalda: 42,
 			cadera: 145,
 			entrepierna: 68,
-			estatura: 154,
-		},
+			estatura: 154
+		}
 	},
 	{
 		name: 30,
@@ -573,8 +573,8 @@ let database = [
 			largespalda: 43,
 			cadera: 155,
 			entrepierna: 70,
-			estatura: 157,
-		},
+			estatura: 157
+		}
 	},
 	{
 		name: 31,
@@ -592,8 +592,8 @@ let database = [
 			largespalda: 42,
 			cadera: 110,
 			entrepierna: 72,
-			estatura: 148,
-		},
+			estatura: 148
+		}
 	},
 	{
 		name: 32,
@@ -611,8 +611,8 @@ let database = [
 			largespalda: 42,
 			cadera: 120,
 			entrepierna: 75,
-			estatura: 150,
-		},
+			estatura: 150
+		}
 	},
 	{
 		name: 33,
@@ -630,8 +630,8 @@ let database = [
 			largespalda: 42,
 			cadera: 124,
 			entrepierna: 76,
-			estatura: 167,
-		},
+			estatura: 167
+		}
 	},
 	{
 		name: 34,
@@ -649,8 +649,8 @@ let database = [
 			largespalda: 43,
 			cadera: 145,
 			entrepierna: 74,
-			estatura: 164,
-		},
+			estatura: 164
+		}
 	},
 	{
 		name: 35,
@@ -668,8 +668,8 @@ let database = [
 			largespalda: 43,
 			cadera: 165,
 			entrepierna: 72,
-			estatura: 162,
-		},
+			estatura: 162
+		}
 	},
 	//------- ASTM BIG MEN
 	{
@@ -688,8 +688,8 @@ let database = [
 			largespalda: 46,
 			cadera: 120,
 			entrepierna: 79,
-			estatura: 177,
-		},
+			estatura: 177
+		}
 	},
 	{
 		name: 37,
@@ -707,8 +707,8 @@ let database = [
 			largespalda: 46,
 			cadera: 120,
 			entrepierna: 78,
-			estatura: 179,
-		},
+			estatura: 179
+		}
 	},
 	{
 		name: 38,
@@ -726,8 +726,8 @@ let database = [
 			largespalda: 47,
 			cadera: 134,
 			entrepierna: 77,
-			estatura: 169,
-		},
+			estatura: 169
+		}
 	},
 	{
 		name: 39,
@@ -745,8 +745,8 @@ let database = [
 			largespalda: 48,
 			cadera: 138,
 			entrepierna: 76,
-			estatura: 173,
-		},
+			estatura: 173
+		}
 	},
 	{
 		name: 40,
@@ -764,9 +764,9 @@ let database = [
 			largespalda: 49,
 			cadera: 154,
 			entrepierna: 74,
-			estatura: 182,
-		},
-	},
+			estatura: 182
+		}
+	}
 ];
 
 // Exportar la base de datos para poder acceder a ella desde otros archivos
