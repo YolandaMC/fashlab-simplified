@@ -91,6 +91,8 @@ header {
 	/*  */
 }
 
+/* -- */
+
 /* Solo para la página body-viewer */
 .container-viewer {
 	background-image: none;
@@ -109,6 +111,20 @@ header {
 	align-items: center;
 	justify-content: center;
 }
+
+/* -- */
+
+/* Sección de la página dataset-viewer.html */
+.fondo .section-dataset-viewer {
+	padding: 0 10px;
+}
+
+.fondo .section-dataset-viewer .datos-formulario {
+	/* width: 20%; */
+
+}
+
+/* -- */
 
 .titulo {
 	margin: 30px;

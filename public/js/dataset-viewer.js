@@ -17,7 +17,8 @@ let dataset, ranges, viewer;
 let numRanges = 3; // Luego lo cambiaras por el numero introducido en el DOM
 let labelType = 'genero'; // Luego lo cambiaras por la opcion introducida en el DOM
 //! OJO añadir condicion si numero segmentos escogidos mayor que el numero de registros en la base, debe tomarse el largo de la base como numero de segmentos
-
+//Creamos unas variables para recoger los datos seleccionados por el usuario en el formulario
+const optionModel = document.querySelector('input[type=radio][name=option-model]');
 //-------------
 
 //-------------
@@ -27,10 +28,30 @@ let labelType = 'genero'; // Luego lo cambiaras por la opcion introducida en el 
 const init = (data) => {
 	//console.log(data);
 	dataset = data;
+
 	// Funcion del modelo de Tensorflow para clasificar dataset. Esta a su vez llamará drawRanges
 	//! Ahora deberas poner un addEvent Listener en los Inputs que permitan las selecciones y en funcion de ellos llamar a las funciones modelRanges y modelRangesWithLabel
 	//modelRanges();
-	modelRangesWithLabel();
+	//modelRangesLabel();
+	//console.log(optionModel.value);
+
+	//* Evaluamos las opciones tomadas por el usuario
+	// Para ello debemos asegurarnos que antes de evaluar el valor de la opción, el usuario haya seleccionado una
+	document.addEventListener('DOMContentLoaded', function () {
+		//const optionModel = document.querySelector('input[type=radio][name=option-model]');
+		optionModel.addEventListener('change', function () {
+			// Verificar si se ha seleccionado alguna opción
+			// if (this.value) {
+			if (this.value === 'no-label-model') {
+				// Funcion del modelo de Tensorflow para clasificar dataset. Esta a su vez llamará drawRanges
+				modelRanges();
+			} else if (this.value === 'label-model') {
+				// Funcion del modelo de Tensorflow para clasificar dataset. Esta a su vez llamará drawRanges
+				modelRangesLabel();
+			}
+			//}
+		});
+	});
 };
 
 //* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS SIN ETIQUETAR.
@@ -118,7 +139,7 @@ function modelRanges() {
 }
 
 //* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS CON ETIQUETA (SEXO O GENERO SEGUN DECIDA EL USUARIO).
-function modelRangesWithLabel() {
+function modelRangesLabel() {
 	//* Paso 1: Preparar los datos
 	// Preprocesar los datos
 	// Extraer las características de los datos

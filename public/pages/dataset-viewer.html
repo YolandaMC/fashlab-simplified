@@ -32,8 +32,29 @@
 		</header>
 
 		<div class="principal-section">
-			<div class="fondo fondo-inicio container-viewer"></div>
-			<form action=""></form>
+			<div class="fondo">
+				<section class="section-dataset-viewer">
+					<form action="" class="datos-formulario">
+						<fieldset>
+							<div class="radiocontainer model-classcontainer">
+								<label class="custom-radio" for="option-model"
+									>Escoger tipo de modelo de clasificación para los datos: <br />
+									<summary class="radios">
+										<input type="radio" name="option-model" value="no-label-model"/> Modelo con datos sin
+										etiquetar&nbsp;
+										<br />
+										<input type="radio" name="option-model" value="label-model" /> Modelo con datos etiquetados por
+										"sexo" o "género"&nbsp;
+									</summary>
+								</label>
+							</div>
+						</fieldset>
+					</form>
+				</section>
+				<section class="section-dataset-viewer">
+					<div class="fondo fondo-inicio container-viewer"></div>
+				</section>
+			</div>
 		</div>
 
 		<footer class="footer">
