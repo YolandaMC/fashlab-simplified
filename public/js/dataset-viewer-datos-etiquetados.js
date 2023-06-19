@@ -40,75 +40,61 @@ function modelRanges() {
 	// Paso 1: Preparar los datos
 	// En la funcion init, hemos introducido en la variable global dataset el json data recuperado con el metodo json de D3js
 	// Extraer solo las medidas corporales de los datos sin etiquetar
-	const processedData = dataset.map((obj) => Object.values(obj.medidasCorporales));
+	const data = dataset.map((obj) => Object.values(obj.medidasCorporales));
 	// Convertir los datos a un tensor de TensorFlow.js
-	const tensorData = tf.tensor2d(processedData);
-	// Escalado de características
-	const mean = tensorData.mean(0);
-	const std = tensorData.sub(mean).square().mean(0).sqrt();
-	const scaledData = tensorData.sub(mean).div(std);
+	const tensorData = tf.tensor2d(data);
 
 	// Paso 3: Crear y entrenar el modelo
-	const numClusters = numRanges; // Definimos el números de clases rangos que deseamos. Al no disponer de datos etiquetados debemos indicar cuantas clases o rangos esperamos encontrar en los datos
-	// Aplicar el algoritmo de agrupación K-means que nos permite
-	function kmeans(dataset, k, numIterations) {
-		let centroids = dataset.slice(0, k);
-		let labels = [];
+	const numClasses = numRanges; // Definimos el números de clases rangos que deseamos. Al no disponer de datos etiquetados debemos indicar cuantas clases o rangos esperamos encontrar en los datos
+	const numFeatures = tensorData.shape[1];
+	// Declaramos un modelo tipo sequencial para clasificar nuestros datos sin etiquetar
+	const model = tf.sequential();
+	model.add(tf.layers.dense({ units: 10, inputShape: [numFeatures], activation: 'relu' }));
+	model.add(tf.layers.dense({ units: numClasses, activation: 'softmax' }));
 
-		for (let i = 0; i < numIterations; i++) {
-			labels = assignLabels(dataset, centroids);
-			centroids = computeCentroids(dataset, labels, k);
-		}
+	// Paso 4: Compilar el modelo
+	model.compile({ loss: 'categoricalCrossentropy', optimizer: 'adam', metrics: ['accuracy'] });
 
-		return { labels, centroids };
+	// Paso 5: Entrenar el modelo
+	const labels = tf.oneHot(tf.tensor1d([0, 1, 2], 'int32'), numClasses);
+	const epochs = 50; // Numero de iteracioens de entrenamiento
+	const batchSize = 16; // Cantidad de ejemplo de entrenamiento empelados en cada iteracion 8 / 16 / 32
+
+	async function trainModel() {
+		return await model.fit(tensorData, labels, { epochs, batchSize });
 	}
 
-	function assignLabels(dataset, centroids) {
-		return dataset.map((point) => {
-			const distances = centroids.map((centroid) => euclideanDistance(point, centroid));
-			const minDistance = Math.min(...distances);
-			return distances.indexOf(minDistance);
+	trainModel().then(() => {
+		// Paso 4: Hacer predicciones y ordenar las clases
+		const predictions = model.predict(tensorData);
+		const predictionsArray = Array.from(predictions.dataSync());
+		// Ordenamos los arrays de predicción en función de la variable pecho que es la más habitual. Puede darse la opcion de esto mas adelane al usuario
+		const sortedClasses = predictionsArray
+			.map((pred, index) => ({ class: index, prediction: pred }))
+			.sort((a, b) => {
+				const chestA = rawData[a.class].medidasCorporales.pecho;
+				const chestB = rawData[b.class].medidasCorporales.pecho;
+				return chestA - chestB;
+			});
+
+		sortedClasses.forEach((obj) => {
+			const classIndex = obj.class;
+			const prediction = obj.prediction;
+			const classData = rawData[classIndex];
+
+			console.log(`Clase ${classIndex}`);
+			console.log('Predicción:', prediction);
+			console.log('Nombre:', classData.name);
+			console.log('Sexo:', classData.sexo);
+			console.log('Género:', classData.genero);
+			console.log('Edad:', classData.edad);
+			console.log('Talla Habitual:', classData.tallaHabitual);
+			console.log('Medidas Corporales:', classData.medidasCorporales);
+			console.log('--------------------');
 		});
-	}
 
-	function computeCentroids(dataset, labels, k) {
-		const centroids = Array.from({ length: k }, () => []);
-
-		labels.forEach((label, i) => {
-			centroids[label].push(dataset[i]);
-		});
-
-		return centroids.map((cluster) => {
-			const sum = cluster.reduce((acc, point) => point.map((x, i) => acc[i] + x), Array(cluster[0].length).fill(0));
-			return sum.map((value) => value / cluster.length);
-		});
-	}
-
-	function euclideanDistance(pointA, pointB) {
-		return Math.sqrt(pointA.reduce((sum, value, i) => sum + Math.pow(value - pointB[i], 2), 0));
-	}
-
-	// Aplicar el algoritmo de agrupación k-means
-	const { labels, centroids } = kmeans(scaledData.arraySync(), numClusters, 10);
-
-	// Agrupar los datos originales con sus etiquetas de cluster
-	const clusteredData = dataset.map((obj, i) => {
-		const clusterLabel = labels[i];
-		return { ...obj, clusterLabel };
-	});
-
-	// Imprimir los datos clasificados y ordenados
-	clusteredData.forEach((obj) => {
-		console.log(`Instancia: ${obj.name}, Cluster: ${obj.clusterLabel}`);
-		console.log(`Medidas Corporales:`, obj.medidasCorporales);
-		console.log(`Resto de datos:`, {
-			name: obj.name,
-			sexo: obj.sexo,
-			genero: obj.genero,
-			edad: obj.edad,
-			tallaHabitual: obj.tallaHabitual,
-		});
-		console.log('------------------------');
+		//const results = 'entrenamiento';
+		//return results;
 	});
 }
 

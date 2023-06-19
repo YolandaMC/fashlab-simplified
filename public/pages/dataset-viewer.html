@@ -13,8 +13,9 @@
 		<!-- FONTS -->
 		<link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/metropolitano" type="text/css" />
 		<!-- Style css -->
-		<link href="../css/style.css" type="text/css" rel="stylesheet" media="" />
-		<!-- atributo media vacio porque el sitio web no es responsivo debido al canvas -->
+		<link href="../css/style.css" type="text/css" rel="stylesheet" />
+		<!-- Load TensorFlow.js from a script tag -->
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 	</head>
 	<body>
 		<header class="header">
@@ -31,8 +32,7 @@
 		</header>
 
 		<div class="principal-section">
-			<div class="fondo fondo-inicio">
-			</div>
+			<div class="fondo fondo-inicio container-viewer"></div>
 		</div>
 
 		<footer class="footer">
