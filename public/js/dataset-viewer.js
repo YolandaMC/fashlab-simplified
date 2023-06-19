@@ -15,7 +15,7 @@ const tf = window.tf;
 // Creo viewer que contendra un elemento que creare para el DOM donde se alojara mi svg
 let dataset, ranges, viewer;
 let numRanges = 3; // Luego lo cambiaras por el numero introducido en el DOM
-let label = 'genero';
+let labelType = 'genero';
 //! OJO añadir condicion si numero segmentos escogidos mayor que el numero de registros en la base, debe tomarse el largo de la base como numero de segmentos
 
 //-------------
@@ -25,12 +25,12 @@ let label = 'genero';
 //* DECLARACIONES *//
 // DEclaracion de init que ejecutara todo el codigo del script
 const init = (data) => {
-	console.log(data);
+	//console.log(data);
 	dataset = data;
 	// Funcion del modelo de Tensorflow para clasificar dataset. Esta a su vez llamará drawRanges
 	//! Ahora deberas poner un addEvent Listener en los Inputs que permitan las selecciones y en funcion de ellos llamar a las funciones modelRanges y modelRangesWithLabel
-	modelRanges();
-	//modelRangesWithLabel();
+	//modelRanges();
+	modelRangesWithLabel();
 };
 
 //* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS SIN ETIQUETAR.
@@ -110,15 +110,132 @@ function modelRanges() {
 		console.log('------------------------');
 	});
 
-	// Paso 5: llamar a la función que va a dibujar mis datos
+	// Paso 5: llamar a la función que va a dibujar mis datos o retornar los datos
+	//return clusteredData;
+	//console.log(clusteredData);
 	drawRanges(clusteredData);
 	// ...
 }
 
 //* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS CON ETIQUETA (SEXO O GENERO SEGUN DECIDA EL USUARIO).
 function modelRangesWithLabel() {
-	// Paso 1: Preparar los datos
-	//TODO
+	//* Paso 1: Preparar los datos
+	// Preprocesar los datos
+	// Extraer las características de los datos
+	function extractFeatures(dataset) {
+		const features = dataset.map((obj) => Object.values(obj.medidasCorporales));
+		return tf.tensor2d(features);
+	}
+
+	//* Paso 2: etiquetas según el tipo seleccionado por el usuario desde el DOM y preparación de los datos
+	let labels;
+	if (labelType === 'sexo') {
+		labels = dataset.map((obj) => obj.sexo);
+	} else if (labelType === 'genero') {
+		labels = dataset.map((obj) => obj.genero);
+	}
+
+	const features = extractFeatures(dataset);
+	/* se encarga de extraer las características de los datos. Toma el conjunto de datos dataset y devuelve un tensor bidimensional 
+	(tensor2d) llamado features que contiene las características de cada objeto en el conjunto de datos. Cada fila del tensor 
+	representa un objeto del conjunto de datos y cada columna representa una característica específica del objeto. */
+	const labelsTensor = tf.tensor1d(labels, 'float32');
+	/* Esta línea convierte las etiquetas en un tensor unidimensional (tensor1d) llamado labelsTensor. El tensor labelsTensor 
+	contiene las etiquetas numéricas correspondientes a cada objeto en el conjunto de datos. Las etiquetas se convierten a 
+	float32 para asegurarse de que coincidan con el tipo de datos esperado por el modelo. */
+
+	//* Paso 3: Convertir las etiquetas a valores numéricos
+	const uniqueLabels = Array.from(new Set(labels)); // Tomo los datos de la columna que he decidido que sea la etiqueta ("sexo" o "genero")
+	//const labelEncoder = new Map(uniqueLabels.map((label, index) => [label, index]));
+	//const encodedLabels = labels.map((label) => labelEncoder.get(label));
+	/* Paso adicional: Determinar el número de unidades en la capa de salida pues no vamos a usar labelEncoder
+		decides ajustar dinámicamente el número de unidades en la capa de salida en función de la cantidad de valores 
+		únicos en tu dataset para "sexo" o "genero"*/
+	const numClasses = uniqueLabels.length; // Se define el numero de clases en base a las distintas etiquetas de la base de datos
+
+	//* Paso 4: Crear un modelo secuencial
+	const model = tf.sequential();
+	model.add(tf.layers.dense({ units: 10, activation: 'relu', inputShape: [9] }));
+	model.add(tf.layers.dense({ units: numClasses, activation: 'softmax' }));
+	//model.add(tf.layers.dense({ units: numClusters, activation: 'softmax' }));
+	//model.add(tf.layers.dense({ units: uniqueLabels.length, activation: 'softmax' }));
+
+	//* Paso 5: Compilar el modelo
+	model.compile({ optimizer: 'adam', loss: 'sparseCategoricalCrossentropy' });
+
+	//* Paso 6: Entrenar el modelo
+	//model.fit(extractFeatures(dataset), encodedLabels, { epochs: 50 });
+	model.fit(features, labelsTensor, { epochs: 50 }); // numero de iteraciones
+
+	//* Paso 7: Realizar las predicciones en los datos de entrada
+	const predictions = model.predict(extractFeatures(dataset));
+
+	//* Paso 8: Decodificar las etiquetas predichas
+	// const decodedLabels = encodedLabels.map((encodedLabel) => {
+	// 	return Array.from(labelEncoder.keys()).find((label) => labelEncoder.get(label) === encodedLabel);
+	// });
+	const decodedLabels = Array.from(predictions.argMax(1).dataSync());
+
+	//* Paso 9: Obtener los valores de la cadena 'pecho' para ordenar las clases
+	const chestValues = dataset.map((obj) => obj.medidasCorporales.pecho);
+
+	//* Paso 10: Agrupar las predicciones y las etiquetas por clase
+	const groupedData = groupDataByClass(predictions, decodedLabels, chestValues);
+
+	//* Paso 11: Ordenar las clases por el valor de 'pecho'
+	const sortedData = sortDataByChest(groupedData);
+
+	//* Paso 12: llamar a la función que va a dibujar mis datos o retornar los datos clasificados y ordenados
+	//return sortedData;
+	console.log(sortedData);
+	//drawRanges(sortedData);
+	// ...
+
+	// Declaracion de Función para agrupar los datos por clase
+	function groupDataByClass(predictions, labels, chestValues) {
+		const groupedData = {};
+
+		for (let i = 0; i < predictions.length; i++) {
+			const prediction = predictions[i];
+			const label = labels[i];
+			const chestValue = chestValues[i];
+			const data = dataset[i]; //incluye el resto de informacion que no participa en la clasificacion, es decir "edad" , "sexo" o "genero" (según la que no se haya tomado como etiqueta) y "tallaHabitual"
+
+			if (!(label in groupedData)) {
+				groupedData[label] = {
+					predictions: [],
+					chestValues: [],
+					data: [],
+				};
+			}
+
+			groupedData[label].predictions.push(prediction);
+			groupedData[label].chestValues.push(chestValue);
+			groupedData[label].data.push(data);
+		}
+
+		return groupedData;
+	}
+
+	// Función para ordenar los datos por el valor de la cadena "pecho"
+	function sortDataByChest(groupedData) {
+		for (const label in groupedData) {
+			const data = groupedData[label];
+			const predictions = data.predictions;
+			const chestValues = data.chestValues;
+
+			const sortedIndices = chestValues
+				.map((_, i) => i)
+				.sort((a, b) => {
+					return chestValues[a] - chestValues[b];
+				});
+
+			groupedData[label].predictions = sortedIndices.map((index) => predictions[index]);
+			groupedData[label].chestValues = sortedIndices.map((index) => chestValues[index]);
+		}
+
+		return groupedData;
+	}
 }
 
 //* Declaracion funcion que dibuja los resultados de la division/rangos realizados por TensorFlow. EMPLEA D3JS
@@ -157,6 +274,7 @@ function drawRanges(clusteredData) {
 //  function json(url) {
 //     return fetch(url).then(response => response.json());
 //   }
+// const dataset = await loadJSONData('../../models/dataset-simulated.json'); // otra menera de recuperar los datos del archivo JSON
 
 //-------------
 
@@ -168,7 +286,5 @@ function drawRanges(clusteredData) {
 	que es la funcion init que hemos creado
 */
 json('../../models/dataset-simulated.json').then((data) => init(data)); // Anque primero procesaremos los dtos con el modelo de TensorFlow, nos vamlemos del método de la biblioteca D3js json para recuperar los datos de la base de datos
-
-
 
 //*  *//
