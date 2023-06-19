@@ -15,7 +15,7 @@ const tf = window.tf;
 // Creo viewer que contendra un elemento que creare para el DOM donde se alojara mi svg
 let dataset, ranges, viewer;
 let numRanges = 3; // Luego lo cambiaras por el numero introducido en el DOM
-let labelType = 'genero';
+let labelType = 'genero'; // Luego lo cambiaras por la opcion introducida en el DOM
 //! OJO añadir condicion si numero segmentos escogidos mayor que el numero de registros en la base, debe tomarse el largo de la base como numero de segmentos
 
 //-------------
