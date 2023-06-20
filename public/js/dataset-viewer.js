@@ -249,17 +249,15 @@ function modelRangesLabel() {
 	/* Paso adicional: Determinar el número de unidades en la capa de salida pues no vamos a usar labelEncoder
 		decides ajustar dinámicamente el número de unidades en la capa de salida en función de la cantidad de valores 
 		únicos en tu dataset para "sexo" o "genero"*/
-	const numClasses = uniqueLabels.length; // Se define el numero de clases en base a las distintas etiquetas de la base de datos
+	const numClasses = uniqueLabels.length; // Se define el numero de clases en base a las distintas etiquetas de la base de datos la cantidad de valores que pueda tener "sexo" o "genero"
 
 	//* Paso 4: Crear un modelo secuencial
 	const model = tf.sequential();
-	model.add(tf.layers.dense({ units: 10, activation: 'relu', inputShape: [9] }));
-	model.add(tf.layers.dense({ units: numClasses, activation: 'softmax' }));
-	//model.add(tf.layers.dense({ units: numClusters, activation: 'softmax' }));
-	//model.add(tf.layers.dense({ units: uniqueLabels.length, activation: 'softmax' }));
+	model.add(tf.layers.dense({ units: 10, activation: 'relu', inputShape: [9] })); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
+	model.add(tf.layers.dense({ units: numClasses, activation: 'softmax' })); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
 
 	//* Paso 5: Compilar el modelo
-	model.compile({ optimizer: 'adam', loss: 'sparseCategoricalCrossentropy' });
+	model.compile({ optimizer: 'adam', loss: 'sparseCategoricalCrossentropy' }); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
 
 	//* Paso 6: Entrenar el modelo
 	//model.fit(extractFeatures(dataset), encodedLabels, { epochs: 50 });
@@ -272,7 +270,7 @@ function modelRangesLabel() {
 	// const decodedLabels = encodedLabels.map((encodedLabel) => {
 	// 	return Array.from(labelEncoder.keys()).find((label) => labelEncoder.get(label) === encodedLabel);
 	// });
-	const decodedLabels = Array.from(predictions.argMax(1).dataSync());
+	const decodedLabels = Array.from(predictions.argMax(1).dataSync()); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
 
 	//* Paso 9: Obtener los valores de la cadena 'pecho' para ordenar las clases
 	const chestValues = dataset.map((obj) => obj.medidasCorporales.pecho);
@@ -286,8 +284,9 @@ function modelRangesLabel() {
 	//* Paso 12: llamar a la función que va a dibujar mis datos o retornar los datos clasificados y ordenados
 	//return sortedData;
 	console.log(sortedData);
+	//TODO
 	//drawRanges(sortedData);
-	// ...
+	//TODO
 
 	// Declaracion de Función para agrupar los datos por clase
 	function groupDataByClass(predictions, labels, chestValues) {
