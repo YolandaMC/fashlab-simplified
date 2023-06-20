@@ -14,8 +14,9 @@ const tf = window.tf;
 // Creo ranges para alojar los resutados que me devuelva el modelo TensorFlow
 // Creo viewer que contendra un elemento que creare para el DOM donde se alojara mi svg
 let dataset, ranges, viewer;
-let numRanges = 3; // Luego lo cambiaras por el numero introducido en el DOM
+let numRanges = 3; // Luego lo cambiaras por el numero introducido en el DOM. Numero de rango que deseamos dividir el dataset en el caso del modelo con datos sin etiquetar
 let labelType = 'genero'; // Luego lo cambiaras por la opcion introducida en el DOM
+let labelsTypes = ['sexo', 'genero']; // Establecemos en una lista las etiquetas que queramos como opcion para nuestro analisis de dataset con TensorFlow.js
 //! OJO añadir condicion si numero segmentos escogidos mayor que el numero de registros en la base, debe tomarse el largo de la base como numero de segmentos
 
 //-------------
@@ -72,8 +73,9 @@ const actualizarOptionModel = () => {
 				numRanges = rangeInput.value;
 				console.log(numRanges);
 				//TODO
-				//* Funcion del modelo de Tensorflow para clasificar dataset. Esta a su vez llamará drawRanges
-				//modelRanges();
+				//* Funcion del modelo de Tensorflow para clasificar dataset sin datos etiquetados. Esta a su vez llamará drawRanges
+				// Divide la dataset en tantos numRanges como el usuario haya indicado en el DOM
+				modelRanges();
 				//TODO
 			});
 			// Insertar el elemento range en el DOM
@@ -87,7 +89,6 @@ const actualizarOptionModel = () => {
 		labelContainer.innerHTML = ''; // Limpiar cualquier contenido anterior
 		labelType = undefined; // Reiniciar el valor de labelType si no se selecciona un input
 	} else if (labelModelRadio.checked) {
-		//! revisar todo el else if, te propone una funcion updateLabelType para actualizar el valor de labelType
 		console.log(labelModelRadio.value);
 
 		// Eliminar el elemento range si existe
@@ -96,76 +97,37 @@ const actualizarOptionModel = () => {
 			rangeInput.parentNode.removeChild(rangeInput);
 		}
 
-		const sexoInput = document.createElement('input');
-		sexoInput.type = 'input';
-		sexoInput.id = 'sexo-input'; // Identificador único para el input de sexo
-		sexoInput.value = 'sexo';
-		sexoInput.addEventListener('change', function () {
-			const selectedValue = this.value;
-			console.log('Selected sexo value:', selectedValue);
-			labelType = selectedValue; // Almacenar el valor en la variable global
-			console.log(labelType);
-			//TODO
-			//* Funcion del modelo de Tensorflow para clasificar dataset. Esta a su vez llamará drawRanges
-			//modelRangesLabel();
-			//TODO
-		});
-
-		const generoInput = document.createElement('input');
-		generoInput.type = 'input';
-		generoInput.id = 'genero-input'; // Identificador único para el input de género
-		generoInput.value = 'género';
-		generoInput.addEventListener('change', function () {
-			const selectedValue = this.value;
-			console.log('Selected género value:', selectedValue);
-			labelType = this.value; // Almacenar el valor del input en la variable global
-			console.log(labelType);
-			//TODO
-			//* Funcion del modelo de Tensorflow para clasificar dataset. Esta a su vez llamará drawRanges
-			//modelRangesLabel();
-			//TODO
-		});
-
-		//* Colocamos los inputs en el DOM
+		// Generamos los radio inputs para las etiquetas posibles para el modelo
 		const labelContainer = document.querySelector('#label-container');
-		labelContainer.innerHTML = ''; // Limpiar cualquier contenido anterior
-		labelContainer.appendChild(sexoInput);
-		labelContainer.appendChild(generoInput);
+		labelContainer.innerHTML = labelsTypes
+			.map(
+				(labelsTypes) => `<div>
+				 <input type="radio" name="labelType" value="${labelsTypes}" id="${labelsTypes}">
+				  <label for="${labelsTypes}">${labelsTypes}</label>
+			 </div>`
+			)
+			.join(' ');
 
-		labelType = undefined; // Reiniciar el valor de labelType si no se selecciona un input
+		// Añadimos un evento listener atento a cuadno se producen cambios de seleccion
+		const radioLabels = document.querySelectorAll('input[name="labelType"]');
+		for (const radioLabel of radioLabels) {
+			radioLabel.addEventListener('change', runSelected);
+		}
 
-		// Verificar el estado de los elementos de radio al cambiar
-		labelModelRadio.addEventListener('change', function () {
-			if (!this.checked) {
-				labelContainer.innerHTML = ''; // Limpiar los campos de texto si el elemento de radio no está seleccionado
+		function runSelected(e) {
+			console.log(e);
+			if (this.checked) {
+				console.log(this.value);
+				//Actualizamos el valor de labelType con al seleccion
+				labelType = this.value;
+				console.log(labelType);
+				//TODO
+				//* Funcion del modelo de Tensorflow para clasificar dataset con datos etiquetados. Esta a su vez llamará drawRanges
+				// Etiqueta la dataset en según la seleccion del usuario haya hecho en el DOM
+				modelRangesLabel();
+				//TODO
 			}
-		});
-		//!
-		//* Seleccionar los inputs de sexo y género por sus identificadores para que cambien con el evento change
-		const sexoInputSelected = document.querySelector('#sexo-input');
-		const generoInputSelected = document.querySelector('#genero-input');
-
-		// Agregar eventos 'change' a los inputs seleccionados
-		sexoInputSelected.addEventListener('change', function () {
-			const selectedValue = this.value;
-			console.log('Selected sexo value:', selectedValue);
-			labelType = selectedValue; // Almacenar el valor en la variable global
-			console.log(labelType);
-			// TODO: Funcion del modelo de Tensorflow para clasificar dataset. Esta a su vez llamará drawRanges
-			// modelRangesLabel();
-			// TODO
-		});
-
-		generoInputSelected.addEventListener('change', function () {
-			const selectedValue = this.value;
-			console.log('Selected género value:', selectedValue);
-			labelType = selectedValue; // Almacenar el valor del input en la variable global
-			console.log(labelType);
-			// TODO: Funcion del modelo de Tensorflow para clasificar dataset. Esta a su vez llamará drawRanges
-			// modelRangesLabel();
-			// TODO
-		});
-		//!
+		}
 	}
 };
 
