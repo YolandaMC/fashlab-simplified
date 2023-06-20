@@ -33,7 +33,7 @@ function pantallaWebcam() {
 	// Creamos un mensaje de información
 	const infoCapturas = document.createElement('h4');
 	infoCapturas.innerHTML =
-		'Pulse el botón capturar para iniciar la webcam,<br>se tomarán dos imágenes, una de frente y otra de perfil,<br>tiene 10segundos entre captura y captura para colocarse';
+		'Pulse el botón capturar para iniciar la webcam,<br>se tomarán dos imágenes, una de frente y otra de perfil derecho,<br>tiene 10segundos entre captura y captura para colocarse';
 	infoCapturas.style.margin = '20px 30px';
 	infoCapturas.style.textAlign = 'center'; // justificacion texto
 	infoCapturas.style.lineHeight = '1.5'; // interlineado texto
@@ -60,11 +60,12 @@ function pantallaWebcam() {
 
 	// Arreglo para almacenar las capturas de pantalla y los puntos seleccionados de las capturas
 	const capturas = [];
+	//TODO METER EN ptosClave LOS PUNTOS QUE CONSIDERES QUE DEBEN TOMARSE COMO REFERENCIA
 	const ptosClave = ['pecho', 'cadera', 'cintura']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
 	const ptosFrente = {};
 	const ptosPerfil = {};
 	// Tiempo entre capturas de pantalla
-	const tiempoCapturas = 2000; // AUMENTAR A 10s POR LO MENOS PARA DAR TIEMPO AL USUARIO A COLOCARSE
+	const tiempoCapturas = 2000; //TODO AUMENTAR A 10s POR LO MENOS PARA DAR TIEMPO AL USUARIO A COLOCARSE
 	// Variable para almacenar el índice de la captura actual para poder mostrarlas en el DOM una tras otra
 	let capturaActual = 0;
 
