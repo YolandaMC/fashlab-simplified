@@ -4,8 +4,6 @@
 let datosFormulario; // Variable que contendrá los datos del formualrio
 let datason; // Varieable que sirve tras implementación del back-end para enviar los datos del formulario en formato JSON
 
-//----------------------------
-
 //* DECLARACION DE FUNCIONES
 
 // FUNCIONES PARA LA RECOGIDA DE LOS DATOS DEL FORMULARIO //
@@ -26,35 +24,35 @@ const tomaDatos = (event) => {
 	console.log(decisionDatos);
 	console.log(decisionBoo);
 	//* Envolvemos el código en una promesa para asegurarnos que se han tomado lso datos
-	return new Promise((resolve, reject) => {
-		//* Evaluamos la decisión con un condicional
-		if (!decisionBoo) {
-			alert('Tus datos no serán enviados');
-			// Introduciremos los datos en un objeto (datos) para poder generar nuestro molde
-			const datosFormData = new FormData(event.target); // Pasamos los datos-formulario a un objeto tipo FormData. Target se refiere al form y si apareciese this se referiría al boton (hijos dentro del form que portan el evento)?
-			datos = Object.fromEntries(datosFormData.entries()); // datos es un objeto de Javascript que me sirve para generar mi molde. Prefiero tener fuera de la función los datos para pasarlo al script molde.js
-			console.log(datos);
-			//* Asigno lso datos a mi variable global datosFormulario
-			datosFormulario = datos;
-			//--
-			resolve(); // pantallaWebcam();
-			//--
-		} else {
-			alert('Tus datos serán enviados');
-			//* FormDataAPI es una Api que nos provee formas de obtener datos de los formularios
-			// Constructor que crea un objeto de tipo FormData
-			const datosFormData = new FormData(event.target);
-			// El método Object.fromEntries() transforma una lista de pares con [clave-valor] en un objeto.
-			datos = Object.fromEntries(datosFormData.entries()); // Datos es un objeto de Javascript que me sirve para generar mi molde
-			//const datason = JSON.stringify(datos); // Trasformo los datos a formato JSON en la variable datason para ser enviados al back-end
-			console.log(datos);
-			//* Asigno lso datos a mi variable global datosFormulario
-			datosFormulario = datos;
-			//--
-			resolve(); // pantallaWebcam();
-			//--
-		}
-	});
+
+	//* Evaluamos la decisión con un condicional
+	if (!decisionBoo) {
+		alert('Tus datos no serán enviados');
+		// Introduciremos los datos en un objeto (datos) para poder generar nuestro molde
+		const datosFormData = new FormData(event.target); // Pasamos los datos-formulario a un objeto tipo FormData. Target se refiere al form y si apareciese this se referiría al boton (hijos dentro del form que portan el evento)?
+		datos = Object.fromEntries(datosFormData.entries()); // datos es un objeto de Javascript que me sirve para generar mi molde. Prefiero tener fuera de la función los datos para pasarlo al script molde.js
+		console.log(datos);
+		//* Asigno lso datos a mi variable global datosFormulario
+		datosFormulario = datos;
+		//--
+		pantallaWebcam();
+
+		//--
+	} else {
+		alert('Tus datos serán enviados');
+		//* FormDataAPI es una Api que nos provee formas de obtener datos de los formularios
+		// Constructor que crea un objeto de tipo FormData
+		const datosFormData = new FormData(event.target);
+		// El método Object.fromEntries() transforma una lista de pares con [clave-valor] en un objeto.
+		datos = Object.fromEntries(datosFormData.entries()); // Datos es un objeto de Javascript que me sirve para generar mi molde
+		//const datason = JSON.stringify(datos); // Trasformo los datos a formato JSON en la variable datason para ser enviados al back-end
+		console.log(datos);
+		//* Asigno lso datos a mi variable global datosFormulario
+		datosFormulario = datos;
+		//--
+		pantallaWebcam();
+		//--
+	}
 };
 
 /*Funcion para extraer un solo dato del formulario (NO SE VA A EMPLEAR)*/
@@ -71,26 +69,18 @@ const tomaDatos = (event) => {
 /* Función para eliminar los elementos del DOM <form id="#datos-formulario"> 
 	y <div class=svg-container> y pasar al código de capturas de la webcam
 	COLOCAMOS ESTA FUNCION EN ARCHIVO pantalla-webcam.js PARA DIVIDIR UN POCO EL CODIGO*/
-// function pantallaWebcam() {
-// 	console.log('Ya podemos pasar al siguiente apartado ahora que tenemos los datos del formulario');
-// 	console.log(datosFormulario);
-// }
+function pantallaWebcam() {
+	console.log('Ya podemos pasar al siguiente apartado ahora que tenemos los datos del formulario');
+	console.log(datosFormulario);
+}
 
-//----------------------------
+//TODO
+//---
 
 //* RECOGIDA DE LOS DATOS DEL FORMULARIO *//
+// Promesa para obtener los datos del formulario
 // Escucha el evento 'submit' del botón del formulario y llama a la función 'tomaDatos'
 const formulario = document.querySelector('#datos-formulario');
-// formulario.addEventListener('submit', tomaDatos);
-formulario.addEventListener('submit', (event) => {
-	//El evento submit inicia toda la ejecucion del código con la recogida de los datos del formulario
-	tomaDatos(event)
-		.then(() => {
-			pantallaWebcam(); // ESTA FUNCION ESTA DECLARADA EN pantalla-webcam.js
-		})
-		.catch((error) => {
-			console.error('Error al obtener los datos del formulario', error);
-		});
-});
+formulario.addEventListener('submit', tomaDatos); //El evento submit inicia toda la ejecucion del código con la recogida de los datos del formulario
 
-//----------------------------
+//---

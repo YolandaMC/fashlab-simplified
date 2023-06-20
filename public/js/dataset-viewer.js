@@ -351,7 +351,8 @@ function drawRanges(clusteredData) {
 	const height = 500; // Alto del contenedor SVG
 
 	// Crear el contenedor SVG en el DOM
-	const svg = d3.select('.container-viewer').append('svg').attr('width', width).attr('height', height); //.select('body')
+	//const svg = d3.select('.container-viewer').append('svg').attr('width', width).attr('height', height); //.select('body')
+	const svg = d3.select('.container-viewer').append('svg').attr('width', width).attr('height', height).attr('class', "svg-container"); 
 
 	// Definir colores para cada cluster
 	const colors = ['red', 'green', 'blue', 'yellow'];

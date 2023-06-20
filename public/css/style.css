@@ -107,9 +107,14 @@ header {
 	justify-content: center;
 }
 
-.svg-container {
+
+/*Estilo contenedor derecho en manual-measurements*/
+.right-container {
 	align-items: center;
 	justify-content: center;
+	margin: 20px;
+	background-color: white;
+	height: 100%;
 }
 
 /* -- */
@@ -357,12 +362,6 @@ input[type='radio']:checked:before {
 	text-align: center;
 }
 
-/*Estilo contenedor derecho*/
-.svgcontainer {
-	margin: 20px;
-	background-color: white;
-	height: 100%;
-}
 
 /* ----------------------------- Footer ----------------------------- */
 footer {
