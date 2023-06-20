@@ -107,9 +107,21 @@ header {
 	justify-content: center;
 }
 
-
 /*Estilo contenedor derecho en manual-measurements*/
+/* .section-left,
+.section-right {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	margin: 20px;
+	background-color: white;
+	height: 100%;
+} */
+
 .right-container {
+	display: flex;
+	flex-direction: row;
 	align-items: center;
 	justify-content: center;
 	margin: 20px;
@@ -126,7 +138,6 @@ header {
 
 .fondo .section-dataset-viewer .datos-formulario {
 	/* width: 20%; */
-
 }
 
 /* -- */
@@ -361,7 +372,6 @@ input[type='radio']:checked:before {
 	padding: 0 10px 15px 10px;
 	text-align: center;
 }
-
 
 /* ----------------------------- Footer ----------------------------- */
 footer {

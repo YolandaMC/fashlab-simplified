@@ -1,8 +1,15 @@
 'use strict';
 
+/* ESTE SCRIPT RECOGE LOS DATOS DEL FORMULARIO DEL ARCHIVO 
+	manual-measurements.html Y LOS RECOGE EN LA VARIABLE
+	datosFormulario DESPUES LLAMA A LA FUNCION pantallaWebcam()
+	QUE SE ENCUENTRA DECLARADA EN pantalla-webcam.js*/
+
+//----------------------------
+
 //* SCRIPT PARA LA RECOGER LA INTRODUCCION MANUAL DE MEDIDAS DEL USUARIO DESDE EL FORMULARIO
 let datosFormulario; // Variable que contendrá los datos del formualrio
-let datason; // Varieable que sirve tras implementación del back-end para enviar los datos del formulario en formato JSON
+//let datason; // Varieable que sirve tras implementación del back-end para enviar los datos del formulario en formato JSON
 
 //----------------------------
 
@@ -33,7 +40,7 @@ const tomaDatos = (event) => {
 			// Introduciremos los datos en un objeto (datos) para poder generar nuestro molde
 			const datosFormData = new FormData(event.target); // Pasamos los datos-formulario a un objeto tipo FormData. Target se refiere al form y si apareciese this se referiría al boton (hijos dentro del form que portan el evento)?
 			datos = Object.fromEntries(datosFormData.entries()); // datos es un objeto de Javascript que me sirve para generar mi molde. Prefiero tener fuera de la función los datos para pasarlo al script molde.js
-			console.log(datos);
+			// console.log(datos);
 			//* Asigno lso datos a mi variable global datosFormulario
 			datosFormulario = datos;
 			//--
@@ -47,7 +54,7 @@ const tomaDatos = (event) => {
 			// El método Object.fromEntries() transforma una lista de pares con [clave-valor] en un objeto.
 			datos = Object.fromEntries(datosFormData.entries()); // Datos es un objeto de Javascript que me sirve para generar mi molde
 			//const datason = JSON.stringify(datos); // Trasformo los datos a formato JSON en la variable datason para ser enviados al back-end
-			console.log(datos);
+			// console.log(datos);
 			//* Asigno lso datos a mi variable global datosFormulario
 			datosFormulario = datos;
 			//--
