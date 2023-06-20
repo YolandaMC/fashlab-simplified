@@ -35,6 +35,12 @@ svg.setAttribute('viewBox', svgViewBox.minX + ' ' + svgViewBox.minY + ' ' + svgV
 // -----------------------
 
 //* SELECCIONAMOS LOS ELEMENTOS DEL FORMULARIO PARA CAPTURAR LAS MEDIDAS QUE SE ESTEN INTRODUCIENDO*//
+//TODO
+// SELECCIÓN DE TODOS LOS SLIDERS JUNTOS
+const inputsRange = document.querySelectorAll('input[type=range]'); //Node list contiene todos los sliders/ranges de mi html manipulation-measurements
+console.log(inputsRange);
+
+//! ELIMINAR ESTATURA Y CUELLO DEL DOM PUES EN ESTE CASO NO LO ESTAS EMPLEANDO
 // MEDIDAS HORIZONTALES
 const medidaPecho = document.querySelector('input[type=range][name=pecho]'); //getElementById
 const medidaCintura = document.querySelector('input[type=range][name=cintura]');
@@ -107,12 +113,7 @@ const medidasHz = {
 	seppecho: 17, // 17
 };
 
-// -----------------------
-dibujarSVG();
-// -----------------------
-
-//TODO Incluyo todo dentro de mi función dibujarSVG para que a cada cambio de slider recalcule y redibuje todo
-
+//TODO Incluyo todo dentro de mi funcion dibujarSVG para que a cada cambio de slider recalcule y redibuje todo
 function dibujarSVG() {
 	//!
 	// Eliminar todos los elementos hijos del SVG en cada llamada a la función, es decir en cada cambio de slider
@@ -1104,91 +1105,42 @@ function dibujarSVG() {
 	svg.appendChild(moldeEntalles);
 }
 
-//TODO EVENTO QUE A CADA CAMBIO DE LOS SLIDER LLAMA A LA FUNCIÓN DE DIBUJAR SVG*//
+//* Llamo en un primer momento a la funcion para que dibuje el patron con los values definidos por defecto para los sliders
 
-//* MEDIDAS VERTICALES*//
-medidaCuello.addEventListener('input', function () {
-	//* MEDIDAS VERTICALES*//
-	medidasVr.cuello = medidaCuello.value;
-	// medidasVr.hombro = medidaHombro.value;
-	// medidasVr.estatura = medidaEstatura.value;
-	// medidasVr.largespalda = medidaLargEsp.value;
-	// medidasVr.largdelantero = medidaLargDel.value;
-	// medidasVr.costadillo = medidaCostadillo.value;
-	// medidasVr.pierna = medidaPierna.value;
-	// medidasVr.entrepierna = medidaEntrepierna.value;
-	// medidasVr.brazo = medidaBrazo.value;
-	//* MEDIDAS HORIZONTALES*//
-	// medidasHz.pecho = medidaPecho.value;
-	// medidasHz.cintura = medidaCintura.value;
-	// medidasHz.cadera = medidaCadera.value;
-	// medidasHz.espalda = medidaEspalda.value;
-	// medidasHz.seppecho = medidaSeppecho.value;
-	dibujarSVG();
-});
+// -----------------------
+dibujarSVG();
+// -----------------------
 
-medidaHombro.addEventListener('input', function () {
-	medidasVr.hombro = medidaHombro.value;
-	dibujarSVG();
-});
+//TODO EVENTO QUE A CADA CAMBIO DE LOS SLIDER LLAMA A LA FUNCION DE DIBUJAR SVG*//
+//* Función para manejar el cambio en los inputs de tipo range
+function handleInputChange() {
+	// Recorrer los inputs de tipo range y obtener sus valores
+	inputsRange.forEach(function (input) {
+		var valor = input.value;
+		// Realizar la lógica necesaria con cada valor de input
+		console.log(valor);
+		//* MEDIDAS VERTICALES*//
+		medidasVr.cuello = medidaCuello.value;
+		medidasVr.hombro = medidaHombro.value;
+		medidasVr.estatura = medidaEstatura.value;
+		medidasVr.largespalda = medidaLargEsp.value;
+		medidasVr.largdelantero = medidaLargDel.value;
+		medidasVr.costadillo = medidaCostadillo.value;
+		medidasVr.pierna = medidaPierna.value;
+		medidasVr.entrepierna = medidaEntrepierna.value;
+		medidasVr.brazo = medidaBrazo.value;
+		//* MEDIDAS HORIZONTALES*//
+		medidasHz.pecho = medidaPecho.value;
+		medidasHz.cintura = medidaCintura.value;
+		medidasHz.cadera = medidaCadera.value;
+		medidasHz.espalda = medidaEspalda.value;
+		medidasHz.seppecho = medidaSeppecho.value;
+		//TODO sigue fallando
+		dibujarSVG();
+	});
+}
 
-medidaEstatura.addEventListener('input', function () {
-	medidasVr.estatura = medidaEstatura.value;
-	dibujarSVG();
-});
-
-medidaLargEsp.addEventListener('input', function () {
-	medidasVr.largespalda = medidaLargEsp.value;
-	dibujarSVG();
-});
-
-medidaLargDel.addEventListener('input', function () {
-	medidasVr.largdelantero = medidaLargDel.value;
-	dibujarSVG();
-});
-
-medidaCostadillo.addEventListener('input', function () {
-	medidasVr.costadillo = medidaCostadillo.value;
-	dibujarSVG();
-});
-
-medidaPierna.addEventListener('input', function () {
-	medidasVr.pierna = medidaPierna.value;
-	dibujarSVG();
-});
-
-medidaEntrepierna.addEventListener('input', function () {
-	medidasVr.entrepierna = medidaEntrepierna.value;
-	dibujarSVG();
-});
-
-medidaBrazo.addEventListener('input', function () {
-	medidasVr.brazo = medidaBrazo.value;
-	dibujarSVG();
-});
-
-//* MEDIDAS HORIZONTALES*//
-medidaPecho.addEventListener('input', function () {
-	medidasHz.pecho = medidaPecho.value;
-	dibujarSVG();
-});
-
-medidaCintura.addEventListener('input', function () {
-	medidasHz.cintura = medidaCintura.value;
-	dibujarSVG();
-});
-
-medidaCadera.addEventListener('input', function () {
-	medidasHz.cadera = medidaCadera.value;
-	dibujarSVG();
-});
-
-medidaEspalda.addEventListener('input', function () {
-	medidasHz.espalda = medidaEspalda.value;
-	dibujarSVG();
-});
-
-medidaSeppecho.addEventListener('input', function () {
-	medidasHz.seppecho = medidaSeppecho.value;
-	dibujarSVG();
+// Agregar el evento a cada input de tipo range
+inputsRange.forEach(function (input) {
+	input.addEventListener('input', handleInputChange);
 });

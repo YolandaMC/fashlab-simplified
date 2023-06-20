@@ -14,8 +14,9 @@ const tf = window.tf;
 // Creo ranges para alojar los resutados que me devuelva el modelo TensorFlow
 // Creo viewer que contendra un elemento que creare para el DOM donde se alojara mi svg
 let dataset, ranges, viewer;
-let numRanges = 3; // Luego lo cambiaras por el numero introducido en el DOM. Numero de rango que deseamos dividir el dataset en el caso del modelo con datos sin etiquetar
-let labelType = 'genero'; // Luego lo cambiaras por la opcion introducida en el DOM
+let numRanges, labelType; // Alojaran las opciones del usuario establecidas en el DOM respecto a cada modelo de clasifiacción (Número de clases o )
+//let numRanges = 3; // Luego lo cambiaras por el numero introducido en el DOM. Numero de rango que deseamos dividir el dataset en el caso del modelo con datos sin etiquetar
+//let labelType = 'genero'; // Luego lo cambiaras por la opcion introducida en el DOM
 let labelsTypes = ['sexo', 'genero']; // Establecemos en una lista las etiquetas que queramos como opcion para nuestro analisis de dataset con TensorFlow.js
 //! OJO añadir condicion si numero segmentos escogidos mayor que el numero de registros en la base, debe tomarse el largo de la base como numero de segmentos
 
@@ -233,7 +234,7 @@ function modelRangesLabel() {
 		labels = dataset.map((obj) => obj.genero);
 	}
 
-	const features = extractFeatures(dataset);
+	const features = extractFeatures(dataset); // convertir los datos en un tensor bidimensional
 	/* se encarga de extraer las características de los datos. Toma el conjunto de datos dataset y devuelve un tensor bidimensional 
 	(tensor2d) llamado features que contiene las características de cada objeto en el conjunto de datos. Cada fila del tensor 
 	representa un objeto del conjunto de datos y cada columna representa una característica específica del objeto. */
@@ -251,6 +252,10 @@ function modelRangesLabel() {
 		únicos en tu dataset para "sexo" o "genero"*/
 	const numClasses = uniqueLabels.length; // Se define el numero de clases en base a las distintas etiquetas de la base de datos la cantidad de valores que pueda tener "sexo" o "genero"
 
+	//! REVISAR EN FUNCIÓN DE
+	//! https://www.youtube.com/watch?v=saN-lPvgdN8
+	//! https://medium.com/dida-machine-learning/how-to-distribute-a-tensorflow-model-as-a-javascript-web-app-b045a1a94eec
+	//! https://medium.com/analytics-vidhya/classification-model-on-custom-dataset-using-tensorflow-js-9458da5f2301
 	//* Paso 4: Crear un modelo secuencial
 	const model = tf.sequential();
 	model.add(tf.layers.dense({ units: 10, activation: 'relu', inputShape: [9] })); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
@@ -354,6 +359,9 @@ function drawRanges(clusteredData) {
 	// Calcular el tamaño de cada círculo en función del número de instancias en el cluster
 	const maxInstances = d3.max(clusteredData, (d) => d.clusterLabel);
 	const circleRadius = Math.min(width, height) / (maxInstances * 2);
+	//TODO
+
+	//TODO
 
 	// Dibujar los círculos en el SVG, uno por cada instancia clasificada
 	svg
