@@ -5,7 +5,7 @@
 // Obtener elementos del DOM
 const botonCapturar = document.getElementById('boton-capturar');
 const contenedorVideo = document.getElementById('contenedor-video');
-const canvasCapturas = document.getElementById('canvasCapturas');
+const canvasCapturas = document.getElementById('canvas-capturas');
 const ctxCapturas = canvasCapturas.getContext('2d');
 
 // Arreglo para almacenar las capturas de pantalla y los puntos seleccionados de las capturas

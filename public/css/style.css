@@ -176,40 +176,31 @@ header {
 }
 
 /* Solo para página manual-measurements */
-.fondo section {
-	align-self: center;
+/*Estilo contenedor derecho e izquierdo en manual-measurements */
+.section-left,	.section-right {
+	display: flex;
+	flex-direction: column;
+	/* align-items: center; */
+	justify-content: center;
+	/* align-self: center; */
 	width: 50%;
 	height: 100%;
 }
 
-/*Estilo contenedor derecho e izquierdo en manual-measurements */
-/* .section-left,
 .section-right {
-	display: flex;
-	flex-direction: row;
 	align-items: center;
-	justify-content: center;
-	margin: 20px;
-	background-color: white;
-	height: 100%;
-} */
-
-.section-left,
-.section-right {
-	width: 100%;
-	height: 100%;
 }
 
 /* Contiene distitnos elementos que se van sucediendo en la aprte derecha de manual-measurements */
-.right-container {
+/* .right-container {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	margin: 20px;
-	background-color: white;
-	height: 100%;
-}
+	margin: 20px; */
+	/* background-color: white; */
+	/* height: 100%;
+} */
 
 /*Estilo contenedor izquierdo*/
 .datos-formulario {
