@@ -51,7 +51,6 @@ function pantallaWebcam() {
 	//TODO METER AQUI TODO EL CODIGO DE datos-click.js
 
 	//* SCRIPT PARA LA TOMA DE IMAGENES DE FRENTE Y PERFIL DEL USUARIO DESDE LA WEBCAM ASI COMO LOS PUNTOS CLAVE QUE ESTE INDIQUE
-
 	// Obtener elementos del DOM
 	//const botonCapturar = document.getElementById('boton-capturar'); // Lo he creado mediante JS arriba
 	//const contenedorVideo = document.getElementById('contenedor-video'); // Lo he creado mediante JS arriba
@@ -61,6 +60,7 @@ function pantallaWebcam() {
 
 	// Arreglo para almacenar las capturas de pantalla y los puntos seleccionados de las capturas
 	const capturas = [];
+	const ptosClave = ['pecho', 'cadera', 'cintura']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
 	const ptosFrente = {};
 	const ptosPerfil = {};
 	// Tiempo entre capturas de pantalla
@@ -192,10 +192,19 @@ function pantallaWebcam() {
 		const rect = canvasCapturas.getBoundingClientRect();
 		const x = event.clientX - rect.left;
 		const y = event.clientY - rect.top;
-		const punto = `pto${Object.keys(ptosFrente).length + 1}`;
-		ptosFrente[punto] = [x, y];
-		dibujarPunto(x, y);
-		if (Object.keys(ptosFrente).length === 10) {
+
+		// Asi los puntos se gusrdan como punto 1, punto 2, vamos a guardarlos con las medidas que corresponde gracias a un arreglo de arriba y la función forEach que permite recorrerlo
+		// const punto = `pto${Object.keys(ptosFrente).length + 1}`;
+		// ptosFrente[punto] = [x, y];
+		// Asignar valores a las propiedades específicas del objeto usando el arreglo de medidas
+		// Verificar si ya se han seleccionado todos los puntos clave
+		if (Object.keys(ptosFrente).length < ptosClave.length) {
+			const punto = ptosClave[Object.keys(ptosFrente).length];
+			ptosFrente[punto] = [x, y];
+			dibujarPunto(x, y);
+		}
+
+		if (Object.keys(ptosFrente).length === ptosClave.length) {
 			setTimeout(function () {
 				capturaActual++;
 				// Limpiar el canvas
@@ -214,10 +223,20 @@ function pantallaWebcam() {
 		const rect = canvasCapturas.getBoundingClientRect();
 		const x = event.clientX - rect.left;
 		const y = event.clientY - rect.top;
-		const punto = `pto${Object.keys(ptosPerfil).length + 1}`;
-		ptosPerfil[punto] = [x, y];
-		dibujarPunto(x, y);
-		if (Object.keys(ptosPerfil).length === 10) {
+
+		// Asi los puntos se gusrdan como punto 1, punto 2, vamos a guardarlos con las medidas que corresponde gracias a un arreglo de arriba y la función forEach que permite recorrerlo
+		// const punto = `pto${Object.keys(ptosPerfil).length + 1}`;
+		// ptosPerfil[punto] = [x, y];
+		// Asignar valores a las propiedades específicas del objeto usando el arreglo de medidas
+		// Verificar si ya se han seleccionado todos los puntos clave
+		if (Object.keys(ptosPerfil).length < ptosClave.length) {
+			const punto = ptosClave[Object.keys(ptosPerfil).length];
+			ptosPerfil[punto] = [x, y];
+			dibujarPunto(x, y);
+		}
+
+		// Verificar si se han seleccionado todos los puntos clave
+		if (Object.keys(ptosPerfil).length === ptosClave.length) {
 			canvasCapturas.removeEventListener('click', manejarClickPerfil);
 			mostrarResultados();
 		}
