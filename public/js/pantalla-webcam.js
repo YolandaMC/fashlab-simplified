@@ -58,12 +58,12 @@ function pantallaWebcam() {
 	//const ctxCapturas = canvasCapturas.getContext('2d'); // Lo voy a crear más tarde mediante JS
 	let canvasCapturas, ctxCapturas; // Van a contener un canvas y su getContext('2d') Lo voy a crear más tarde mediante JS
 
-	// Arreglo para almacenar las capturas de pantalla y los puntos seleccionados de las capturas
-	const capturas = [];
-	//TODO METER EN ptosClave LOS PUNTOS QUE CONSIDERES QUE DEBEN TOMARSE COMO REFERENCIA
-	const ptosClave = ['pecho', 'cadera', 'cintura']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
-	const ptosFrente = {};
-	const ptosPerfil = {};
+	//* ARREGLOS PARA ALMACENAR LAS CAPTURAS DE PANTALLA Y LOS PUNTOS SELECCIONADOS EN LAS CAPTURAS
+	//TODO NOS LLEVAMOS TODAS ESTAS VARIABLES AL SCRIPT datos-formulario.js PARA QUE SEAN GLOBALES Y ACCESIBLES PARA TODOS
+	// const capturas = [];
+	// const ptosClave = ['pecho', 'cadera', 'cintura']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
+	// const ptosFrente = {};
+	// const ptosPerfil = {};
 	// Tiempo entre capturas de pantalla
 	const tiempoCapturas = 2000; //TODO AUMENTAR A 10s POR LO MENOS PARA DAR TIEMPO AL USUARIO A COLOCARSE
 	// Variable para almacenar el índice de la captura actual para poder mostrarlas en el DOM una tras otra
@@ -239,7 +239,8 @@ function pantallaWebcam() {
 		// Verificar si se han seleccionado todos los puntos clave
 		if (Object.keys(ptosPerfil).length === ptosClave.length) {
 			canvasCapturas.removeEventListener('click', manejarClickPerfil);
-			mostrarResultados();
+			mostrarResultados(); // muestra los objetos con ptos capturados por consola
+			//TODO SEGUIR AQUI CON EL RESTO DE CODIGO. SE HA DECIDIDO LLAMAR AL SIGUIETE SCRIPT DESDE datos-formulario.js
 		}
 	}
 
@@ -255,8 +256,6 @@ function pantallaWebcam() {
 	function mostrarResultados() {
 		console.log('Puntos del frente:', ptosFrente);
 		console.log('Puntos del perfil:', ptosPerfil);
-
-		//TODO SEGUIR AQUI CON EL RESTO DE CODIGO
 	}
 
 	//Función para crear el elemento <span> que me da un aviso de espera para que se inice la conexión de la webcam

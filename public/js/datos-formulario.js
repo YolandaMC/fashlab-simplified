@@ -8,8 +8,22 @@
 //----------------------------
 
 //* SCRIPT PARA LA RECOGER LA INTRODUCCION MANUAL DE MEDIDAS DEL USUARIO DESDE EL FORMULARIO
+
+//----------------------------
+
+//* DECLARACION DE VARIABLES *//
+
+//* Para datos-formulario.js
 let datosFormulario; // Variable que contendrá los datos del formualrio
 //let datason; // Varieable que sirve tras implementación del back-end para enviar los datos del formulario en formato JSON
+
+//* Para pantalla-webcam.js
+//* ARREGLOS PARA ALMACENAR LAS CAPTURAS DE PANTALLA Y LOS PUNTOS SELECCIONADOS EN LAS CAPTURAS
+//Se usan en pantalla-webcam.js
+const capturas = [];
+const ptosClave = ['pecho', 'cadera', 'cintura']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
+const ptosFrente = {};
+const ptosPerfil = {};
 
 //----------------------------
 
@@ -93,7 +107,17 @@ formulario.addEventListener('submit', (event) => {
 	//El evento submit inicia toda la ejecucion del código con la recogida de los datos del formulario
 	tomaDatos(event)
 		.then(() => {
-			pantallaWebcam(); // ESTA FUNCION ESTA DECLARADA EN pantalla-webcam.js
+			//pantallaWebcam(); // ESTA FUNCION ESTA DECLARADA EN pantalla-webcam.js
+			//TODO ANALIZAMOS SI LAS VARIABLES capturas, ptosFrente y ptosPerfil CONTIENEN DATOS (SE HA REALIZADO CORRECTAMENTE TODO EL PROCESO DE pantallaWebcam() SINO VOLVEMOS A LLAMAR A LA FUNCION)
+			// if(capturas & ptosFrente & ptosPerfil){ //condicion apra saber si pantallaWebcam ha capturado datos
+			// 	console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
+			// }else{
+			// 	pantallaWebcam(); // se vuelve a llamar a la funcion apra rellenar los objetos capturas, ptosFrente y ptosPerfil
+			// }
+			while (!capturas || !ptosFrente || !ptosPerfil) { //! MAL HECHO WHILE
+				pantallaWebcam(); // se llama a la funcion mientras alguno de los objetos capturas, ptosFrente y ptosPerfil este vacio
+			}
+			console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
 		})
 		.catch((error) => {
 			console.error('Error al obtener los datos del formulario', error);
