@@ -11,6 +11,10 @@
 
 //----------------------------
 
+//Importamos la libreria TensorFlow.js
+const tf = window.tf; // necesario?
+const poseDetection = window.poseDetection; // necesario?
+
 //* DECLARACION DE VARIABLES *//
 
 //* Para datos-formulario.js
@@ -28,10 +32,13 @@ const ptosPerfil = {};
 
 //Se usan en images-tensorflow.js
 // Alamcenar a los puntos clave (landmarks) y conexiones del esqueleto despues de usar Pose-detection
-const keypointsFrente = [];
-const keypointsPerfil = [];
-const skeletonFrente = []; // No lo vas a usar
-const skeletonPerfil = []; // No lo vas a usar
+let posesFrente, posesPerfil; // {score, keypoints, keypoints3D}
+let keypointsFrente, keypointsPerfil; // {x, y, z, score, name}
+let keypoints3DFrente, keypoints3DPerfil; // {x, y, z, score, name}
+// Almacenar segmentacion despues de usar Body-segmentation
+let bodySegmentationFrente , bodySegmentationPerfil;
+let bodySegmentacionPartesFrente, bodySegmentacionPartesPerfil;
+let bodyMaskFrente, bodyMaskPerfil;
 
 //----------------------------
 
@@ -135,9 +142,9 @@ formulario.addEventListener('submit', async (event) => {
 	try {
 		await tomaDatos(event);
 		await pantallaWebcam();
-		//console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
-		await otraFuncion();
-		//await imagesTensorFlow();
+		console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
+		await imagesTensorFlow();
+		await saberPorDondeVamos();// CUIDADO QUE SE HA EJECUTADO ANTES QUE imagesTensorFlow();
 	} catch (error) {
 		console.error('Error en la ejecución del formulario', error);
 	}
@@ -145,6 +152,6 @@ formulario.addEventListener('submit', async (event) => {
 
 //----------------------------
 
-function otraFuncion() {
-	console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
+function saberPorDondeVamos() {
+	console.log('Hemos llegado hasta aquí!');
 }

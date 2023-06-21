@@ -18,8 +18,11 @@
 		<!-- CARGAMOS TENSORFLOW.JS Y LOS MODELOS POSENET Y BODY-SEGMENTATION -->
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 		<!-- Pose-detection -->
+		<!-- Require the peer dependencies of pose-detection. -->
+		<!-- Require the peer dependencies of pose-detection. -->
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+		<!-- You must explicitly require a TF.js backend if you're not using the TF.js union bundle. -->
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
 		<!-- Body-segmentation -->
@@ -307,8 +310,8 @@
 		<!-- Debes colocar en orden de "llamada" los scripts si quieres que funcione correctamente, es decir el prinipal que se inicia con el envio del formulario el ultimo datos-formulario.js el último-->
 		<script type="text/javascript" src="../js/reactividad-web.js"></script>
 		<!-- Scripts DENTRO DE LA CARPETA manual-measurements -->
-		<!-- <script type="text/javascript" src="../js/manual-measurements/images-tensorflow.js"></script> -->
 		<script type="text/javascript" src="../js/manual-measurements/pantalla-webcam.js"></script>
+		<script type="text/javascript" src="../js/manual-measurements/images-tensorflow.js"></script>
 		<script type="text/javascript" src="../js/manual-measurements/datos-formulario.js"></script>
 	</body>
 </html>
