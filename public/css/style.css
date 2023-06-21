@@ -371,7 +371,7 @@ input[type='radio']:checked:before {
 	text-align: center;
 }
 
-/* Solo para la página manual-measurements cuando se ejecuta pantalla-webcam boton capturar */
+/* Solo para la página manual-measurements.html cuando se ejecuta pantalla-webcam.js boton capturar */
 #boton-capturar {
 	margin: 20px 30px;
 	padding: 5px 10px;
@@ -397,6 +397,22 @@ input[type='radio']:checked:before {
 	box-shadow: 5px 5px #e1e1e154;
 	color: #878787;
 }
+
+/* Animación de carga de manual-measurements.html cuando se ejecuta el script images-tensorflow.js */
+.loader {
+	margin: 100px;
+	border: 16px solid #d0d0d0;
+	border-top: 16px solid #878787;
+	border-radius: 50%;
+	width: 120px;
+	height: 120px;
+	animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+  }
 
 /* ----------------------------- Footer ----------------------------- */
 footer {

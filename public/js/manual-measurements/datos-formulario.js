@@ -36,9 +36,9 @@ let posesFrente, posesPerfil; // {score, keypoints, keypoints3D}
 let keypointsFrente, keypointsPerfil; // {x, y, z, score, name}
 let keypoints3DFrente, keypoints3DPerfil; // {x, y, z, score, name}
 // Almacenar segmentacion despues de usar Body-segmentation
-let bodySegmentationFrente , bodySegmentationPerfil;
-let bodySegmentacionPartesFrente, bodySegmentacionPartesPerfil;
-let bodyMaskFrente, bodyMaskPerfil;
+let segmentationFrente , segmentationPerfil;
+let segmentacionPartesFrente, segmentacionPartesPerfil;
+let maskFrente, maskPerfil;
 
 //----------------------------
 
