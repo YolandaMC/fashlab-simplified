@@ -61,7 +61,8 @@ function imagesTensorFlow() {
     // Aquí puedes procesar los puntos clave y las conexiones del esqueleto según tus necesidades
 
     // Utilizar el módulo tf.bodySegmentation
-    const segmentation = await tf.bodySegmentation.segmentPerson(imagenFrontal);
+    const segmentationFrente = await tf.bodySegmentation.segmentPerson(imgFrente);
+    const segmentationPerfil = await tf.bodySegmentation.segmentPerson(imgPerfil);
 
     // Utilizar el resultado de la segmentación
     // Aquí puedes procesar la segmentación según tus necesidades
