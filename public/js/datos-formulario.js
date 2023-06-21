@@ -103,25 +103,50 @@ const tomaDatos = (event) => {
 // Escucha el evento 'submit' del botón del formulario y llama a la función 'tomaDatos'
 const formulario = document.querySelector('#datos-formulario');
 // formulario.addEventListener('submit', tomaDatos);
-formulario.addEventListener('submit', (event) => {
-	//El evento submit inicia toda la ejecucion del código con la recogida de los datos del formulario
-	tomaDatos(event)
-		.then(() => {
-			//pantallaWebcam(); // ESTA FUNCION ESTA DECLARADA EN pantalla-webcam.js
-			//TODO ANALIZAMOS SI LAS VARIABLES capturas, ptosFrente y ptosPerfil CONTIENEN DATOS (SE HA REALIZADO CORRECTAMENTE TODO EL PROCESO DE pantallaWebcam() SINO VOLVEMOS A LLAMAR A LA FUNCION)
-			// if(capturas & ptosFrente & ptosPerfil){ //condicion apra saber si pantallaWebcam ha capturado datos
-			// 	console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
-			// }else{
-			// 	pantallaWebcam(); // se vuelve a llamar a la funcion apra rellenar los objetos capturas, ptosFrente y ptosPerfil
-			// }
-			while (!capturas || !ptosFrente || !ptosPerfil) { //! MAL HECHO WHILE
-				pantallaWebcam(); // se llama a la funcion mientras alguno de los objetos capturas, ptosFrente y ptosPerfil este vacio
-			}
-			console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
-		})
-		.catch((error) => {
-			console.error('Error al obtener los datos del formulario', error);
-		});
-});
+// formulario.addEventListener('submit', (event) => {
+// 	//El evento submit inicia toda la ejecucion del código con la recogida de los datos del formulario
+// 	tomaDatos(event)
+// 		.then(() => {
+// 			return pantallaWebcam() // ESTA FUNCION ESTA DECLARADA EN pantalla-webcam.js Y RESUELVE UNA PROMESA PARA SEGUIR EJECUTANDO CODIGO
+// 				.then(() => {
+// 					return console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil'); // ESTA FUNCION ESTA DECLARADA EN pantalla-webcam.js
+// 					//return prueba();
+// 				})
+// 				.catch((error) => {
+// 					console.error('Error en pantallaWebcam', error);
+// 					// Manejar el error específico de pantallaWebcam
+// 				});
+// 		})
+// 		.catch((error) => {
+// 			console.error('Error al obtener los datos del formulario', error);
+// 		});
+// });
 
 //----------------------------
+formulario.addEventListener('submit', async (event) => {
+	try {
+	  await tomaDatos(event);
+	  await pantallaWebcam();
+	  //console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
+	  await otraFuncion();
+	} catch (error) {
+	  console.error('Error en la ejecución del formulario', error);
+	}
+  });
+
+
+//----------------------------
+
+//TODO ANALIZAMOS SI LAS VARIABLES capturas, ptosFrente y ptosPerfil CONTIENEN DATOS (SE HA REALIZADO CORRECTAMENTE TODO EL PROCESO DE pantallaWebcam() SINO VOLVEMOS A LLAMAR A LA FUNCION)
+// if(capturas & ptosFrente & ptosPerfil){ //condicion apra saber si pantallaWebcam ha capturado datos
+// 	console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
+// }else{
+// 	pantallaWebcam(); // se vuelve a llamar a la funcion apra rellenar los objetos capturas, ptosFrente y ptosPerfil
+// }
+// while (!capturas || !ptosFrente || !ptosPerfil) { //! MAL HECHO WHILE
+// 	pantallaWebcam(); // se llama a la funcion mientras alguno de los objetos capturas, ptosFrente y ptosPerfil este vacio
+// }
+// console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
+function otraFuncion(){
+	console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
+}
