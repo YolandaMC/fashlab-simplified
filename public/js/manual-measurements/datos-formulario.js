@@ -19,11 +19,19 @@ let datosFormulario; // Variable que contendrá los datos del formualrio
 
 //* Para pantalla-webcam.js
 //* ARREGLOS PARA ALMACENAR LAS CAPTURAS DE PANTALLA Y LOS PUNTOS SELECCIONADOS EN LAS CAPTURAS
+
 //Se usan en pantalla-webcam.js
 const capturas = [];
 const ptosClave = ['pecho', 'cadera', 'cintura']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
 const ptosFrente = {};
 const ptosPerfil = {};
+
+//Se usan en images-tensorflow.js
+// Alamcenar a los puntos clave (landmarks) y conexiones del esqueleto despues de usar Pose-detection
+const keypointsFrente = [];
+const keypointsPerfil = [];
+const skeletonFrente = []; // No lo vas a usar
+const skeletonPerfil = []; // No lo vas a usar
 
 //----------------------------
 
@@ -125,28 +133,18 @@ const formulario = document.querySelector('#datos-formulario');
 //----------------------------
 formulario.addEventListener('submit', async (event) => {
 	try {
-	  await tomaDatos(event);
-	  await pantallaWebcam();
-	  //console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
-	  await otraFuncion();
+		await tomaDatos(event);
+		await pantallaWebcam();
+		//console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
+		await otraFuncion();
+		//await imagesTensorFlow();
 	} catch (error) {
-	  console.error('Error en la ejecución del formulario', error);
+		console.error('Error en la ejecución del formulario', error);
 	}
-  });
-
+});
 
 //----------------------------
 
-//TODO ANALIZAMOS SI LAS VARIABLES capturas, ptosFrente y ptosPerfil CONTIENEN DATOS (SE HA REALIZADO CORRECTAMENTE TODO EL PROCESO DE pantallaWebcam() SINO VOLVEMOS A LLAMAR A LA FUNCION)
-// if(capturas & ptosFrente & ptosPerfil){ //condicion apra saber si pantallaWebcam ha capturado datos
-// 	console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
-// }else{
-// 	pantallaWebcam(); // se vuelve a llamar a la funcion apra rellenar los objetos capturas, ptosFrente y ptosPerfil
-// }
-// while (!capturas || !ptosFrente || !ptosPerfil) { //! MAL HECHO WHILE
-// 	pantallaWebcam(); // se llama a la funcion mientras alguno de los objetos capturas, ptosFrente y ptosPerfil este vacio
-// }
-// console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
-function otraFuncion(){
+function otraFuncion() {
 	console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
 }

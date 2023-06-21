@@ -132,7 +132,7 @@ const actualizarOptionModel = () => {
 	}
 };
 
-//* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS SIN ETIQUETAR.
+//* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS SIN ETIQUETAR. CLASIFICADOR KNN
 function modelRanges() {
 	// Paso 1: Preparar los datos
 	// En la funcion init, hemos introducido en la variable global dataset el json data recuperado con el metodo json de D3js
@@ -252,12 +252,8 @@ function modelRangesLabel() {
 		únicos en tu dataset para "sexo" o "genero"*/
 	const numClasses = uniqueLabels.length; // Se define el numero de clases en base a las distintas etiquetas de la base de datos la cantidad de valores que pueda tener "sexo" o "genero"
 
-	//! REVISAR EN FUNCIÓN DE
-	//! https://www.youtube.com/watch?v=saN-lPvgdN8
-	//! https://medium.com/dida-machine-learning/how-to-distribute-a-tensorflow-model-as-a-javascript-web-app-b045a1a94eec
-	//! https://medium.com/analytics-vidhya/classification-model-on-custom-dataset-using-tensorflow-js-9458da5f2301
 	//* Paso 4: Crear un modelo secuencial
-	const model = tf.sequential();
+	const model = tf.sequential(); //! https://js.tensorflow.org/api/4.7.0/#sequential
 	model.add(tf.layers.dense({ units: 10, activation: 'relu', inputShape: [9] })); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
 	model.add(tf.layers.dense({ units: numClasses, activation: 'softmax' })); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
 

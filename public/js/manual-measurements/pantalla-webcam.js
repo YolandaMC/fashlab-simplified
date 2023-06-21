@@ -11,17 +11,17 @@
 
 //----------------------------
 
-//TODO DENTRO DE ESTE CODIGO DEBERAS METER TAMBIEN CUANDO CAPTURES LAS IMAGENES SU PROCESAMIENTO CON EL MODELO PRE-ENTRENADO ESCOGIDO
+//----------------------------
 
 //* Funcion para eliminar los elementos del DOM <form id="#datos-formulario"> y <div class=svg-container> *//
 function pantallaWebcam() {
 	//* ESTABLECEMOS UNA PROMESA
 	return new Promise(async (resolve, reject) => {
 		//ESTABLEZCO UNA PROMESA PARA ASEGURARME QUE SE EJECUTA ESTE CÖDIGO ANTES DE PASAR AL SIGUIENTE EN datos-formulario.js
-
 		console.log('Ya podemos pasar al siguiente apartado ahora que tenemos los datos del formulario');
 		console.log(datosFormulario);
 
+		//! REORDENAR LAS ELIMINACIONES PARA QUE ESTEN EN LA FUNCIÖN DONDE SE CREARON
 		//* ELIMINAMOS ELEMENTOS DOM INNECESARIOS ANTES DE PASAR A CREAR LOS DE LA PANTALLA TOMA DE CAPTURAS DESDE LA WEBCAM Y DATOS CLICKS *//
 		const fondo = document.querySelector('.fondo');
 		fondo.style.flexDirection = 'column';

@@ -15,6 +15,20 @@
 		<!-- Style css -->
 		<link href="../css/style.css" type="text/css" rel="stylesheet" media="" />
 		<!-- atributo media vacio porque el sitio web no es responsivo debido al canvas -->
+		<!-- CARGAMOS TENSORFLOW.JS Y LOS MODELOS POSENET Y BODY-SEGMENTATION -->
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+		<!-- Pose-detection -->
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+		<!-- Body-segmentation -->
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-segmentation"></script>
+		<!-- Optional: Include below scripts if you want to use TensorFlow.js runtime. -->
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+		<!-- Optional: Include below scripts if you want to use MediaPipe runtime.  -->
+		<script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation"></script>
 	</head>
 	<body>
 		<header class="header">
@@ -293,6 +307,7 @@
 		<!-- Debes colocar en orden de "llamada" los scripts si quieres que funcione correctamente, es decir el prinipal que se inicia con el envio del formulario el ultimo datos-formulario.js el último-->
 		<script type="text/javascript" src="../js/reactividad-web.js"></script>
 		<!-- Scripts DENTRO DE LA CARPETA manual-measurements -->
+		<!-- <script type="text/javascript" src="../js/manual-measurements/images-tensorflow.js"></script> -->
 		<script type="text/javascript" src="../js/manual-measurements/pantalla-webcam.js"></script>
 		<script type="text/javascript" src="../js/manual-measurements/datos-formulario.js"></script>
 	</body>
