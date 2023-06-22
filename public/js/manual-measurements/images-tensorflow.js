@@ -57,8 +57,8 @@ async function imagesTensorFlow() {
 
 		//* VAMOS A ESTABLECER VARIAS PROMESAS PARA QUE RESOLVE SOLO SE PRODUZCA CUANDO SE HAYAN CUMPLIDO TODAS
 		const posePromise = pose();
-		//const bodyMaskPromise = bodyMask(); //bodyMaskPromise el modelo antiguo de BodyPix devulve un error
-		const segmentationPartsPromise = segmentationParts();
+		//const bodyMaskPromise = bodyMask(); //! bodyMaskPromise el modelo antiguo de BodyPix devulve un error
+		const segmentationPartsPromise = segmentationParts(); 
 
 		async function pose() {
 			//const pose = async function ()
@@ -130,12 +130,12 @@ async function imagesTensorFlow() {
 		// 	// Configura el color de fondo de la máscara
 		// 	const maskBackground = { r: 0, g: 0, b: 0, a: 0 };
 		// 	// Obtener la máscara de segmentación
-		// 	// maskFrente = bodyPix.toMaskImageData(segmentacionFrente, maskBackground); // Obtengo un ImageData en blanco y negro ()
-		// 	// maskPerfil = bodyPix.toMaskImageData(segmentacionPerfil, maskBackground);
+		// 	maskFrente = bodyPix.toMaskImageData(segmentacionFrente, maskBackground); // Obtengo un ImageData en blanco y negro ()
+		// 	maskPerfil = bodyPix.toMaskImageData(segmentacionPerfil, maskBackground);
 		// 	// //Imprimimos resultados por consola
 		// 	console.log('Los resultados para segmentationParts con el modelo BodyPix son:');
-		// 	console.log('BodyPix segmentationParts', segmentacionFrente, segmentacionPerfil);
-		// 	// console.log('BodyPix maskSegmentation', maskFrente, maskPerfil);
+		// 	//console.log('BodyPix segmentationParts', segmentacionFrente, segmentacionPerfil);
+		// 	 console.log('BodyPix maskSegmentation', maskFrente, maskPerfil);
 
 		// 	// const opacity = 0.7;
 		// 	// const maskBlurAmount = 0; // Number of pixels to blur by.

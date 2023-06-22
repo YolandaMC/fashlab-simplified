@@ -15,7 +15,7 @@
 const tf = window.tf; // necesario?
 const poseDetection = window.poseDetection; // necesario?
 const bodySegmentation = window.bodySegmentation;
-const bodyPix = window.bodyPix;
+//const bodyPix = window.bodyPix; // BodyPix antiguo NO FUNCIONA
 
 //* DECLARACION DE VARIABLES *//
 
