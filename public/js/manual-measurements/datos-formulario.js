@@ -14,6 +14,8 @@
 //Importamos la libreria TensorFlow.js
 const tf = window.tf; // necesario?
 const poseDetection = window.poseDetection; // necesario?
+const bodySegmentation = window.bodySegmentation;
+const bodyPix = window.bodyPix;
 
 //* DECLARACION DE VARIABLES *//
 
@@ -37,8 +39,9 @@ let keypointsFrente, keypointsPerfil; // {x, y, z, score, name}
 let keypoints3DFrente, keypoints3DPerfil; // {x, y, z, score, name}
 // Almacenar segmentacion despues de usar Body-segmentation
 let segmentationFrente , segmentationPerfil;
-let segmentacionPartesFrente, segmentacionPartesPerfil;
 let maskFrente, maskPerfil;
+let segmentacionPartesFrente, segmentacionPartesPerfil;
+let maskPartesFrente, maskPartesPerfil;
 
 //----------------------------
 

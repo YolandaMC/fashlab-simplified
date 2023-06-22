@@ -31,6 +31,7 @@ function pantallaWebcam() {
 		fondo.removeChild(sectionRight);
 		//* CREAMOS LOS ELEMENTOS DEL DOM QUE NOS VAN A PERMITIR TOMAR LAS CAPTURAS DE PANTALLA DE LA WEBCAM Y DATOS CLICKS *//
 		// Creamos el contenedor de video que contendrá el video capurado desde la webcam
+		fondo.style.height = '85vh';// para que mantenga un tamaño concreto en los siguientes procesos
 		const contenedorVideo = document.createElement('div');
 		contenedorVideo.id = 'contenedor-video';
 		fondo.appendChild(contenedorVideo);
@@ -69,7 +70,7 @@ function pantallaWebcam() {
 		// const ptosFrente = {};
 		// const ptosPerfil = {};
 		// Tiempo entre capturas de pantalla
-		const tiempoCapturas = 2000; //TODO AUMENTAR A 10s POR LO MENOS PARA DAR TIEMPO AL USUARIO A COLOCARSE
+		const tiempoCapturas = 1000; //TODO AUMENTAR A 10s POR LO MENOS PARA DAR TIEMPO AL USUARIO A COLOCARSE
 		// Variable para almacenar el índice de la captura actual para poder mostrarlas en el DOM una tras otra
 		let capturaActual = 0;
 

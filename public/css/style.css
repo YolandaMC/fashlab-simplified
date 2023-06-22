@@ -60,7 +60,7 @@ header {
 
 .principal-section {
 	display: block;
-	padding: 0 10px;
+	/* padding: 0 10px; */
 }
 
 .fondo {
@@ -72,11 +72,11 @@ header {
 	/* background-size: cover; */
 	/* background-repeat: no-repeat; */
 	background-color: whitesmoke; /*Quitar si luego metes foto*/
-	margin: 0 20px 0 20px;
+	/* margin: 0 20px 0 20px; */
 	border-radius: 4px;
-	border-style: solid;
-	border-color: #ebebeb;
-	border-width: 5px;
+	border-style: none;
+	/* border-color: #ebebeb;
+	border-width: 5px; */
 }
 
 /* Solo para página principal y viewers */
@@ -401,8 +401,8 @@ input[type='radio']:checked:before {
 /* Animación de carga de manual-measurements.html cuando se ejecuta el script images-tensorflow.js */
 .loader {
 	margin: 100px;
-	border: 16px solid #d0d0d0;
-	border-top: 16px solid #878787;
+	border: 16px solid #be6767;
+	border-top: 16px solid #953737;
 	border-radius: 50%;
 	width: 120px;
 	height: 120px;

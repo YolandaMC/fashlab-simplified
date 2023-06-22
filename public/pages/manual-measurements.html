@@ -17,21 +17,16 @@
 		<!-- atributo media vacio porque el sitio web no es responsivo debido al canvas -->
 		<!-- CARGAMOS TENSORFLOW.JS Y LOS MODELOS POSENET Y BODY-SEGMENTATION -->
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-		<!-- Pose-detection -->
-		<!-- Require the peer dependencies of pose-detection. -->
-		<!-- Require the peer dependencies of pose-detection. -->
+		<!-- Require the peer dependencies of models -->
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
-		<!-- You must explicitly require a TF.js backend if you're not using the TF.js union bundle. -->
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+		<!-- Pose-detection -->
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
-		<!-- Body-segmentation -->
-		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-segmentation"></script>
-		<!-- Optional: Include below scripts if you want to use TensorFlow.js runtime. -->
-		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
-		<!-- Optional: Include below scripts if you want to use MediaPipe runtime.  -->
-		<script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation"></script>
+		<!-- Body-segmentation BodyPix antiguo?  -->
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.2.0/dist/body-pix.min.js"></script>
+		<!-- Body-segmentation BodyPix nuevo -->
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-segmentation"></script>	
 	</head>
 	<body>
 		<header class="header">
