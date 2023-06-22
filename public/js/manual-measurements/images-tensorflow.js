@@ -92,7 +92,6 @@ async function imagesTensorFlow() {
 		}
 
 		async function bodyMask() {
-			//NO FUNCIONA YA ESTE MODELO PARA PODER SEGMENTAR EL CUERPO ENTERO
 			//const bodyMask = async function () OTRA FORMA DE PONERLA
 			//* ANALISIS MODELO BODYPIX
 			//ResNet50
@@ -109,7 +108,7 @@ async function imagesTensorFlow() {
 			// 	quantBytes: 4, // 1, 2, 4 ESCOGEMOS EL VALOR MAYOR PARA MAS PRECISION
 			// };
 			//Cargamos el modelo
-			const model = await bodyPix.load(segmenterConfig); //https://blog.tensorflow.org/2019/11/updated-bodypix-2.html  ||  https://github.com/tensorflow/tfjs-models/tree/master/body-pix#person-segmentation
+			const model = await bodyPix.load(segmenterConfig); //https://github.com/tensorflow/tfjs-models/blob/master/body-pix/README_Archive.md
 			console.log('el modelo body pix se ha cargado');
 			// arguments for estimating person segmentation.
 			const segmentationConfig = {
