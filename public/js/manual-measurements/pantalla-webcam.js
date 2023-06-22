@@ -31,7 +31,7 @@ function pantallaWebcam() {
 		fondo.removeChild(sectionRight);
 		//* CREAMOS LOS ELEMENTOS DEL DOM QUE NOS VAN A PERMITIR TOMAR LAS CAPTURAS DE PANTALLA DE LA WEBCAM Y DATOS CLICKS *//
 		// Creamos el contenedor de video que contendrá el video capurado desde la webcam
-		fondo.style.height = '85vh';// para que mantenga un tamaño concreto en los siguientes procesos
+		fondo.style.height = '85vh'; // para que mantenga un tamaño concreto en los siguientes procesos
 		const contenedorVideo = document.createElement('div');
 		contenedorVideo.id = 'contenedor-video';
 		fondo.appendChild(contenedorVideo);
@@ -70,12 +70,13 @@ function pantallaWebcam() {
 		// const ptosFrente = {};
 		// const ptosPerfil = {};
 		// Tiempo entre capturas de pantalla
-		const tiempoCapturas = 1000; //TODO AUMENTAR A 10s POR LO MENOS PARA DAR TIEMPO AL USUARIO A COLOCARSE
+		const tiempoCapturas = 2000; //TODO AUMENTAR A 10s POR LO MENOS PARA DAR TIEMPO AL USUARIO A COLOCARSE
 		// Variable para almacenar el índice de la captura actual para poder mostrarlas en el DOM una tras otra
 		let capturaActual = 0;
 
 		// Variable para almacenar el elemento de video y elemento spande inicio
 		let video;
+		let plantilla; // se mostraran las siluetas de frente y perfil en ella
 		let mensajeEspera;
 
 		// Se definen unos tamaños iniciales para el elemento canvas donde se mosrtarán las capturas de pantalla, pero luego se tomara el tamaño de resolucion de la propia webcam
@@ -121,8 +122,23 @@ function pantallaWebcam() {
 				// video.height = 480;
 				contenedorVideo.appendChild(video);
 				video.play();
+				// Dibujo la silueta de referencia de frente
+				contenedorVideo.style.position = 'relative';
+				plantilla = document.createElement('img');
+				plantilla.id = 'plantilla';
+				plantilla.src = './../assets/img/plantilla-frente.svg';
+				plantilla.style.position = 'absolute';
+				plantilla.style.zIndex = 2; // se posicione por encima contenedorVideo
+				plantilla.style.top = '0';
+				plantilla.style.left = '0';
+				video.style.zIndex = 1;
+				video.style.top = '0';
+				video.style.left = '0';
+				contenedorVideo.appendChild(plantilla);
 				setTimeout(function () {
 					capturarFrame(video);
+					// Dibujo la silueta de referencia de perfil
+					plantilla.src = './../assets/img/plantilla-perfil.svg';
 					setTimeout(function () {
 						capturarFrame(video);
 						cerrarWebcam(video, stream);
@@ -153,6 +169,7 @@ function pantallaWebcam() {
 			stream.getTracks().forEach(function (track) {
 				track.stop();
 			});
+			contenedorVideo.removeChild(plantilla); //!
 			contenedorVideo.removeChild(video);
 		}
 
