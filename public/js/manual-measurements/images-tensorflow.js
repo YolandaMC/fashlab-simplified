@@ -238,8 +238,8 @@ async function imagesTensorFlow() {
 			await tf.setBackend('webgl');
 			//* ESTABLECEMOS UNA PROMESA
 			await Promise.all([posePromise, bodyMaskPromise, segmentationPartsPromise]); //bodyMaskPromise el modelo antiguo de BodyPix devulve un error
-			//await Promise.all([posePromise, segmentationPartsPromise]);
-			//await Promise.all([bodyMaskPromise]);
+			// await Promise.allSettled([posePromise, bodyMaskPromise, segmentationPartsPromise])
+			//.then (values=>{console.log(values)});
 			await imprimirResultadosConsola(); // segun la tienes aqui se ejecuta antes que el resto
 			// Al finalizar todos los procesos de imagesTensorFlow(), resolver la promesa
 			resolve();
