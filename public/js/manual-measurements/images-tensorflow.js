@@ -57,8 +57,8 @@ async function imagesTensorFlow() {
 
 		//* VAMOS A ESTABLECER VARIAS PROMESAS PARA QUE RESOLVE SOLO SE PRODUZCA CUANDO SE HAYAN CUMPLIDO TODAS
 		const posePromise = pose();
-		//const bodyMaskPromise = bodyMask(); //! bodyMaskPromise el modelo antiguo de BodyPix devulve un error
-		const segmentationPartsPromise = segmentationParts(); 
+		const bodyMaskPromise = bodyMask();
+		const segmentationPartsPromise = segmentationParts();
 
 		async function pose() {
 			//const pose = async function ()
@@ -91,70 +91,65 @@ async function imagesTensorFlow() {
 			console.log('Pose-Detection keypoints3D', keypoints3DFrente, keypoints3DPerfil);
 		}
 
-		// async function bodyMask() { //NO FUNCIONA YA ESTE MODELO PARA PODER SEGMENTAR EL CUERPO ENTERO
-		// 	//const bodyMask = async function () OTRA FORMA DE PONERLA
-		// 	// //* ANALISIS MODELO BODYPIX
-		// 	//ResNet50
-		// 	// const segmenterConfig = {
-		// 	// 	architecture: 'ResNet50', // puede usarse 'MobileNetV1'
-		// 	// 	outputStride: 16, //16, 32 para ResNet50.  8, 16 para MobileNetV1
-		// 	// 	quantBytes: 4,
-		// 	// };
-		// 	// MobileNetV1
-		// 	const segmenterConfig = {
-		// 		architecture: 'MobileNetV1', // puede usarse 'ResNet50'
-		// 		outputStride: 8, // 16, 32 para ResNet50.  8, 16 para MobileNetV1 ESCOGEMOS EL VALOR MENOR PARA MAS PRECISION
-		// 		multiplier: 1, // 1.0, 0.75, or 0.50 solo se emplea en MobileNetV1 ESCOGEMOS EL VALOR MAYOR PARA MAS PRECISION
-		// 		quantBytes: 4, // 1, 2, 4 ESCOGEMOS EL VALOR MAYOR PARA MAS PRECISION
-		// 	};
-		// 	//Cargamos el modelo
-		// 	const model = await bodyPix.load(segmenterConfig); //https://blog.tensorflow.org/2019/11/updated-bodypix-2.html  ||  https://github.com/tensorflow/tfjs-models/tree/master/body-pix#person-segmentation
-		// 	console.log('el modelo body pix se ha cargado');
-		// 	// arguments for estimating person segmentation.
-		// 	const outputStride = 16;
-		// 	const segmentationThreshold = 0.5;
+		async function bodyMask() {
+			//NO FUNCIONA YA ESTE MODELO PARA PODER SEGMENTAR EL CUERPO ENTERO
+			//const bodyMask = async function () OTRA FORMA DE PONERLA
+			//* ANALISIS MODELO BODYPIX
+			//ResNet50
+			const segmenterConfig = {
+				architecture: 'ResNet50', // puede usarse 'MobileNetV1'
+				outputStride: 16, //16, 32 para ResNet50.  8, 16 para MobileNetV1
+				quantBytes: 4,
+			};
+			// MobileNetV1
+			// const segmenterConfig = {
+			// 	architecture: 'MobileNetV1', // puede usarse 'ResNet50'
+			// 	outputStride: 8, // 16, 32 para ResNet50.  8, 16 para MobileNetV1 ESCOGEMOS EL VALOR MENOR PARA MAS PRECISION
+			// 	multiplier: 1, // 1.0, 0.75, or 0.50 solo se emplea en MobileNetV1 ESCOGEMOS EL VALOR MAYOR PARA MAS PRECISION
+			// 	quantBytes: 4, // 1, 2, 4 ESCOGEMOS EL VALOR MAYOR PARA MAS PRECISION
+			// };
+			//Cargamos el modelo
+			const model = await bodyPix.load(segmenterConfig); //https://blog.tensorflow.org/2019/11/updated-bodypix-2.html  ||  https://github.com/tensorflow/tfjs-models/tree/master/body-pix#person-segmentation
+			console.log('el modelo body pix se ha cargado');
+			// arguments for estimating person segmentation.
+			const segmentationConfig = {
+				flipHorizontal: false,
+				internalResolution: 'full',
+				segmentationThreshold: 0.7,
+			};
 
-		// 	// Utilizar la API de BodyPix antoguo. Variables declaradas globalmente en datos-formulario.js
-		// 	// segmentationFrente = await segmenter.segmentPeople(imgFrente, segmentationConfig);
-		// 	// segmentationFrente = await segmenter.segmentPeople(imgPerfil, segmentationConfig);
-		// 	// segmentationFrente = await model.segmentPerson(imgFrente, outputStride, segmentationThreshold); //segmentPerson
-		// 	// segmentationFrente = await model.segmentPerson(imgPerfil, outputStride, segmentationThreshold); //segmentPerson
-		// 	segmentationFrente = await model.segmentPerson(imgFrente, {
-		// 		internalResolution: 'full',
-		// 	}); //segmentPerson
-		// 	segmentationFrente = await model.segmentPerson(imgPerfil, {
-		// 		internalResolution: 'full',
-		// 	}); //segmentPerson
+			// Utilizar la API de BodyPix antoguo. Variables declaradas globalmente en datos-formulario.js
+			segmentacionFrente = await model.segmentPerson(imgFrente, segmentationConfig); //segmentPerson
+			segmentacionPerfil = await model.segmentPerson(imgPerfil, segmentationConfig); //segmentPerson
 
-		// 	//const maskColor = { r: 255, g: 255, b: 255, a: 255 }; // Color de la máscara (blanco en este caso)
-		// 	// Configura el color de fondo de la máscara
-		// 	const maskBackground = { r: 0, g: 0, b: 0, a: 0 };
-		// 	// Obtener la máscara de segmentación
-		// 	maskFrente = bodyPix.toMaskImageData(segmentacionFrente, maskBackground); // Obtengo un ImageData en blanco y negro ()
-		// 	maskPerfil = bodyPix.toMaskImageData(segmentacionPerfil, maskBackground);
-		// 	// //Imprimimos resultados por consola
-		// 	console.log('Los resultados para segmentationParts con el modelo BodyPix son:');
-		// 	//console.log('BodyPix segmentationParts', segmentacionFrente, segmentacionPerfil);
-		// 	 console.log('BodyPix maskSegmentation', maskFrente, maskPerfil);
+			// Obtener la máscara de segmentación dentro del objeto
+			maskFrente = segmentacionFrente.mask;
+			maskPerfil = segmentacionPerfil.mask;
+			//Imprimimos resultados por consola
+			console.log('Los resultados para segmentationParts con el modelo BodyPix son:');
+			console.log('BodyPix segmentationParts', segmentacionFrente, segmentacionPerfil);
+			console.log('BodyPix maskSegmentation', maskFrente, maskPerfil);
 
-		// 	// const opacity = 0.7;
-		// 	// const maskBlurAmount = 0; // Number of pixels to blur by.
-
-		// 	// //CREO CANVAS PARA VERLO PRUEBA
-		// 	// //TODO
-		// 	// const canvasFrente = document.createElement('canvas');
-		// 	// const canvasPerfil = document.createElement('canvas');
-		// 	// fondo.removeChild(loader); // elimino loader
-		// 	// fondo.style.height = '100%'; // para que se adapte a lso tamanos de los canvas
-		// 	// fondo.appendChild(canvasFrente); // coloco el canvas en el DOM
-		// 	// fondo.appendChild(canvasPerfil); // coloco el canvas en el DOM
-		// 	// //TODO
-		// 	// // Draw the colored part image on top of the original image onto a canvas.
-		// 	// // The colored part image will be drawn semi-transparent, with an opacity of
-		// 	// // 0.7, allowing for the original image to be visible under.
-		// 	// bodyPix.drawMask(canvasFrente, imgFrente, maskFrente, opacity, maskBlurAmount);
-		// 	// bodyPix.drawMask(canvasPerfil, imgPerfil, maskPerfil, opacity, maskBlurAmount);
-		// }
+			//CREO CANVAS PARA VERLO PRUEBA
+			//TODO
+			const canvasFrente = document.createElement('canvas');
+			const canvasPerfil = document.createElement('canvas');
+			fondo.removeChild(loader); // elimino loader
+			fondo.style.height = '100%'; // para que se adapte a lso tamanos de los canvas
+			fondo.appendChild(canvasFrente); // coloco el canvas en el DOM
+			fondo.appendChild(canvasPerfil); // coloco el canvas en el DOM
+			//TODO
+			const coloredPartFrente = bodyPix.toMask(segmentacionFrente);
+			const coloredPartPerfil = bodyPix.toMask(segmentacionPerfil);
+			const opacity = 0.7;
+			const flipHorizontal = false;
+			const maskBlurAmount = 0;
+			// Draw the colored part image on top of the original image onto a canvas.
+			// The colored part image will be drawn semi-transparent, with an opacity of
+			// 0.7, allowing for the original image to be visible under.
+			bodyPix.drawMask(canvasFrente, imgFrente, coloredPartFrente, opacity, maskBlurAmount, flipHorizontal);
+			bodyPix.drawMask(canvasPerfil, imgPerfil, coloredPartPerfil, opacity, maskBlurAmount, flipHorizontal);
+		}
 
 		async function segmentationParts() {
 			//const segmentationParts = async function () OTRA FORMA DE PONERLA
@@ -243,8 +238,9 @@ async function imagesTensorFlow() {
 			await tf.ready();
 			await tf.setBackend('webgl');
 			//* ESTABLECEMOS UNA PROMESA
-			// await Promise.all([posePromise, bodyMaskPromise, segmentationPartsPromise]); //bodyMaskPromise el modelo antiguo de BodyPix devulve un error
-			await Promise.all([posePromise, segmentationPartsPromise]);
+			await Promise.all([posePromise, bodyMaskPromise, segmentationPartsPromise]); //bodyMaskPromise el modelo antiguo de BodyPix devulve un error
+			//await Promise.all([posePromise, segmentationPartsPromise]);
+			//await Promise.all([bodyMaskPromise]);
 			await imprimirResultadosConsola(); // segun la tienes aqui se ejecuta antes que el resto
 			// Al finalizar todos los procesos de imagesTensorFlow(), resolver la promesa
 			resolve();

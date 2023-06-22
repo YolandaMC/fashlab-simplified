@@ -15,7 +15,7 @@
 const tf = window.tf; // necesario?
 const poseDetection = window.poseDetection; // necesario?
 const bodySegmentation = window.bodySegmentation;
-//const bodyPix = window.bodyPix; // BodyPix antiguo NO FUNCIONA
+const bodyPix = window.bodyPix; // BodyPix antiguo NO FUNCIONA
 
 //* DECLARACION DE VARIABLES *//
 
@@ -38,7 +38,7 @@ let posesFrente, posesPerfil; // {score, keypoints, keypoints3D}
 let keypointsFrente, keypointsPerfil; // {x, y, z, score, name}
 let keypoints3DFrente, keypoints3DPerfil; // {x, y, z, score, name}
 // Almacenar segmentacion despues de usar Body-segmentation
-let segmentationFrente , segmentationPerfil;
+let segmentacionFrente , segmentacionPerfil;
 let maskFrente, maskPerfil;
 let segmentacionPartesFrente, segmentacionPartesPerfil;
 let maskPartesFrente, maskPartesPerfil;
