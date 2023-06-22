@@ -189,6 +189,26 @@ header {
 
 .section-right {
 	align-items: center;
+	position: relative;
+	overflow: hidden;
+
+}
+
+.section-right::before {
+	content: "";
+	display: block;
+	padding-top: 145%;
+}
+
+/* Estilo imagen info de medidas */
+#img-info-medidas{
+	position: absolute;
+	padding: 15px;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 /* Contiene distitnos elementos que se van sucediendo en la aprte derecha de manual-measurements */
@@ -370,6 +390,8 @@ input[type='radio']:checked:before {
 	padding: 0 10px 15px 10px;
 	text-align: center;
 }
+
+
 
 /* Solo para la página manual-measurements.html cuando se ejecuta pantalla-webcam.js boton capturar */
 #boton-capturar {
