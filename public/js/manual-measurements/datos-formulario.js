@@ -143,7 +143,11 @@ formulario.addEventListener('submit', async (event) => {
 		await tomaDatos(event);
 		await pantallaWebcam();
 		console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
-		await imagesTensorFlow();
+		await imagesTensorFlow(); // https://www.youtube.com/watch?v=41VfSbuYBP0
+		/* Aqui realmente te interesaria que imagesTensorFlow() se ejecutase nada mas que  
+		pantallaWebcam() capturase en captures las imagenes para hacer la ejecucion del 
+		codigo mas corta, no esperar a que termine pantallaWebcam() para ejecutar el analisis 
+		con modelos declarados en imagesTensorFlow() y que es bastante lento*/
 		await saberPorDondeVamos();// CUIDADO QUE SE HA EJECUTADO ANTES QUE imagesTensorFlow();
 	} catch (error) {
 		console.error('Error en la ejecución del formulario', error);

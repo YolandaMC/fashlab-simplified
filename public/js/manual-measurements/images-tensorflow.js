@@ -55,9 +55,14 @@ async function imagesTensorFlow() {
 		imgFrente.src = capturas[0]; // Imagen frente está en la primera posición de capturas
 		imgPerfil.src = capturas[1]; // Imagen de perfil está en la segunda posición de capturas
 
-		const pose = async function () {
-			//* ANALISIS MODELO POSE-DETECTION
+		//* VAMOS A ESTABLECER VARIAS PROMESAS PARA QUE RESOLVE SOLO SE PRODUZCA CUANDO SE HAYAN CUMPLIDO TODAS
+		const posePromise = pose();
+		const segmentationPromise = segmentation();
+		const segmentationPartsPromise = segmentationParts();
 
+		async function pose() {
+			//const pose = async function ()
+			//* ANALISIS MODELO POSE-DETECTION
 			// Cargamos el modelo Pose-detection
 			const model = poseDetection.SupportedModels.BlazePose;
 			const detectorConfig = {
@@ -78,9 +83,16 @@ async function imagesTensorFlow() {
 			keypointsPerfil = posesPerfil[0].keypoints;
 			keypoints3DFrente = posesFrente[0].keypoints3D; // keypoints3DFrente  = {x, y, z, score, name}
 			keypoints3DPerfil = posesPerfil[0].keypoints3D;
-		};
 
-		const segmentacion = async function () {
+			//Imprimimos resultados por consola
+			console.log('Los resultados para pose() con el modelo Pose-Detection son:');
+			console.log('Pose-Detection poses', posesFrente, posesPerfil);
+			console.log('Pose-Detection keypoints', keypointsFrente, keypointsPerfil);
+			console.log('Pose-Detection keypoints3D', keypoints3DFrente, keypoints3DPerfil);
+		}
+
+		async function segmentation() {
+			//const segmentation = async function () OTRA FORMA DE PONERLA
 			//* ANALISIS MODELO BODY-SEGMENTATION MediaPipeSelfieSegmentation
 
 			const model = bodySegmentation.SupportedModels.MediaPipeSelfieSegmentation; //https://github.com/tensorflow/tfjs-models/tree/master/body-segmentation/src/selfie_segmentation_tfjs
@@ -92,21 +104,26 @@ async function imagesTensorFlow() {
 			// Utilizar la API de Body-segmentation MediaPipe SelfieSegmentation. Variables declaradas globalmente en datos-formulario.js
 			segmentationFrente = await segmenter.segmentPeople(imgFrente, segmentationConfig);
 			segmentationFrente = await segmenter.segmentPeople(imgPerfil, segmentationConfig);
-		};
 
-		const segmentacionPartes = async function () {
+			//Imprimimos resultados por consola
+			console.log(
+				'Los resultados para segmentation() con el modelo BODY-SEGMENTATION MediaPipeSelfieSegmentation son:'
+			);
+			console.log('Body-segmentation MediaPipe', segmentationFrente, segmentationPerfil);
+		}
+
+		async function segmentationParts() {
+			//const segmentationParts = async function () OTRA FORMA DE PONERLA
 			// //* ANALISIS MODELO BODY-SEGMENTATION
-
 			const model = bodySegmentation.SupportedModels.BodyPix; //https://github.com/tensorflow/tfjs-models/tree/master/body-segmentation/src/body_pix
 			//ResNet50
-            // const segmenterConfig = {
+			// const segmenterConfig = {
 			// 	architecture: 'ResNet50', // puede usarse 'MobileNetV1'
 			// 	outputStride: 32, //16, 32 para ResNet50.  8, 16 para MobileNetV1
-			// 	//multiplier: 0.75, //1.0, 0.75, or 0.50 solo se emplea en MobileNetV1
 			// 	quantBytes: 2,
 			// };
-            // MobileNetV1
-            const segmenterConfig = {
+			// MobileNetV1
+			const segmenterConfig = {
 				architecture: 'MobileNetV1', // puede usarse 'ResNet50'
 				outputStride: 16, //16, 32 para ResNet50.  8, 16 para MobileNetV1
 				multiplier: 0.75, //1.0, 0.75, or 0.50 solo se emplea en MobileNetV1
@@ -132,6 +149,11 @@ async function imagesTensorFlow() {
 				bodySegmentation.bodyPixMaskValueToRainbowColor,
 				{ r: 255, g: 255, b: 255, a: 255 }
 			);
+			//Imprimimos resultados por consola
+			console.log('Los resultados para segmentationParts con el modelo BodyPix son:');
+			console.log('BodyPix segmentationParts', segmentacionPartesFrente, segmentacionPartesPerfil);
+			console.log('BodyPix maskSegmentation', maskFrente, maskPerfil);
+
 			const opacity = 0.7;
 			const flipHorizontal = false;
 			const maskBlurAmount = 0;
@@ -149,17 +171,11 @@ async function imagesTensorFlow() {
 			// 0.7, allowing for the original image to be visible under.
 			bodySegmentation.drawMask(canvasFrente, imgFrente, maskFrente, opacity, maskBlurAmount, flipHorizontal);
 			bodySegmentation.drawMask(canvasPerfil, imgPerfil, maskPerfil, opacity, maskBlurAmount, flipHorizontal);
-			imprimirResultadosConsola();
-		};
+		}
 
 		function imprimirResultadosConsola() {
-			console.log('Pose-Detection poses', posesFrente, posesPerfil);
-			console.log('Pose-Detection keypoints', keypointsFrente, keypointsPerfil);
-			console.log('Pose-Detection keypoints', keypoints3DFrente, keypoints3DPerfil);
-			console.log('Body-segmentation segmentation', segmentationFrente, segmentationPerfil);
-			console.log('Body-segmentation segmentacionPartes', segmentacionPartesFrente, segmentacionPartesPerfil);
-			console.log('Body-segmentation mask', maskFrente, maskPerfil);
-			resolve(); //! PASARLO EN LA ULTIMA FUNCION QUE SE EJECUTE DEBERÏAS INTENTAR NO LLAMARLA EN segmentacionPartes() SINO EN EL TRY-CATCH
+			console.log('Han terminado los procesos de analisis de los modelos');
+			//resolve(); //! PASARLO EN LA ULTIMA FUNCION QUE SE EJECUTE DEBERÏAS INTENTAR NO LLAMARLA EN segmentacionPartes() SINO EN EL TRY-CATCH
 		}
 
 		try {
@@ -167,15 +183,15 @@ async function imagesTensorFlow() {
 			// Nos aseguramos que TensorFlow.js está cargado antes de iniciar lso modelos
 			await tf.ready();
 			await tf.setBackend('webgl');
-			await pose(); //!
-			await segmentacion();//!
-            await segmentacionPartes(); //!
-			//imprimirResultadosConsola(); // segun la tiene se ejecuta antes que el resto
+			//* ESTABLECEMOS UNA PROMESA
+			await Promise.all([posePromise, segmentationPromise, segmentationPartsPromise]);
+			await imprimirResultadosConsola(); // segun la tienes aqui se ejecuta antes que el resto
 			// Al finalizar todos los procesos de imagesTensorFlow(), resolver la promesa
+			resolve();
 		} catch (error) {
+			console.log('Se ha producido un error ', error);
 			// En caso de error, llamar a reject()
-			reject(error);
+			reject(new Error('No se han ejecutado los modelos ni impreso por consola'));
 		}
-		//resolve();
 	});
 }
