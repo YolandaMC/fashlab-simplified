@@ -20,12 +20,11 @@ const bodyPix = window.bodyPix; // BodyPix antiguo NO FUNCIONA
 //* DECLARACION DE VARIABLES *//
 
 //* Para datos-formulario.js
-let datosFormulario; // Variable que contendrá los datos del formualrio
+let datosFormulario; // Variable que contendrá los datos del formualrio. Servira para dibujar el patrón desde body-viewer.js y los scripts de la carpeta construccion-body-viewer
 //let datason; // Varieable que sirve tras implementación del back-end para enviar los datos del formulario en formato JSON
 
 //* Para pantalla-webcam.js
 //* ARREGLOS PARA ALMACENAR LAS CAPTURAS DE PANTALLA Y LOS PUNTOS SELECCIONADOS EN LAS CAPTURAS
-
 //Se usan en pantalla-webcam.js
 const capturas = [];
 const ptosClave = ['pecho', 'cadera', 'cintura']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
@@ -121,26 +120,6 @@ const tomaDatos = (event) => {
 // Escucha el evento 'submit' del botón del formulario y llama a la función 'tomaDatos'
 const formulario = document.querySelector('#datos-formulario');
 // formulario.addEventListener('submit', tomaDatos);
-// formulario.addEventListener('submit', (event) => {
-// 	//El evento submit inicia toda la ejecucion del código con la recogida de los datos del formulario
-// 	tomaDatos(event)
-// 		.then(() => {
-// 			return pantallaWebcam() // ESTA FUNCION ESTA DECLARADA EN pantalla-webcam.js Y RESUELVE UNA PROMESA PARA SEGUIR EJECUTANDO CODIGO
-// 				.then(() => {
-// 					return console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil'); // ESTA FUNCION ESTA DECLARADA EN pantalla-webcam.js
-// 					//return prueba();
-// 				})
-// 				.catch((error) => {
-// 					console.error('Error en pantallaWebcam', error);
-// 					// Manejar el error específico de pantallaWebcam
-// 				});
-// 		})
-// 		.catch((error) => {
-// 			console.error('Error al obtener los datos del formulario', error);
-// 		});
-// });
-
-//----------------------------
 formulario.addEventListener('submit', async (event) => {
 	try {
 		await tomaDatos(event);

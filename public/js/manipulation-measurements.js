@@ -2,7 +2,8 @@
 
 //* DEFINO Y SELECCIONO EL ELEMENTO DEL DOM PARA GENERAR EL SVG *//
 // Tomo el elemento svg del html
-let svg = document.querySelector('.svg-manupulation');
+const svg = document.querySelector('.svg-manupulation');
+
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 // Variable que me permite establecer el tamaño del svg
@@ -47,17 +48,17 @@ const medidaCintura = document.querySelector('input[type=range][name=cintura]');
 const medidaCadera = document.querySelector('input[type=range][name=cadera]');
 const medidaEspalda = document.querySelector('input[type=range][name=espalda]');
 const medidaSeppecho = document.querySelector('input[type=range][name=seppecho]');
-const medidaCuello = document.querySelector('input[type=range][name=cuello]');
+//const medidaCuello = document.querySelector('input[type=range][name=cuello]');
 const medidaHombro = document.querySelector('input[type=range][name=hombro]');
 
 // MEDIDAS HORIZONTALES
-const medidaEstatura = document.querySelector('input[type=range][name=estatura]');
+//const medidaEstatura = document.querySelector('input[type=range][name=estatura]');
 const medidaLargEsp = document.querySelector('input[type=range][name=largespalda]');
 const medidaLargDel = document.querySelector('input[type=range][name=largdelantero]');
 const medidaCostadillo = document.querySelector('input[type=range][name=costadillo]');
 const medidaPierna = document.querySelector('input[type=range][name=pierna]');
 const medidaEntrepierna = document.querySelector('input[type=range][name=entrepierna]');
-const medidaBrazo = document.querySelector('input[type=range][name=brazo]');
+//const medidaBrazo = document.querySelector('input[type=range][name=brazo]');
 
 // -----------------------
 // -----------------------
@@ -66,61 +67,59 @@ const medidaBrazo = document.querySelector('input[type=range][name=brazo]');
 // Definimos las constantes que vamos a utilizar
 
 //* MEDIDAS VERTICALES*//
-// const medidasVr = {
-// 	cuello: medidaCuello.value,
-// 	hombro: medidaHombro.value,
-// 	estatura: medidaEstatura.value,
-// 	largespalda: medidaLargEsp.value,
-// 	largdelantero: medidaLargDel.value,
-// 	costadillo: medidaCostadillo.value,
-// 	pierna: medidaPierna.value,
-// 	entrepierna: medidaEntrepierna.value,
-// 	brazo: medidaBrazo.value,
-// };
+const medidasVr = {
+	hombro: parseFloat(medidaHombro.value),
+	estatura: 165, // El patron de torno segun esta planteado no depdende del valor de estatura
+	largespalda: parseFloat(medidaLargEsp.value),
+	largdelantero: parseFloat(medidaLargDel.value),
+	costadillo: parseFloat(medidaCostadillo.value),
+	pierna: parseFloat(medidaPierna.value),
+	entrepierna: parseFloat(medidaEntrepierna.value),
+	brazo: 61, //! VALOR FIJO. LUEGO LA CAMBIARAS CUANDO EXISTA PATRON DE MANGA
+};
 
 // console.log('medidasVr' + medidasVr);
 
 //* MEDIDAS HORIZONTALES*//
-// const medidasHz = {
-// 	pecho: medidaPecho.value,
-// 	cintura: medidaCintura.value,
-// 	cadera: medidaCadera.value,
-// 	espalda: medidaEspalda.value,
-// 	seppecho: medidaSeppecho.value,
-// };
+const medidasHz = {
+	pecho: parseFloat(medidaPecho.value),
+	cintura: parseFloat(medidaCintura.value),
+	cadera: parseFloat(medidaCadera.value),
+	espalda: parseFloat(medidaEspalda.value),
+	cuello: 36, // DEBES HACER MODIFICACIONES EN LA CONSTRUCCION PARA PODER USARLA. USAS COMO EMDIDA CUELLO pecho/8
+	seppecho: parseFloat(medidaSeppecho.value),
+};
 
 // -----------------------
 // -----------------------
 
 //* INICIALIZAMOS EL PATRON CON UNAS MEDIDAS
-const medidasVr = {
-	cuello: 36,
-	hombro: 13,
-	estatura: 165,
-	largespalda: 40,
-	largdelantero: 45, //45
-	costadillo: 38.5,
-	pierna: 96,
-	entrepierna: 71,
-	brazo: 59,
-};
+// const medidasVr = {
+// 	hombro: 13,
+// 	estatura: 165,
+// 	largespalda: 40,
+// 	largdelantero: 45, //45
+// 	costadillo: 38.5,
+// 	pierna: 96,
+// 	entrepierna: 71,
+// 	brazo: 59,
+// };
 
-const medidasHz = {
-	pecho: 88, // 88
-	cintura: 72, // 72
-	cadera: 94, // 94
-	espalda: 35, // 35
-	seppecho: 17, // 17
-};
+// const medidasHz = {
+// 	pecho: 88, // 88
+// 	cintura: 72, // 72
+// 	cadera: 94, // 94
+// 	espalda: 35, // 35
+//  cuello: 36,
+// 	seppecho: 17, // 17
+// };
 
 //TODO Incluyo todo dentro de mi funcion dibujarSVG para que a cada cambio de slider recalcule y redibuje todo
 function dibujarSVG() {
-	//!
-	// Eliminar todos los elementos hijos del SVG en cada llamada a la función, es decir en cada cambio de slider
+	//* Eliminar todos los elementos hijos del SVG en cada llamada a la función, es decir en cada cambio de slider
 	while (svg.firstChild) {
 		svg.firstChild.remove();
 	}
-	//!
 
 	//* Incluyo medidas que se extraen de otras a falta de obtener ratios para sustituir la proporción arbitraria*//
 	medidasVr.montante = medidasVr.pierna - medidasVr.entrepierna;
@@ -217,7 +216,7 @@ function dibujarSVG() {
 	// Medidas verticales construcción patrón
 	let altSisa = medidasVr.largespalda / 2;
 	let altEspalda = (3 / 4) * medidasVr.largespalda;
-	let cajaCue = medidasHz.pecho / 8;
+	let cajaCue = medidasHz.pecho / 8; //(medidasHz.cuello/6)+2 o //medidasHz.pecho / 8;
 	let altPnz = altSisa - 2.5; //Altura del pezón (2.5 es una medida arbitraria del pezon respecto de la líena de sisa)
 
 	// Medidas horizontales construcción patrón
@@ -1098,11 +1097,13 @@ function dibujarSVG() {
 	// -----------------------
 
 	//* INCLUIMOS TODOS LOS MÓDULOS DE CONSTRUCCION EN EL SVG BODY-VIEWER *//
-	svg.appendChild(marcoDelimitador);
+	// svg.appendChild(marcoDelimitador);
 	svg.appendChild(auxliaresConstruccion);
 	svg.appendChild(moldeDelantero);
 	svg.appendChild(moldeEspalda);
 	svg.appendChild(moldeEntalles);
+
+	console.log('ha dibujado el patrón');
 }
 
 //* Llamo en un primer momento a la funcion para que dibuje el patron con los values definidos por defecto para los sliders
@@ -1120,21 +1121,22 @@ function handleInputChange() {
 		// Realizar la lógica necesaria con cada valor de input
 		console.log(valor);
 		//* MEDIDAS VERTICALES*//
-		medidasVr.cuello = medidaCuello.value;
-		medidasVr.hombro = medidaHombro.value;
-		medidasVr.estatura = medidaEstatura.value;
-		medidasVr.largespalda = medidaLargEsp.value;
-		medidasVr.largdelantero = medidaLargDel.value;
-		medidasVr.costadillo = medidaCostadillo.value;
-		medidasVr.pierna = medidaPierna.value;
-		medidasVr.entrepierna = medidaEntrepierna.value;
-		medidasVr.brazo = medidaBrazo.value;
+
+		medidasVr.hombro = parseFloat(medidaHombro.value);
+		medidasVr.estatura = 165;
+		medidasVr.largespalda = parseFloat(medidaLargEsp.value);
+		medidasVr.largdelantero = parseFloat(medidaLargDel.value);
+		medidasVr.costadillo = parseFloat(medidaCostadillo.value);
+		medidasVr.pierna = parseFloat(medidaPierna.value);
+		medidasVr.entrepierna = parseFloat(medidaEntrepierna.value);
+		medidasVr.brazo = 61; //! VALOR FIJO. LUEGO LA CAMBIARAS CUANDO EXISTA PATRON DE MANGA
 		//* MEDIDAS HORIZONTALES*//
-		medidasHz.pecho = medidaPecho.value;
-		medidasHz.cintura = medidaCintura.value;
-		medidasHz.cadera = medidaCadera.value;
-		medidasHz.espalda = medidaEspalda.value;
-		medidasHz.seppecho = medidaSeppecho.value;
+		medidasHz.pecho = parseFloat(medidaPecho.value);
+		medidasHz.cintura = parseFloat(medidaCintura.value);
+		medidasHz.cadera = parseFloat(medidaCadera.value);
+		medidasHz.espalda = parseFloat(medidaEspalda.value);
+		medidasVr.cuello = 36; // En su lugar estas empleando pecho/8, debes hacer modificaciones si lo quisieras incluir
+		medidasHz.seppecho = parseFloat(medidaSeppecho.value);
 		//TODO sigue fallando
 		dibujarSVG();
 	});
