@@ -11,7 +11,7 @@
 
 //----------------------------
 
-//Importamos la libreria TensorFlow.js
+//Importamos las librerías TensorFlow.js y mdoelos
 const tf = window.tf; // necesario?
 const poseDetection = window.poseDetection; // necesario?
 const bodySegmentation = window.bodySegmentation;
@@ -23,15 +23,15 @@ const bodyPix = window.bodyPix; // BodyPix antiguo NO FUNCIONA
 let datosFormulario; // Variable que contendrá los datos del formualrio. Servira para dibujar el patrón desde body-viewer.js y los scripts de la carpeta construccion-body-viewer
 //let datason; // Varieable que sirve tras implementación del back-end para enviar los datos del formulario en formato JSON
 
-//* Para pantalla-webcam.js
-//* ARREGLOS PARA ALMACENAR LAS CAPTURAS DE PANTALLA Y LOS PUNTOS SELECCIONADOS EN LAS CAPTURAS
-//Se usan en pantalla-webcam.js
+//*Se usan en pantalla-webcam.js
+// ARREGLOS PARA ALMACENAR LAS CAPTURAS DE PANTALLA Y LOS PUNTOS SELECCIONADOS EN LAS CAPTURAS
 const capturas = [];
-const ptosClave = ['pecho', 'cadera', 'cintura']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
+const ptosClave = ['centroDelanteroConCintura', 'pezon', 'lateralConCadera', 'puntaHombro', 'caidaHombro']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
+/* Los puntos clave del cuerpo junto con las medidas que aporte permiten establecer todo el patrón pues son a partir de estos puntos donde se toman manualmente las medidas en el cuerpo*/
 const ptosFrente = {};
 const ptosPerfil = {};
 
-//Se usan en images-tensorflow.js
+//*Se usan en images-tensorflow.js
 // Alamcenar a los puntos clave (landmarks) y conexiones del esqueleto despues de usar Pose-detection
 let posesFrente, posesPerfil; // {score, keypoints, keypoints3D}
 let keypointsFrente, keypointsPerfil; // {x, y, z, score, name}
