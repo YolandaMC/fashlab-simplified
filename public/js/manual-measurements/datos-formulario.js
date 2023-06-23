@@ -37,7 +37,7 @@ let posesFrente, posesPerfil; // {score, keypoints, keypoints3D}
 let keypointsFrente, keypointsPerfil; // {x, y, z, score, name}
 let keypoints3DFrente, keypoints3DPerfil; // {x, y, z, score, name}
 // Almacenar segmentacion despues de usar Body-segmentation
-let segmentacionFrente , segmentacionPerfil;
+let segmentacionFrente, segmentacionPerfil;
 let maskFrente, maskPerfil;
 let segmentacionPartesFrente, segmentacionPartesPerfil;
 let maskPartesFrente, maskPartesPerfil;
@@ -72,6 +72,15 @@ const tomaDatos = (event) => {
 			const datosFormData = new FormData(event.target); // Pasamos los datos-formulario a un objeto tipo FormData. Target se refiere al form y si apareciese this se referiría al boton (hijos dentro del form que portan el evento)?
 			datos = Object.fromEntries(datosFormData.entries()); // datos es un objeto de Javascript que me sirve para generar mi molde. Prefiero tener fuera de la función los datos para pasarlo al script molde.js
 			// console.log(datos);
+			//* Comvierto los datos recogidos que sean numeros a float (medidas y edad) y en resto lo dejo en string
+			// Recorrer las propiedades del objeto "datos"
+			for (let key in datos) {
+				// Verificar si el valor es un string y si es un número válido
+				if (typeof datos[key] === 'string' && !isNaN(parseFloat(datos[key]))) {
+					// Convertir el string a tipo float y actualizas el valor en el objeto
+					datos[key] = parseFloat(datos[key]);
+				}
+			}
 			//* Asigno lso datos a mi variable global datosFormulario
 			datosFormulario = datos;
 			//--
@@ -84,8 +93,17 @@ const tomaDatos = (event) => {
 			const datosFormData = new FormData(event.target);
 			// El método Object.fromEntries() transforma una lista de pares con [clave-valor] en un objeto.
 			datos = Object.fromEntries(datosFormData.entries()); // Datos es un objeto de Javascript que me sirve para generar mi molde
-			//const datason = JSON.stringify(datos); // Trasformo los datos a formato JSON en la variable datason para ser enviados al back-end
 			// console.log(datos);
+			//* Comvierto los datos recogidos que sean numeros a float (medidas y edad) y en resto lo dejo en string
+			// Recorrer las propiedades del objeto "datos"
+			for (let key in datos) {
+				// Verificar si el valor es un string y si es un número válido
+				if (typeof datos[key] === 'string' && !isNaN(parseFloat(datos[key]))) {
+					// Convertir el string a tipo float y actualizas el valor en el objeto
+					datos[key] = parseFloat(datos[key]);
+				}
+			}
+			//const datason = JSON.stringify(datos); // Trasformo los datos a formato JSON en la variable datason para ser enviados al back-end
 			//* Asigno lso datos a mi variable global datosFormulario
 			datosFormulario = datos;
 			//--
@@ -130,7 +148,7 @@ formulario.addEventListener('submit', async (event) => {
 		pantallaWebcam() capturase en captures las imagenes para hacer la ejecucion del 
 		codigo mas corta, no esperar a que termine pantallaWebcam() para ejecutar el analisis 
 		con modelos declarados en imagesTensorFlow() y que es bastante lento*/
-		await saberPorDondeVamos();// CUIDADO QUE SE HA EJECUTADO ANTES QUE imagesTensorFlow();
+		await saberPorDondeVamos();
 	} catch (error) {
 		console.error('Error en la ejecución del formulario', error);
 	}

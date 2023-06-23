@@ -30,7 +30,7 @@ let datosFormulario = {
 }; //nos sirve por ahora, luego la debemos variar
 
 // console.log (datos);
-console.log('datos' + datosFormulario);
+console.log('datos' + datosFormulario); //Los datosFormulario de medidas y edad se han pasado a float en el script datos-formulario.js
 
 // const medidasVr = {
 // 	cuello: 36,
