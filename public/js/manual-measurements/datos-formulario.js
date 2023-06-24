@@ -28,7 +28,7 @@ let datosFormulario; // Variable que contendrá los datos del formualrio. Servir
 const capturas = [];
 const ptosClave = ['centroDelanteroConCintura', 'pezon', 'lateralConCadera', 'puntaHombro', 'caidaHombro']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
 /* Los puntos clave del cuerpo junto con las medidas que aporte permiten establecer todo el patrón pues son a partir de estos puntos donde se toman manualmente las medidas en el cuerpo*/
-const ptosFrente = {};
+const ptosFrente = {}; //SON LOS PUUNTOS QUE EL USUARIO SELECCIONA PARA UN FUTURO MODELO
 const ptosPerfil = {};
 
 //*Se usan en images-tensorflow.js
@@ -41,6 +41,9 @@ let segmentacionFrente, segmentacionPerfil;
 let maskFrente, maskPerfil;
 let segmentacionPartesFrente, segmentacionPartesPerfil;
 let maskPartesFrente, maskPartesPerfil;
+// Para guardar los puntos de borde obtenidos y los centros delantero y lateral
+let bordeHip, bordeShoulder;
+let centroDel, centroLal;
 
 //----------------------------
 
