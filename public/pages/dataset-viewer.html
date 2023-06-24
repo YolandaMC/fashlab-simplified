@@ -32,17 +32,19 @@
 		</header>
 
 		<div class="principal-section">
-			<div class="fondo">
+			<div class="fondo-dataset-viewer">
 				<section class="section-dataset-viewer">
 					<form action="" class="datos-formulario">
 						<fieldset>
-							<div class="radiocontainer model-classcontainer">
+							<div class="radiocontainer model-classcontainer radiocontainer-dataset-viewer">
 								<label class="custom-radio" for="option-model"
 									>Escoger tipo de modelo de clasificación para los datos: <br />
 									<summary class="radios">
 										<input type="radio" name="option-model" value="no-label-model" /> Modelo con datos sin
 										etiquetar&nbsp;
-										<div id="range-container"></div>
+										<div id="range-container">
+											<label for="num-ranges"><output class="eleccion" id="eleccion"></output></label>
+										</div>
 										<br />
 										<input type="radio" name="option-model" value="label-model" /> Modelo con datos etiquetados por
 										"sexo" o "género"&nbsp;
@@ -54,7 +56,7 @@
 					</form>
 				</section>
 				<section class="section-dataset-viewer">
-					<div class="fondo fondo-inicio container-viewer"></div>
+					<div class="container-dataset-viewer"></div>
 				</section>
 			</div>
 		</div>
@@ -120,6 +122,8 @@
 				</p>
 			</div>
 		</footer>
+		<!-- JS -->
+		<script type="text/javascript" src="../js/reactividad-web.js"></script>
 		<!-- Biblioteca D3.js para visualización de datos -->
 		<script src="../js/libraries/d3.v7.js"></script>
 		<!-- Código tratamiento de datos -->

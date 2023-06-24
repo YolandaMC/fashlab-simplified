@@ -66,6 +66,7 @@ const actualizarOptionModel = () => {
 			rangeInput.min = 1; // Minima segmentacion permitida
 			rangeInput.max = 12; // Maxima segmentacion permitida
 			rangeInput.value = 6; // Valor inicial 6
+			rangeInput.class = 'num-ranges';
 			rangeInput.addEventListener('change', function () {
 				// Obtener el valor seleccionado y realizar las acciones correspondientes
 				console.log('Selected range value:', this.value);
@@ -74,7 +75,7 @@ const actualizarOptionModel = () => {
 				numRanges = rangeInput.value;
 				console.log(numRanges);
 				//TODO
-				//* Funcion del modelo de Tensorflow para clasificar dataset sin datos etiquetados. Esta a su vez llamará drawRanges
+				//* Funcion del modelo de Tensorflow para clasificar dataset sin datos etiquetados. Esta a su vez llamara drawRanges
 				// Divide la dataset en tantos numRanges como el usuario haya indicado en el DOM
 				modelRanges();
 				//TODO
@@ -338,6 +339,12 @@ function modelRangesLabel() {
 
 //* Declaracion funcion que dibuja los resultados de la division/rangos realizados por TensorFlow. EMPLEA D3JS
 function drawRanges(clusteredData) {
+
+	//! Eliminar todos los elementos hijos del SVG en cada llamada a la función, es decir en cada cambio de slider
+	// while (svg.firstChild) {
+	// 	svg.firstChild.remove();
+	// }
+
 	// viewer = select('.container-viewer')
 	// 	.append('svg')
 	// 	.attr('width', window.innerWidth)
@@ -348,7 +355,12 @@ function drawRanges(clusteredData) {
 
 	// Crear el contenedor SVG en el DOM
 	//const svg = d3.select('.container-viewer').append('svg').attr('width', width).attr('height', height); //.select('body')
-	const svg = d3.select('.container-viewer').append('svg').attr('width', width).attr('height', height).attr('class', "svg-container"); 
+	const svg = d3
+		.select('.container-dataset-viewer')
+		.append('svg')
+		.attr('width', width)
+		.attr('height', height)
+		.attr('class', 'svg-container');
 
 	// Definir colores para cada cluster
 	const colors = ['red', 'green', 'blue', 'yellow'];

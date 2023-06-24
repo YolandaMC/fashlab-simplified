@@ -67,3 +67,15 @@ for (let i = 0; i < slideContainers.length; i++) {
 	updateRange.call(slider);
 	slider.oninput = updateRange;
 }
+
+//* Solo para la pagina dataset-viewer
+const range = document.getElementById('range-input');
+if (range) { //! NO FUNCIONA REVISAR
+	function updateRange2() {
+		const eleccion = this.parentElement.getElementById('eleccion');
+		eleccion.innerHTML = this.value;
+	}
+	const rangeContainer = document.getElementById('range-container');
+	updateRange2.call(range);
+	range.oninput = updateRange2;
+}
