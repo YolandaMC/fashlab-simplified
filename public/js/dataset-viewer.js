@@ -21,7 +21,22 @@ let labelsTypes = ['sexo', 'genero']; // Establecemos en una lista las etiquetas
 //! OJO añadir condicion si numero segmentos escogidos mayor que el numero de registros en la base, debe tomarse el largo de la base como numero de segmentos
 
 //-------------
-
+//* Definir colores para cada cluster y resto de elementos
+//const colors = ['red', 'green', 'blue', 'yellow'];
+const colors = [
+	'#5eb9c2',
+	'#58cbc0',
+	'#6adbb3',
+	'#90e99e',
+	'#c1f385',
+	'#f9f871',
+	'#5eb9c2',
+	'#4ba6c9',
+	'#5b8fc6',
+	'#7b75b4',
+	'#935891',
+	'#9b3e63',
+];
 //-------------
 
 //* DECLARACIONES *//
@@ -67,6 +82,22 @@ const actualizarOptionModel = () => {
 			rangeInput.max = 12; // Maxima segmentacion permitida
 			rangeInput.value = 6; // Valor inicial 6
 			rangeInput.class = 'num-ranges';
+			rangeInput.step = '1';
+			rangeInput.list = 'steplist';
+			rangeInput.style.width = '100%';
+			let datalist = document.createElement('datalist');
+			datalist.id = 'steplist';
+			datalist.style.display = 'flex';
+			for (let i = rangeInput.min; i <= rangeInput.max; i++) {
+				let option = document.createElement('option');
+				option.textContent = i;
+				option.style.width = '100%'; // Establecer el ancho al 100%
+				option.style.backgroundColor = colors[i - 1];
+				option.style.color = 'white';
+				option.style.fontWeight = '600';
+				option.style.textAlign = 'center';
+				datalist.appendChild(option);
+			}
 			rangeInput.addEventListener('change', function () {
 				// Obtener el valor seleccionado y realizar las acciones correspondientes
 				console.log('Selected range value:', this.value);
@@ -81,8 +112,8 @@ const actualizarOptionModel = () => {
 				//TODO
 			});
 			// Insertar el elemento range en el DOM
-			// Por ejemplo, dentro de un contenedor con id "range-container"
 			const rangeContainer = document.querySelector('#range-container');
+			rangeContainer.appendChild(datalist);
 			rangeContainer.appendChild(rangeInput);
 		}
 
@@ -93,10 +124,12 @@ const actualizarOptionModel = () => {
 	} else if (labelModelRadio.checked) {
 		console.log(labelModelRadio.value);
 
-		// Eliminar el elemento range si existe
+		// Eliminar el elemento range si existe y la visualización de lso rangos que aparece encima
 		const rangeInput = document.querySelector('#range-input');
+		const datalist = document.querySelector('#steplist');
 		if (rangeInput) {
 			rangeInput.parentNode.removeChild(rangeInput);
+			datalist.parentNode.removeChild(datalist);
 		}
 
 		// Generamos los radio inputs para las etiquetas posibles para el modelo
@@ -109,13 +142,16 @@ const actualizarOptionModel = () => {
 			 </div>`
 			)
 			.join(' ');
-
+		//*Estilo para ubciar las opciones en el DOM
+		labelContainer.style.margin = '0 25% 0 25%';
+		labelContainer.style.display = 'flex';
+		labelContainer.style.alingItems = 'center';
+		labelContainer.style.justifyContent = 'space-between';
 		// Añadimos un evento listener atento a cuadno se producen cambios de seleccion
 		const radioLabels = document.querySelectorAll('input[name="labelType"]');
 		for (const radioLabel of radioLabels) {
 			radioLabel.addEventListener('change', runSelected);
 		}
-
 		function runSelected(e) {
 			console.log(e);
 			if (this.checked) {
@@ -213,8 +249,16 @@ function modelRanges() {
 	// Paso 5: llamar a la función que va a dibujar mis datos o retornar los datos
 	//return clusteredData;
 	//console.log(clusteredData);
+
+	//----
+
+	//----
+
 	drawRanges(clusteredData);
-	// ...
+
+	//----
+
+	//----
 }
 
 //* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS CON ETIQUETA (SEXO O GENERO SEGUN DECIDA EL USUARIO).
@@ -286,9 +330,17 @@ function modelRangesLabel() {
 	//* Paso 12: llamar a la función que va a dibujar mis datos o retornar los datos clasificados y ordenados
 	//return sortedData;
 	console.log(sortedData);
-	//TODO
-	//drawRanges(sortedData);
-	//TODO
+
+	//----
+
+	//----
+
+	drawRangesLabel();
+	// drawRangesLabel(sortedData);
+
+	//----
+
+	//----
 
 	// Declaracion de Función para agrupar los datos por clase
 	function groupDataByClass(predictions, labels, chestValues) {
@@ -339,31 +391,22 @@ function modelRangesLabel() {
 
 //* Declaracion funcion que dibuja los resultados de la division/rangos realizados por TensorFlow. EMPLEA D3JS
 function drawRanges(clusteredData) {
+	//*Seleccionamos el contenedor donde van nuestras visualizaciones
+	const svgContainer = document.querySelector('.container-dataset-viewer');
+	svgContainer.innerHTML = ''; // Elimina todo el contenido dentro del contenedor SVG antes de agregar uno nuevo
 
-	//! Eliminar todos los elementos hijos del SVG en cada llamada a la función, es decir en cada cambio de slider
-	// while (svg.firstChild) {
-	// 	svg.firstChild.remove();
-	// }
-
-	// viewer = select('.container-viewer')
-	// 	.append('svg')
-	// 	.attr('width', window.innerWidth)
-	// 	.attr('height', window.innerHeight); // Establecer luego si este ancho y alto te viene bien
-	// //
-	const width = 500; // Ancho del contenedor SVG
-	const height = 500; // Alto del contenedor SVG
+	// const width = datasetViewer.width; // Ancho del contenedor SVG
+	const width = 1400; // Ancho del contenedor SVG
+	const height = 600; // Alto del contenedor SVG
 
 	// Crear el contenedor SVG en el DOM
 	//const svg = d3.select('.container-viewer').append('svg').attr('width', width).attr('height', height); //.select('body')
 	const svg = d3
-		.select('.container-dataset-viewer')
-		.append('svg')
+		.select('.container-dataset-viewer') //Seleccionamos el contenedor donde colocar el svg
+		.append('svg') // declaramos el tipo de elemento a añadir
 		.attr('width', width)
 		.attr('height', height)
 		.attr('class', 'svg-container');
-
-	// Definir colores para cada cluster
-	const colors = ['red', 'green', 'blue', 'yellow'];
 
 	// Calcular el tamaño de cada círculo en función del número de instancias en el cluster
 	const maxInstances = d3.max(clusteredData, (d) => d.clusterLabel);
@@ -384,6 +427,11 @@ function drawRanges(clusteredData) {
 		.attr('fill', (d) => colors[d.clusterLabel]);
 }
 
+function drawRangesLabel() {
+	//*Seleccionamos el contenedor donde van nuestras visualizaciones
+	const svgContainer = document.querySelector('.container-dataset-viewer');
+	svgContainer.innerHTML = ''; // Elimina todo el contenido dentro del contenedor SVG antes de agregar uno nuevo
+}
 // Paso 6: Cargar el archivo JSON declarando la función json en el caso de no haber dispuesto del metodo json de D3js
 //  function json(url) {
 //     return fetch(url).then(response => response.json());
