@@ -132,32 +132,54 @@ header {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background-color: whitesmoke; /*Quitar si luego metes foto*/
+	/* background-color: whitesmoke;  */
+	/*Quitar si luego metes foto*/
 	border-radius: 4px;
 	border-style: none;
-	
+	box-shadow: 0px 7px 7px #87878713, 0px -7px 7px #87878713;
 }
 
-.section-dataset-viewer{
+.section-dataset-viewer {
 	width: auto;
 	height: auto;
 }
 
-.container-dataset-viewer{
-	width: auto;
+.container-dataset-viewer {
 	height: auto;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
 	background-color: white;
-	 /*Quitar si luego metes foto*/
-	margin-bottom:  20px;
+	/*Quitar si luego metes foto*/
+	margin-bottom: 20px;
+	/* padding: auto; */
 	border-radius: 4px;
 	border-style: none;
+	position: relative;
 }
 
-/* -- */
+.container-dataset-viewer svg {
+	align-self: center;
+}
+
+.tooltip-container {
+	position: absolute;
+	left: 50%;
+	top: 0;
+	transform: translateX(-50%);
+	z-index: 2;
+}
+
+.tooltip.hidden {
+	display: none;
+}
+
+.tooltip-valor-dato.hidden {
+	display: none;
+}
+
+/* --------------------------------------- */
 
 .titulo {
 	margin: 30px;
@@ -456,8 +478,6 @@ input[type='radio']:checked:before {
 	box-shadow: 5px 5px #e1e1e154;
 	color: #878787;
 }
-
-
 
 /* ----------------------------- Footer ----------------------------- */
 footer {
