@@ -716,15 +716,17 @@ function drawRanges(clusteredData) {
 
 	// Obtén la lista de medidas corporales disponibles
 	const medidasCorporales = Object.keys(clusteredData[0].medidasCorporales);
+	const clustersLabels = Object.keys(clusteredData[0].clusterLabel);
 	// Obtén el número de medidas corporales y el número de colores disponibles
 	const numMedidasCorporales = medidasCorporales.length;
+	const numclustersLabels = clustersLabels.length;
 	// Configuración de colores para cada medida corporal
 	const numColores = colors.length;
 	// const colorScale = d3.scaleOrdinal().domain(medidasCorporales).range(d3.schemeCategory10);
 	const colorScale = d3 //!
 		.scaleOrdinal()
-		.domain(medidasCorporales)
-		.range(colors.slice(0, numMedidasCorporales))
+		.domain(clustersLabels)
+		.range(colors.slice(0, numclustersLabels))
 		.unknown(colors[numColores - 1]);
 
 	// Ordena los datos por clusterLabel
@@ -774,13 +776,13 @@ function drawRanges(clusteredData) {
 		}))
 	);
 
-	//* Para los colores de los cluster
+	//* Para los colores de los cluster y als stacks
 	const numStacks = d3.max(stackedData, (d) => d.length); //!
 
 	//Colores para cada cluster
 	const clusterColorScale = d3
 		.scaleOrdinal()
-		.domain(clusteredData.map((d) => d.clusteredLabel))
+		.domain(clusteredData.map((d) => d.clusterLabel))
 		.range(colors);
 
 	// Crea una escala de saturación para diferenciar las stacks
@@ -799,12 +801,7 @@ function drawRanges(clusteredData) {
 			(exit) => exit.remove()
 		)
 		.classed('stack', true)
-		.attr('fill', (d, i) => {
-			const clusteredLabel = d[0].data.clusterLabel;
-			const baseColor = clusterColorScale(clusteredLabel);
-			const saturation = saturationScale(i);
-			return d3.interpolateRgb(baseColor, d3.rgb(baseColor).brighter(saturation));
-		});
+		.attr('fill', (d) => clusterColorScale(d.key));
 
 	stackGroup
 		.selectAll('rect')
