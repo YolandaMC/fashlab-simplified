@@ -23,7 +23,8 @@ let labelsTypes = ['sexo', 'genero']; // Establecemos en una lista las etiquetas
 //-------------
 //* Definir colores para cada cluster y resto de elementos
 //const colors = ['red', 'green', 'blue', 'yellow'];
-const colors = [// 80 == 50% opacidad
+const colors = [
+	// 80 == 50% opacidad
 	'#5eb9c2',
 	'#58cbc0',
 	'#6adbb3',
@@ -456,6 +457,9 @@ function drawDataset() {
 	svgContainer.innerHTML = ''; // Elimina todo el contenido dentro del contenedor SVG antes de agregar uno nuevo
 
 	//https://programmerclick.com/article/4640880948/
+	//https://www.youtube.com/watch?v=Ihi0AFoC3PY
+	//https://d3-graph-gallery.com/graph/barplot_stacked_basicWide.html
+	//https://www.educative.io/answers/how-to-create-stacked-bar-chart-using-d3
 
 	//* Establecemos tamaño del svg
 	const width = 1200;
@@ -467,16 +471,14 @@ function drawDataset() {
 	// Tamaño ajustado del SVG
 	const svgWidth = width + margin.left + margin.right + legendWidth;
 	const svgHeight = height + margin.top + margin.bottom;
-
 	// Espacio entre barras
 	const barSpacing = 5;
 
 	// Obtén la lista de medidas corporales disponibles
 	const medidasCorporales = Object.keys(dataset[0].medidasCorporales);
-
-	// Configuración de colores para cada medida corporal
 	// Obtén el número de medidas corporales y el número de colores disponibles
 	const numMedidasCorporales = medidasCorporales.length;
+	// Configuración de colores para cada medida corporal
 	const numColores = colors.length;
 	// const colorScale = d3.scaleOrdinal().domain(medidasCorporales).range(d3.schemeCategory10);
 	const colorScale = d3
@@ -498,10 +500,9 @@ function drawDataset() {
 		.range([0, width])
 		.padding(0.1);
 
-	const yScale = d3
-		.scaleLinear()
-		.domain([0, d3.max(dataset, (d) => d3.sum(Object.values(d.medidasCorporales)))])
-		.range([height, 0]);
+	// Calcula el máximo valor acumulado de medidas corporales para el dominio del eje Y
+	const maxMeasure = d3.max(dataset, (d) => d3.sum(Object.values(d.medidasCorporales)));
+	const yScale = d3.scaleLinear().domain([0, maxMeasure]).range([height, 0]);
 
 	// Crea el SVG y establece su tamaño
 	const svg = d3.select('.container-dataset-viewer').append('svg').attr('width', svgWidth).attr('height', svgHeight);
@@ -513,7 +514,6 @@ function drawDataset() {
 	tooltipContainer.append('div').attr('class', 'tooltip hidden');
 	// Selección del tooltip
 	const tooltip = tooltipContainer.select('.tooltip');
-
 
 	// Crea un grupo para el gráfico principal
 	const mainGroup = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
@@ -540,15 +540,16 @@ function drawDataset() {
 	stackGroup
 		.selectAll('rect')
 		.data((d) => d)
-		.join(
-			(enter) => enter.append('rect'),
-			(update) => update,
-			(exit) => exit.remove()
-		)
+		// .join(
+		// 	(enter) => enter.append('rect'),
+		// 	(update) => update,
+		// 	(exit) => exit.remove()
+		// )
+		.join('rect')
 		.attr('x', (d) => xScale(d.data.name))
-		.attr('y', (d) => yScale(d[1]))
-		.attr('height', (d) => yScale(d[0]) - yScale(d[1]))
-		.attr('width', xScale.bandwidth()); //14
+		.attr('y', (d) => yScale(d[1])) //.attr('y', (d, i) => yScale(d[1] + (i > 0 ? d[i - 1][1] : 0)))
+		.attr('height', (d) => yScale(d[0]) - yScale(d[1])) //.attr('height', (d) => yScale(d[0]) - yScale(d[1]+ d[0]))
+		.attr('width', xScale.bandwidth()); //.attr('width', xScale.bandwidth());
 
 	// Agrega una leyenda para las medidas corporales
 	const legendGroup = svg
@@ -603,7 +604,6 @@ function drawDataset() {
 	// 	.style('font-size', '12px') // Ajusta el tamaño de la fuente aquí
 	// 	.style('fill', 'black') ;// Color del texto
 	// 	//.attr('transform', 'translate(0, 5)'); // Ajuste vertical del texto para evitar superposición
-
 
 	//* Función para mostrar la ventana emergente
 	function showTooltip(event, d) {
