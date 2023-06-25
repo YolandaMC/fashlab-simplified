@@ -329,3 +329,47 @@ function drawDataset() {
 document.addEventListener('DOMContentLoaded', () => {
 	json('../../models/dataset-simulated.json').then((data) => init(data)); // Anque primero procesaremos los dtos con el modelo de TensorFlow, nos vamlemos del método de la biblioteca D3js json para recuperar los datos de la base de datos
 });
+
+
+
+//* Declaracion funcion que dibuja los resultados de la division/rangos realizados por TensorFlow. EMPLEA D3JS
+function drawRanges(clusteredData) {
+	//*Seleccionamos el contenedor donde van nuestras visualizaciones
+	const svgContainer = document.querySelector('.container-dataset-viewer');
+	svgContainer.innerHTML = ''; // Elimina todo el contenido dentro del contenedor SVG antes de agregar uno nuevo
+
+	console.log(clusteredData);
+
+	//* Establecemos tamaño del svg
+	// const width = datasetViewer.width; // Ancho del contenedor SVG
+	const width = 1400; // Ancho del contenedor SVG
+	const height = 600; // Alto del contenedor SVG
+
+	// Crear el contenedor SVG en el DOM
+	//const svg = d3.select('.container-viewer').append('svg').attr('width', width).attr('height', height); //.select('body')
+	const svg = d3
+		.select('.container-dataset-viewer') //Seleccionamos el contenedor donde colocar el svg
+		.append('svg') // declaramos el tipo de elemento a añadir
+		.attr('width', width)
+		.attr('height', height)
+		.attr('class', 'svg-container');
+
+	// Calcular el tamaño de cada círculo en función del número de instancias en el cluster
+	const maxInstances = d3.max(clusteredData, (d) => d.clusterLabel);
+	const circleRadius = Math.min(width, height) / (maxInstances * 2);
+
+	//TODO
+
+	//TODO
+
+	// Dibujar los círculos en el SVG, uno por cada instancia clasificada
+	svg
+		.selectAll('circle')
+		.data(clusteredData)
+		.enter()
+		.append('circle')
+		.attr('cx', (d) => (d.medidasCorporales.pecho / 100) * width) // Coordenada x basada en el valor de "pecho"
+		.attr('cy', (d) => (d.medidasCorporales.estatura / 200) * height) // Coordenada y basada en el valor de "estatura"
+		.attr('r', circleRadius)
+		.attr('fill', (d) => colors[d.clusterLabel]);
+}

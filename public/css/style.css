@@ -163,6 +163,7 @@ header {
 	align-self: center;
 }
 
+/* Tooltip info name, sexo, genero y edad */
 .tooltip-container {
 	position: absolute;
 	left: 50%;
@@ -176,6 +177,21 @@ header {
 }
 
 .tooltip-valor-dato.hidden {
+	display: none;
+}
+
+/* Tooltip de cada línea que representa una medida */
+.tooltipLine {
+	position: absolute;
+	/* visibility: hidden; */
+	padding: 8px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.tooltipLine.hidden {
 	display: none;
 }
 

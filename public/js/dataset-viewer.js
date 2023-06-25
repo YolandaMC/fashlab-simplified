@@ -351,8 +351,7 @@ function modelRangesLabel() {
 
 	//----
 
-	drawRangesLabel();
-	// drawRangesLabel(sortedData);
+	drawRangesLabel(sortedData);
 
 	//----
 
@@ -405,52 +404,12 @@ function modelRangesLabel() {
 	}
 }
 
-//* Declaracion funcion que dibuja los resultados de la division/rangos realizados por TensorFlow. EMPLEA D3JS
-function drawRanges(clusteredData) {
-	//*Seleccionamos el contenedor donde van nuestras visualizaciones
-	const svgContainer = document.querySelector('.container-dataset-viewer');
-	svgContainer.innerHTML = ''; // Elimina todo el contenido dentro del contenedor SVG antes de agregar uno nuevo
+//----------
 
-	//* Establecemos tamaño del svg
-	// const width = datasetViewer.width; // Ancho del contenedor SVG
-	const width = 1400; // Ancho del contenedor SVG
-	const height = 600; // Alto del contenedor SVG
+//* FUNCIONES QUE DIBUJAN LOS DATOS
 
-	// Crear el contenedor SVG en el DOM
-	//const svg = d3.select('.container-viewer').append('svg').attr('width', width).attr('height', height); //.select('body')
-	const svg = d3
-		.select('.container-dataset-viewer') //Seleccionamos el contenedor donde colocar el svg
-		.append('svg') // declaramos el tipo de elemento a añadir
-		.attr('width', width)
-		.attr('height', height)
-		.attr('class', 'svg-container');
-
-	// Calcular el tamaño de cada círculo en función del número de instancias en el cluster
-	const maxInstances = d3.max(clusteredData, (d) => d.clusterLabel);
-	const circleRadius = Math.min(width, height) / (maxInstances * 2);
-
-	//TODO
-
-	//TODO
-
-	// Dibujar los círculos en el SVG, uno por cada instancia clasificada
-	svg
-		.selectAll('circle')
-		.data(clusteredData)
-		.enter()
-		.append('circle')
-		.attr('cx', (d) => (d.medidasCorporales.pecho / 100) * width) // Coordenada x basada en el valor de "pecho"
-		.attr('cy', (d) => (d.medidasCorporales.estatura / 200) * height) // Coordenada y basada en el valor de "estatura"
-		.attr('r', circleRadius)
-		.attr('fill', (d) => colors[d.clusterLabel]);
-}
-
-function drawRangesLabel() {
-	//*Seleccionamos el contenedor donde van nuestras visualizaciones
-	const svgContainer = document.querySelector('.container-dataset-viewer');
-	svgContainer.innerHTML = ''; // Elimina todo el contenido dentro del contenedor SVG antes de agregar uno nuevo
-}
-
+//----------
+//*ESTA FUNCION DIBUJA EL DATASET EN ORDEN DE APARICION DE LOS DATOS EN EL Y CUANDO SE ESCOGE numRanges = 1 ES DECIR, QUE SE DECIDDE NO SIVIDIR EL DATASET
 function drawDataset() {
 	//*Seleccionamos el contenedor donde van nuestras visualizaciones
 	const svgContainer = document.querySelector('.container-dataset-viewer');
@@ -592,18 +551,88 @@ function drawDataset() {
 		.on('mouseover', showTooltip) // Agrega eventos de ratón para mostrar y ocultar la ventana emergente
 		.on('mouseout', hideTooltip);
 
-	//Agrega valor name debajo de cada barra
-	// stackGroup
-	// 	.selectAll('text')
-	// 	.data((d) => d)
-	// 	.join('text')
-	// 	.text((d) => d.data.name) // Establece el contenido del texto como el valor de la clave "name"
-	// 	.attr('x', (d) => xScale(d.data.name) + xScale.bandwidth() / 2)
-	// 	.attr('y', (d) => yScale(d[0]) + 15) // Posición debajo de la barra con un margen
-	// 	.attr('text-anchor', 'middle') // Alineación horizontal al centro
-	// 	.style('font-size', '12px') // Ajusta el tamaño de la fuente aquí
-	// 	.style('fill', 'black') ;// Color del texto
-	// 	//.attr('transform', 'translate(0, 5)'); // Ajuste vertical del texto para evitar superposición
+	//-----------------
+
+	// Crea un nuevo grupo para las lineas de conexión
+	const lineGroup = mainGroup.append('g').attr('class', 'line-group');
+
+	// Trama las líneas de conexión
+	// lineGroup
+	// 	.selectAll('line')
+	// 	.data(stackedData)
+	// 	.join('line')
+	// 	.attr('x1', (d) => xScale(d[0].data.name) + xScale.bandwidth() / 2)
+	// 	.attr('y1', (d) => yScale(d[0][1]))
+	// 	.attr('x2', (d) => xScale(d[d.length - 1].data.name) + xScale.bandwidth() / 2)
+	// 	.attr('y2', (d) => yScale(d[d.length - 1][1]))
+	// 	.attr('stroke', 'pink')
+	// 	.attr('stroke-width', 2);
+
+	// Definir la escala de colores para las lineas de conexion
+	const colorScaleLinesConexion = d3.interpolateRgb('mistyrose', 'hotpink');
+
+	// Trama las líneas de conexión
+	stackedData.forEach((stack, stackIndex) => {
+		stack.forEach((d, i) => {
+			if (i < stack.length - 1) {
+				const currentBar = d;
+				const nextBar = stack[i + 1];
+
+				const line = lineGroup
+					.append('line')
+					.attr('x1', xScale(currentBar.data.name) + xScale.bandwidth() / 2)
+					.attr('y1', yScale(currentBar[1]))
+					.attr('x2', xScale(nextBar.data.name) + xScale.bandwidth() / 2)
+					.attr('y2', yScale(nextBar[1]))
+					.attr('stroke', colorScaleLinesConexion(stackIndex / (stackedData.length - 1))) //'pink'
+					.attr('stroke-width', 2);
+
+				// Agregar tooltips
+				line //!NO ESTA FUNCIONANDO
+					.on('mouseover', (event, d) => {
+						// const medidaCorporal = currentBar.data.medidasCorporales;
+						let medidaCorporal;
+						if (currentBar.data && currentBar.data.medidasCorporales) {
+							medidaCorporal = currentBar.data.medidasCorporales;
+						} else if (currentBar[0] && currentBar[0].data && currentBar[0].data.medidasCorporales) {
+							medidaCorporal = currentBar[0].data.medidasCorporales;
+						} else {
+							console.error('Estructura de datos no válida');
+							return;
+						}
+						const keys = Object.keys(medidaCorporal);
+						// const tooltipContent = keys.map((key) => `${key}: ${medidaCorporal[key]}`).join('<br>');
+						const tooltipContent = Object.entries(medidaCorporal)
+							.map(([key, value]) => `${key}: ${value}`)
+							.join('<br>');
+						console.log(tooltipContent);
+						//-------------------------------
+						const tooltipLine = d3.select('.tooltipLine');
+						// Obtén las coordenadas del gráfico en relación con el elemento contenedor
+						const containerRect = svgContainer.getBoundingClientRect();
+						// Resta las coordenadas del gráfico del evento del ratón para obtener las coordenadas relativas dentro del gráfico
+						const xRelative = event.pageX - containerRect.left;
+						const yRelative = event.pageY - containerRect.top;
+						tooltipLine
+							.classed('hidden', false)
+							// .style('visibility', 'visible')
+							.style('left', event.pageX + 'px')
+							.style('top', event.pageY + 'px')
+							// .style('left', `${xRelative}px`)
+							// .style('top', `${yRelative}px`)
+							// .html(`Medida Corporal: ${medida}: ${medidaCorporal[medida]}`);
+							.html(`Medidas Corporales:<br>${tooltipContent}`);
+					})
+					.on('mouseout', () => {
+						const tooltipLine = d3.select('.tooltipLine');
+						// tooltipLine.style('visibility', 'hidden');
+						tooltipLine.classed('hidden', true);
+					});
+			}
+		});
+	});
+
+	//----------------
 
 	//* Función para mostrar la ventana emergente
 	function showTooltip(event, d) {
@@ -662,6 +691,263 @@ function drawDataset() {
 		const tooltip = d3.select('.tooltip');
 		tooltip.classed('hidden', true);
 	}
+}
+
+//* Declaracion funcion que dibuja los resultados de la division/rangos realizados por TensorFlow. EMPLEA D3JS
+function drawRanges(clusteredData) {
+	//*Seleccionamos el contenedor donde van nuestras visualizaciones
+	const svgContainer = document.querySelector('.container-dataset-viewer');
+	svgContainer.innerHTML = ''; // Elimina todo el contenido dentro del contenedor SVG antes de agregar uno nuevo
+
+	console.log(clusteredData);
+
+	//* Establecemos tamaño del svg
+	const width = 1200;
+	const height = 600;
+	// Margen
+	const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+	// Espacio para la leyenda
+	const legendWidth = 120;
+	// Tamaño ajustado del SVG
+	const svgWidth = width + margin.left + margin.right + legendWidth;
+	const svgHeight = height + margin.top + margin.bottom;
+	// Espacio entre barras
+	const barSpacing = 5;
+
+	// Obtén la lista de medidas corporales disponibles
+	const medidasCorporales = Object.keys(clusteredData[0].medidasCorporales);
+	// Obtén el número de medidas corporales y el número de colores disponibles
+	const numMedidasCorporales = medidasCorporales.length;
+	// Configuración de colores para cada medida corporal
+	const numColores = colors.length;
+	// const colorScale = d3.scaleOrdinal().domain(medidasCorporales).range(d3.schemeCategory10);
+	const colorScale = d3 //!
+		.scaleOrdinal()
+		.domain(medidasCorporales)
+		.range(colors.slice(0, numMedidasCorporales))
+		.unknown(colors[numColores - 1]);
+
+	// Ordena los datos por clusterLabel
+	clusteredData.sort((a, b) => a.clusterLabel - b.clusterLabel);
+
+	// Escalas
+	const xScale = d3
+		.scaleBand()
+		.domain(clusteredData.map((d) => d.name))
+		.range([0, width])
+		.padding(0.1);
+
+	// Calcula el máximo valor acumulado de medidas corporales para el dominio del eje Y
+	const maxMeasure = d3.max(clusteredData, (d) => d3.sum(Object.values(d.medidasCorporales)));
+	const yScale = d3.scaleLinear().domain([0, maxMeasure]).range([height, 0]);
+
+	// Crea el SVG y establece su tamaño
+	const svg = d3.select('.container-dataset-viewer').append('svg').attr('width', svgWidth).attr('height', svgHeight);
+	// Obtén una referencia al contenedor del gráfico
+	const chartContainer = d3.select('.container-dataset-viewer');
+	// Crea el contenedor para el tooltip
+	const tooltipContainer = chartContainer.append('div').attr('class', 'tooltip-container');
+	// Crea el tooltip dentro del contenedor
+	tooltipContainer.append('div').attr('class', 'tooltip hidden');
+	// Selección del tooltip
+	const tooltip = tooltipContainer.select('.tooltip');
+
+	// Crea un grupo para el gráfico principal
+	const mainGroup = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+	// Apila los datos por columnas
+	// const stackedData = d3
+	// 	.stack()
+	// 	.keys(medidasCorporales)
+	// 	.value((d, key) => d.medidasCorporales[key])
+	// 	.offset(d3.stackOffsetNone)(dataset);
+
+	const stackedData = d3
+		.stack()
+		.keys(medidasCorporales)
+		.value((d, key) => d.medidasCorporales[key])
+		.offset(d3.stackOffsetNone)(
+		clusteredData.map((d) => ({
+			...d,
+			medidasCorporales: d.medidasCorporales,
+			clusterLabel: d.clusterLabel !== undefined ? d.clusterLabel : 'N/A',
+		}))
+	);
+
+	//* Para los colores de los cluster
+	const numStacks = d3.max(stackedData, (d) => d.length); //!
+
+	//Colores para cada cluster
+	const clusterColorScale = d3
+		.scaleOrdinal()
+		.domain(clusteredData.map((d) => d.clusteredLabel))
+		.range(colors);
+
+	// Crea una escala de saturación para diferenciar las stacks
+	const saturationScale = d3
+		.scaleLinear()
+		.domain([0, numStacks - 1]) //!
+		.range([0.2, 1]);
+
+	// Dibuja las barras apiladas
+	const stackGroup = mainGroup //svg
+		.selectAll('g.stack')
+		.data(stackedData)
+		.join(
+			(enter) => enter.append('g'),
+			(update) => update,
+			(exit) => exit.remove()
+		)
+		.classed('stack', true)
+		.attr('fill', (d, i) => {
+			const clusteredLabel = d[0].data.clusterLabel;
+			const baseColor = clusterColorScale(clusteredLabel);
+			const saturation = saturationScale(i);
+			return d3.interpolateRgb(baseColor, d3.rgb(baseColor).brighter(saturation));
+		});
+
+	stackGroup
+		.selectAll('rect')
+		.data((d) => d)
+		.join('rect')
+		.attr('x', (d) => xScale(d.data.name))
+		.attr('y', (d) => yScale(d[1])) //.attr('y', (d, i) => yScale(d[1] + (i > 0 ? d[i - 1][1] : 0)))
+		.attr('height', (d) => yScale(d[0]) - yScale(d[1])) //.attr('height', (d) => yScale(d[0]) - yScale(d[1]+ d[0]))
+		.attr('width', xScale.bandwidth()); //.attr('width', xScale.bandwidth());
+
+	// Agrega una leyenda para las medidas corporales
+	const legendGroup = svg
+		.append('g')
+		.attr('transform', `translate(${width + margin.left + margin.right}, ${margin.top})`);
+
+	legendGroup
+		.selectAll('rect')
+		.data(medidasCorporales)
+		.join('rect')
+		.attr('x', 0)
+		.attr('y', (d, i) => i * 20)
+		.attr('width', 10)
+		.attr('height', 10)
+		.attr('fill', (d, i) => colorScale(d));
+
+	legendGroup
+		.selectAll('text')
+		.data(medidasCorporales)
+		.join('text')
+		.attr('x', 20)
+		.attr('y', (d, i) => i * 20 + 10)
+		.text((d) => d)
+		.attr('alignment-baseline', 'middle')
+		.style('font-size', '12px'); // Ajusta el tamaño del texto aquí;
+
+	// Agrega un círculo encima de cada barra apilada
+	stackGroup
+		.selectAll('circle')
+		.data((d) => d)
+		.join('circle')
+		.attr('cx', (d) => xScale(d.data.name) + xScale.bandwidth() / 2)
+		.attr('cy', (d) => yScale(d[1]) - 10) // Ubicación encima de la barra con un margen
+		.attr('r', 5)
+		.style('fill', 'pink') // Color del punto
+		.on('mouseover', showTooltip) // Agrega eventos de ratón para mostrar y ocultar la ventana emergente
+		.on('mouseout', hideTooltip);
+
+	//-----------------
+
+	//* Crea un nuevo grupo para las lineas de conexión
+	const lineGroup = mainGroup.append('g').attr('class', 'line-group');
+
+	// Definir la escala de colores para las lineas de conexion
+	const colorScaleLinesConexion = d3.interpolateRgb('mistyrose', 'hotpink');
+
+	// Trama las líneas de conexión
+	stackedData.forEach((stack, stackIndex) => {
+		stack.forEach((d, i) => {
+			if (i < stack.length - 1) {
+				const currentBar = d;
+				const nextBar = stack[i + 1];
+
+				const line = lineGroup
+					.append('line')
+					.attr('x1', xScale(currentBar.data.name) + xScale.bandwidth() / 2)
+					.attr('y1', yScale(currentBar[1]))
+					.attr('x2', xScale(nextBar.data.name) + xScale.bandwidth() / 2)
+					.attr('y2', yScale(nextBar[1]))
+					.attr('stroke', colorScaleLinesConexion(stackIndex / (stackedData.length - 1))) //'pink'
+					.attr('stroke-width', 2);
+			}
+		});
+	});
+
+	//----------------
+
+	//* Función para mostrar la ventana emergente
+	function showTooltip(event, d) {
+		// const tooltip = d3.select('.tooltip');
+
+		let data;
+		if (d.data) {
+			// Si "d" tiene una propiedad "data", usamos esa propiedad como datos
+			data = d.data;
+		} else if (d[0] && d[0].data) {
+			// Si "d[0]" tiene una propiedad "data", usamos esa propiedad como datos
+			data = d[0].data;
+		} else {
+			// Si no se encuentra una estructura de datos válida, mostramos un mensaje de error
+			console.error('Estructura de datos no válida');
+			return;
+		}
+
+		const name = data.name !== undefined ? data.name : 'N/A';
+		const sexo = data.sexo !== undefined ? data.sexo : 'N/A';
+		const genero = data.genero !== undefined ? data.genero : 'N/A';
+		const edad = data.edad !== undefined ? data.edad : 'N/A';
+		const tallaHabitual = data.tallaHabitual !== undefined ? data.tallaHabitual : 'N/A';
+		const clusterLabel = data.clusterLabel || 'N/A';
+
+		const tooltipContent =
+			'<div>Name: ' +
+			name +
+			'</div>' +
+			'<div>Sexo: ' +
+			sexo +
+			'</div>' +
+			'<div>Genero: ' +
+			genero +
+			'</div>' +
+			'<div>Edad: ' +
+			edad +
+			'</div>' +
+			'<div>Talla Habitual: ' +
+			tallaHabitual +
+			'</div>' +
+			'<div>Cluster Label: ' +
+			clusterLabel +
+			'</div>';
+
+		const containerWidth = svgContainer.getBoundingClientRect().width;
+		const tooltipWidth = tooltip.node().getBoundingClientRect().width;
+		const tooltipLeft = (containerWidth - tooltipWidth) / 2;
+
+		// tooltip
+		// 	.style('left', `${event.pageX}px`) // Usamos "event.pageX" en lugar de "d3.event.pageX"
+		// 	.style('top', `${event.pageY}px`) // Usamos "event.pageY" en lugar de "d3.event.pageY"
+		// 	.html(tooltipContent)
+		// 	.classed('hidden', false);
+		tooltip.style('left', `${tooltipLeft}px`).style('top', '0').html(tooltipContent).classed('hidden', false);
+	}
+
+	//* Función para ocultar la ventana emergente
+	function hideTooltip(event, d) {
+		const tooltip = d3.select('.tooltip');
+		tooltip.classed('hidden', true);
+	}
+}
+
+function drawRangesLabel(sortedData) {
+	//*Seleccionamos el contenedor donde van nuestras visualizaciones
+	const svgContainer = document.querySelector('.container-dataset-viewer');
+	svgContainer.innerHTML = ''; // Elimina todo el contenido dentro del contenedor SVG antes de agregar uno nuevo
 }
 
 //-------------
