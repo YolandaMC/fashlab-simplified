@@ -716,18 +716,8 @@ function drawRanges(clusteredData) {
 
 	// Obtén la lista de medidas corporales disponibles
 	const medidasCorporales = Object.keys(clusteredData[0].medidasCorporales);
-	const clustersLabels = Object.keys(clusteredData[0].clusterLabel);
-	// Obtén el número de medidas corporales y el número de colores disponibles
-	const numMedidasCorporales = medidasCorporales.length;
-	const numclustersLabels = clustersLabels.length;
-	// Configuración de colores para cada medida corporal
-	const numColores = colors.length;
-	// const colorScale = d3.scaleOrdinal().domain(medidasCorporales).range(d3.schemeCategory10);
-	const colorScale = d3 //!
-		.scaleOrdinal()
-		.domain(clustersLabels)
-		.range(colors.slice(0, numclustersLabels))
-		.unknown(colors[numColores - 1]);
+	// const clustersLabels = Object.keys(clusteredData[0].clusterLabel); //!
+	const clusterLabels = [...new Set(clusteredData.map((d) => d.clusterLabel))]; //!
 
 	// Ordena los datos por clusterLabel
 	clusteredData.sort((a, b) => a.clusterLabel - b.clusterLabel);
@@ -758,12 +748,6 @@ function drawRanges(clusteredData) {
 	const mainGroup = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
 
 	// Apila los datos por columnas
-	// const stackedData = d3
-	// 	.stack()
-	// 	.keys(medidasCorporales)
-	// 	.value((d, key) => d.medidasCorporales[key])
-	// 	.offset(d3.stackOffsetNone)(dataset);
-
 	const stackedData = d3
 		.stack()
 		.keys(medidasCorporales)
@@ -776,32 +760,42 @@ function drawRanges(clusteredData) {
 		}))
 	);
 
-	//* Para los colores de los cluster y als stacks
-	const numStacks = d3.max(stackedData, (d) => d.length); //!
+	// console.log(clusterLabels);
 
+	//* Para los colores de los cluster y als stacks
+	// Obtén el número de medidas corporales y el número de colores disponibles
+	const numMedidasCorporales = medidasCorporales.length;
+	const numclusterLabels = clusterLabels.length; //!
+	const numColores = colors.length;
+	// const colorScale = d3.scaleOrdinal().domain(medidasCorporales).range(d3.schemeCategory10);
+	const colorScale = d3 //!
+		.scaleOrdinal()
+		.domain(clusterLabels) //!
+		.range(colors.slice(0, numclusterLabels))
+		.unknown(colors[numColores - 1]);
 	//Colores para cada cluster
 	const clusterColorScale = d3
 		.scaleOrdinal()
-		.domain(clusteredData.map((d) => d.clusterLabel))
-		.range(colors);
+		.domain(clusterLabels) //.domain(clusteredData.map((d) => d.clusterLabel))
+		.range(colors.slice(0, numclusterLabels))
+		.unknown(colors[numColores - 1]);
 
+	//* Configuración de colores para cada medida corporal
 	// Crea una escala de saturación para diferenciar las stacks
+	// const numStacks = d3.max(stackedData, (d) => d.length); //!
+	//console.log(numMedidasCorporales);
 	const saturationScale = d3
 		.scaleLinear()
-		.domain([0, numStacks - 1]) //!
-		.range([0.2, 1]);
+		// .domain([0, numMedidasCorporales - 1]) //!
+		.domain([0, clusteredData.length - 1]) //! LAS STACKS DE CADA BARRA PARA LA MISMA MEDIDA CORPORAL SE REPRESENTAN TODAS JUNTAS PRIMERO
+		.range([0, 1]);
 
 	// Dibuja las barras apiladas
 	const stackGroup = mainGroup //svg
 		.selectAll('g.stack')
 		.data(stackedData)
-		.join(
-			(enter) => enter.append('g'),
-			(update) => update,
-			(exit) => exit.remove()
-		)
-		.classed('stack', true)
-		.attr('fill', (d) => clusterColorScale(d.key));
+		.join('g')
+		.classed('stack', true);
 
 	stackGroup
 		.selectAll('rect')
@@ -810,7 +804,26 @@ function drawRanges(clusteredData) {
 		.attr('x', (d) => xScale(d.data.name))
 		.attr('y', (d) => yScale(d[1])) //.attr('y', (d, i) => yScale(d[1] + (i > 0 ? d[i - 1][1] : 0)))
 		.attr('height', (d) => yScale(d[0]) - yScale(d[1])) //.attr('height', (d) => yScale(d[0]) - yScale(d[1]+ d[0]))
-		.attr('width', xScale.bandwidth()); //.attr('width', xScale.bandwidth());
+		.attr('width', xScale.bandwidth()) //.attr('width', xScale.bandwidth());
+		// .attr('fill', (d, i) => clusterColorScale(d.data.clusterLabel));
+		.attr('fill', function (d) {
+			const stackNode = d3.select(this); // Nodo de la stack actual
+			const stackIndex = stackGroup.selectAll('rect').nodes().indexOf(stackNode.node()); // Índice de la stack dentro de la barra
+			const clusterLabel = d.data.clusterLabel; // Etiqueta del cluster
+			const baseColor = clusterColorScale(clusterLabel); // Color base del clusterLabel
+			const stackPosition = stackIndex / (numMedidasCorporales - 1); // Posición relativa de la stack dentro de la barra
+			const stackColor = d3.interpolateRgb(
+				baseColor,
+				baseColorWithTransparency(baseColor)
+			)(saturationScale(stackPosition)); // Color con degradado de saturación
+			return stackColor;
+		});
+
+	function baseColorWithTransparency(baseColor) {
+		const transparentColor = d3.color(baseColor);
+		transparentColor.opacity = 0.4; // Establecemos la transparencia al 20% (ajusta según tus necesidades)
+		return transparentColor.toString();
+	}
 
 	// Agrega una leyenda para las medidas corporales
 	const legendGroup = svg
