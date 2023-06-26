@@ -40,6 +40,7 @@ const colors = [
 ];
 //-------------
 
+
 //* DECLARACIONES *//
 // DEclaracion de init que ejecutara todo el codigo del script
 const init = (data) => {
@@ -188,11 +189,20 @@ const actualizarOptionModel = () => {
 				//* CREAMOS UN FORMULARIO APRA INTRODUCIR LOS DATOS QUE QUEREMOS PREDECIR EN BASE A LOS DATOS EQIQUETADOS DE LOS QUE DISPONEMOS
 				crearFormulario(labelType);
 				//Funcion para tomar los datos del formulario
-				//TODO
-				//* Funcion del modelo de Tensorflow para clasificar los datos introducidos a través de dataset con datos etiquetados.
-				// Etiqueta la dataset en según la seleccion del usuario haya hecho en el DOM
-				//modelLabel();
-				//TODO
+				const formularioPrediccion = document.getElementById('datos-formulario-prediccion');
+				formularioPrediccion.addEventListener('submit', async (event) => {
+					try {
+						const datosFormulario = await recogerDatosFormulario(event);
+						console.log(datosFormulario);
+						//TODO
+						//* Funcion del modelo de Tensorflow para clasificar los datos introducidos a través de dataset con datos etiquetados.
+						// Etiqueta la dataset en según la seleccion del usuario haya hecho en el DOM
+						//modelLabel();
+						//TODO
+					} catch (error) {
+						console.error('Error en la ejecución del formulario', error);
+					}
+				});
 			}
 		}
 	}
@@ -346,7 +356,7 @@ function crearFormulario(labelType) {
 		const texto = document.createElement('div');
 		texto.textContent = datos.textContent;
 		texto.style.display = 'inline-block';
-		texto.style.marginRigth = '10px';
+		texto.style.marginRight = '7px';
 
 		const output = document.createElement('output');
 		output.setAttribute('class', 'limit');
@@ -355,7 +365,7 @@ function crearFormulario(labelType) {
 		const unidades = document.createElement('div');
 		unidades.textContent = 'años';
 		unidades.style.display = 'inline-block';
-		unidades.style.marginLeft = '10px';
+		unidades.style.marginLeft = '3px';
 
 		const input = document.createElement('input');
 		input.setAttribute('type', 'range');
@@ -518,7 +528,7 @@ function crearFormulario(labelType) {
 		const texto = document.createElement('div');
 		texto.textContent = datos.textContent;
 		texto.style.display = 'inline-block';
-		texto.style.marginRight = '10px';
+		texto.style.marginRight = '7px';
 
 		const output = document.createElement('output');
 		output.setAttribute('class', 'limit');
@@ -527,7 +537,7 @@ function crearFormulario(labelType) {
 		const unidades = document.createElement('div');
 		unidades.textContent = 'cm';
 		unidades.style.display = 'inline-block';
-		unidades.style.marginLeft = '10px';
+		unidades.style.marginLeft = '3px';
 
 		const input = document.createElement('input');
 		input.setAttribute('type', 'range');
@@ -562,7 +572,7 @@ function crearFormulario(labelType) {
 		const texto = document.createElement('div');
 		texto.textContent = datos.textContent;
 		texto.style.display = 'inline-block';
-		texto.style.marginRight = '10px';
+		texto.style.marginRight = '7px';
 
 		const output = document.createElement('output');
 		output.setAttribute('class', 'limit');
@@ -571,7 +581,7 @@ function crearFormulario(labelType) {
 		const unidades = document.createElement('div');
 		unidades.textContent = 'cm';
 		unidades.style.display = 'inline-block';
-		unidades.style.marginLeft = '10px';
+		unidades.style.marginLeft = '3px';
 
 		const input = document.createElement('input');
 		input.setAttribute('type', 'range');
@@ -598,25 +608,50 @@ function crearFormulario(labelType) {
 	containerMedidas.appendChild(containerHz);
 	containerMedidas.appendChild(containerVr);
 	fieldset.appendChild(containerMedidas);
+
+	//* Crear el botón de envío
+	const containerBotonEnviar = document.createElement('div');
+	containerBotonEnviar.setAttribute('class', 'btn-enviocontainer');
+	const botonEnviar = document.createElement('button');
+	botonEnviar.setAttribute('type', 'submit');
+	botonEnviar.textContent = 'Enviar';
+	// Agregar el botón de envío al fieldset
+	containerBotonEnviar.appendChild(botonEnviar);
+	fieldset.appendChild(containerBotonEnviar);
+
 	//* Añadimos fieldset al formulario y este a labelContainer
 	formularioPrediccion.appendChild(fieldset);
 	formularioContainer.appendChild(formularioPrediccion);
 
-	//* FUNCIONES PARA ACTUALIZAR EL VALOR DE LOS SLIDERS
+	//*ACTUALIZAR EL VALOR DE LOS SLIDERS
 	function updateRange() {
 		const limit = this.parentElement.getElementsByClassName('limit')[0];
 		//limit.innerHTML = this.value;
 		limit.textContent = this.value;
 	}
-
 	const slideContainers = document.getElementsByClassName('slidecontainer');
-
 	for (let i = 0; i < slideContainers.length; i++) {
 		const slider = slideContainers[i].getElementsByClassName('slider')[0];
 		updateRange.call(slider);
 		slider.oninput = updateRange;
 	}
 }
+
+const recogerDatosFormulario = (event) => {
+	//*Para una accion predeterminada del evento
+	event.preventDefault(); // eveitar que recargue la página
+	const datosFormData = new FormData(event.target); // Pasamos los datos-formulario a un objeto tipo FormData. Target se refiere al form y si apareciese this se referiría al boton (hijos dentro del form que portan el evento)?
+	datos = Object.fromEntries(datosFormData.entries()); // datos es un objeto de Javascript
+	for (let key in datos) {
+		// Verificar si el valor es un string y si es un número válido
+		if (typeof datos[key] === 'string' && !isNaN(parseFloat(datos[key]))) {
+			// Convertir el string a tipo float y actualizas el valor en el objeto
+			datos[key] = parseFloat(datos[key]);
+		}
+	}
+	// console.log(datos);
+	return datos;
+};
 
 //* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS SIN ETIQUETAR. CLASIFICADOR KNN
 function modelRanges() {
