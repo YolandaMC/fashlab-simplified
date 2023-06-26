@@ -767,12 +767,7 @@ function drawRanges(clusteredData) {
 	const numMedidasCorporales = medidasCorporales.length;
 	const numclusterLabels = clusterLabels.length; //!
 	const numColores = colors.length;
-	// const colorScale = d3.scaleOrdinal().domain(medidasCorporales).range(d3.schemeCategory10);
-	const colorScale = d3 //!
-		.scaleOrdinal()
-		.domain(clusterLabels) //!
-		.range(colors.slice(0, numclusterLabels))
-		.unknown(colors[numColores - 1]);
+
 	//Colores para cada cluster
 	const clusterColorScale = d3
 		.scaleOrdinal()
@@ -786,7 +781,6 @@ function drawRanges(clusteredData) {
 	//console.log(numMedidasCorporales);
 	const saturationScale = d3
 		.scaleLinear()
-		// .domain([0, numMedidasCorporales - 1]) //!
 		.domain([0, clusteredData.length - 1]) //! LAS STACKS DE CADA BARRA PARA LA MISMA MEDIDA CORPORAL SE REPRESENTAN TODAS JUNTAS PRIMERO
 		.range([0, 1]);
 
@@ -814,14 +808,14 @@ function drawRanges(clusteredData) {
 			const stackPosition = stackIndex / (numMedidasCorporales - 1); // Posición relativa de la stack dentro de la barra
 			const stackColor = d3.interpolateRgb(
 				baseColor,
-				baseColorWithTransparency(baseColor)
+				baseColorWithTransparency(baseColor, 0.2)
 			)(saturationScale(stackPosition)); // Color con degradado de saturación
 			return stackColor;
 		});
 
-	function baseColorWithTransparency(baseColor) {
+	function baseColorWithTransparency(baseColor, desaturation) {
 		const transparentColor = d3.color(baseColor);
-		transparentColor.opacity = 0.4; // Establecemos la transparencia al 20% (ajusta según tus necesidades)
+		transparentColor.opacity = desaturation; //0.4 // Establecemos la transparencia al 20% (ajusta según tus necesidades)
 		return transparentColor.toString();
 	}
 
@@ -838,7 +832,7 @@ function drawRanges(clusteredData) {
 		.attr('y', (d, i) => i * 20)
 		.attr('width', 10)
 		.attr('height', 10)
-		.attr('fill', (d, i) => colorScale(d));
+		.attr('fill', (d, i) => baseColorWithTransparency('grey', (medidasCorporales.length - i + 1) * 0.1)); // Ajusta el factor multiplicador para obtener diferentes grados de transparencia
 
 	legendGroup
 		.selectAll('text')
@@ -848,7 +842,7 @@ function drawRanges(clusteredData) {
 		.attr('y', (d, i) => i * 20 + 10)
 		.text((d) => d)
 		.attr('alignment-baseline', 'middle')
-		.style('font-size', '12px'); // Ajusta el tamaño del texto aquí;
+		.style('font-size', '12px'); // tamaño del texto;
 
 	// Agrega un círculo encima de cada barra apilada
 	stackGroup
@@ -913,25 +907,25 @@ function drawRanges(clusteredData) {
 		const genero = data.genero !== undefined ? data.genero : 'N/A';
 		const edad = data.edad !== undefined ? data.edad : 'N/A';
 		const tallaHabitual = data.tallaHabitual !== undefined ? data.tallaHabitual : 'N/A';
-		const clusterLabel = data.clusterLabel || 'N/A';
+		const clusterLabel = data.clusterLabel !== undefined ? data.clusterLabel : 'N/A';
 
 		const tooltipContent =
-			'<div>Name: ' +
+			'<div>Nombre: ' +
 			name +
 			'</div>' +
 			'<div>Sexo: ' +
 			sexo +
 			'</div>' +
-			'<div>Genero: ' +
+			'<div>Género: ' +
 			genero +
 			'</div>' +
 			'<div>Edad: ' +
 			edad +
 			'</div>' +
-			'<div>Talla Habitual: ' +
+			'<div>Talla habitual: ' +
 			tallaHabitual +
 			'</div>' +
-			'<div>Cluster Label: ' +
+			'<div>Segmento asignado: ' +
 			clusterLabel +
 			'</div>';
 
@@ -944,7 +938,12 @@ function drawRanges(clusteredData) {
 		// 	.style('top', `${event.pageY}px`) // Usamos "event.pageY" en lugar de "d3.event.pageY"
 		// 	.html(tooltipContent)
 		// 	.classed('hidden', false);
-		tooltip.style('left', `${tooltipLeft}px`).style('top', '0').html(tooltipContent).classed('hidden', false);
+		tooltip
+			.style('left', `${tooltipLeft}px`)
+			.style('top', '0')
+			.html(tooltipContent)
+			.classed('hidden', false)
+			.style('font-size', '13px'); // tamaño del texto;
 	}
 
 	//* Función para ocultar la ventana emergente
