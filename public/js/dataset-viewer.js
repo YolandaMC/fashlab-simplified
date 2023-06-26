@@ -40,7 +40,6 @@ const colors = [
 ];
 //-------------
 
-
 //* DECLARACIONES *//
 // DEclaracion de init que ejecutara todo el codigo del script
 const init = (data) => {
@@ -71,7 +70,7 @@ const actualizarOptionModel = () => {
 	if (noLabelModelRadio.checked) {
 		console.log(noLabelModelRadio.value);
 
-		// Crear el elemento range si no existe que permitira seleccionar el número de segmentacioens que queremos en neustra muestra
+		// Crear el elemento range si no existe que permitira seleccionar el numero de segmentacioens que queremos en neustra muestra
 		let rangeInput = document.querySelector('#range-input'); //Seleccioanmos input range con id #range-input (si existe)
 		// Si no existe lo creamos
 		if (!rangeInput) {
@@ -139,16 +138,18 @@ const actualizarOptionModel = () => {
 		labelContainer.innerHTML = '';
 		const formularioContainer = document.querySelector('#formulario-container');
 		formularioContainer.innerHTML = '';
-		const resultadosContainer = document.querySelector('#resultados-formulario-container');
-		resultadosContainer.innerHTML = ''; // Limpiar cualquier contenido anterior
+
 		//* Reiniciar el valor de labelType si no se selecciona un input
 		labelType = undefined;
 	} else if (labelModelRadio.checked) {
 		console.log(labelModelRadio.value);
-
 		// Eliminar el elemento range si existe y la visualización de lso rangos que aparece encima
 		const rangeInput = document.querySelector('#range-input');
 		const datalist = document.querySelector('#steplist');
+		//*Limpiamos cualquier contenido en div class= "container-dataset-viewer" que pudiera haber de otra seleccion
+		const svgContainer = document.querySelector('.container-dataset-viewer');
+		svgContainer.innerHTML = '';
+
 		if (rangeInput) {
 			rangeInput.parentNode.removeChild(rangeInput);
 			datalist.parentNode.removeChild(datalist);
@@ -184,8 +185,6 @@ const actualizarOptionModel = () => {
 				//* Limpiamos los elementos creados apra la otra opcion
 				const formularioContainer = document.querySelector('#formulario-container');
 				formularioContainer.innerHTML = '';
-				const resultadosContainer = document.querySelector('#resultados-formulario-container');
-				resultadosContainer.innerHTML = ''; // Limpiar cualquier contenido anterior
 				//* CREAMOS UN FORMULARIO APRA INTRODUCIR LOS DATOS QUE QUEREMOS PREDECIR EN BASE A LOS DATOS EQIQUETADOS DE LOS QUE DISPONEMOS
 				crearFormulario(labelType);
 				//Funcion para tomar los datos del formulario
@@ -194,11 +193,10 @@ const actualizarOptionModel = () => {
 					try {
 						const datosFormulario = await recogerDatosFormulario(event);
 						console.log(datosFormulario);
-						//TODO
-						//* Funcion del modelo de Tensorflow para clasificar los datos introducidos a través de dataset con datos etiquetados.
+						//* Funcion del modelo de Tensorflow para clasificar los datos introducidos a traves de dataset con datos etiquetados.
 						// Etiqueta la dataset en según la seleccion del usuario haya hecho en el DOM
-						//modelLabel();
-						//TODO
+						const resultadosPrediccion = modelLabel(dataset, datosFormulario);
+						mostrarPrediccion(resultadosPrediccion);
 					} catch (error) {
 						console.error('Error en la ejecución del formulario', error);
 					}
@@ -637,21 +635,54 @@ function crearFormulario(labelType) {
 	}
 }
 
-const recogerDatosFormulario = (event) => {
+function recogerDatosFormulario(event) {
 	//*Para una accion predeterminada del evento
 	event.preventDefault(); // eveitar que recargue la página
 	const datosFormData = new FormData(event.target); // Pasamos los datos-formulario a un objeto tipo FormData. Target se refiere al form y si apareciese this se referiría al boton (hijos dentro del form que portan el evento)?
 	datos = Object.fromEntries(datosFormData.entries()); // datos es un objeto de Javascript
 	for (let key in datos) {
-		// Verificar si el valor es un string y si es un número válido
+		// Verificar si el valor es un string y si es un numero válido
 		if (typeof datos[key] === 'string' && !isNaN(parseFloat(datos[key]))) {
 			// Convertir el string a tipo float y actualizas el valor en el objeto
 			datos[key] = parseFloat(datos[key]);
 		}
 	}
-	// console.log(datos);
+	//* Retiramos el formulario
+	const formularioContainer = document.querySelector('#formulario-container');
+	formularioContainer.innerHTML = '';
+	// También lso elementos de seleccion
+	const labelContainer = document.querySelector('#label-container');
+	labelContainer.innerHTML = '';
+	// Desmarcamos los dos radioInputs principales
+	const radioInputs = document.querySelectorAll('input[type="radio"][name="option-model"]');
+	// Para desmarcar cada elemento de radio
+	radioInputs.forEach((input) => {
+		input.checked = false;
+	});
+	//* Devolvemos los datos
 	return datos;
-};
+}
+
+function mostrarPrediccion(prediccion) {
+	//* Tomamos div class= "container-dataset-viewer" para ver lso resultados
+	const svgContainer = document.querySelector('.container-dataset-viewer');
+	svgContainer.style.display = 'flex';
+	svgContainer.style.flexDirection = 'column';
+	svgContainer.style.alignContent = 'center';
+	svgContainer.style.justifyContent = 'center';
+	const resultadoLabel = document.createElement('h1');
+	resultadoLabel.textContent = prediccion.predictedLabel;
+	resultadoLabel.style.display = 'block';
+	resultadoLabel.style.margin = ' 20px 0 10px 0';
+	resultadoLabel.style.textAlign = 'center';
+	svgContainer.appendChild(resultadoLabel);
+	const resultadoConfianza = document.createElement('h4');
+	resultadoConfianza.textContent = prediccion.confidence;
+	resultadoConfianza.style.display = 'block';
+	resultadoConfianza.style.margin = '20px';
+	resultadoConfianza.style.textAlign = 'center';
+	svgContainer.appendChild(resultadoConfianza);
+}
 
 //* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS SIN ETIQUETAR. CLASIFICADOR KNN
 function modelRanges() {
@@ -746,16 +777,44 @@ function modelRanges() {
 }
 
 //* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS CON ETIQUETA (SEXO O GENERO SEGUN DECIDA EL USUARIO).
-function modelLabel(nuevoCuerpo) {
+function modelLabel(dataset, nuevoCuerpo) {
 	//TODO
 	//No hace falta recuperrar el valor de labeltype porque es una varaible global.Recuperamos el valor de la etiqueta por la que queremos etiquetar los datos que se introduzcan si por sexo o por genero
 	//* Paso 1: Preparar los datos
-	// Preprocesar los datos
-	// Extraer las características de los datos
-	function extractFeatures(dataset) {
-		const features = dataset.map((obj) => Object.values(obj.medidasCorporales));
+	// Extraer las características de los datos que van a entrenar el modelo
+	console.log(nuevoCuerpo);
+	function extractFeatures(data) {
+		const features = data.map((obj) => Object.values(obj.medidasCorporales));
+		console.log(features);
 		return tf.tensor2d(features);
 	}
+
+	// Preprocesar los datos de neuvo cuerpo para que se parezcan a la estructura de los de dataset //!MODIFICAR MAS ARDE CUANDO LA BASE DE DATOS SEA LA QUE SE REGISTRA CON LA PROPIA APLICACION PARA QUE INCLUYA TODAS LAS MEDIDAS
+	function convertToDatasetFormat(nuevoCuerpo) {
+		const medidasCorporales = {
+			cuello: nuevoCuerpo.cuello,
+			espalda: nuevoCuerpo.espalda,
+			pecho: nuevoCuerpo.pecho,
+			cintura: nuevoCuerpo.cintura,
+			largdelantero: nuevoCuerpo.largdelantero,
+			largespalda: nuevoCuerpo.largespalda,
+			cadera: nuevoCuerpo.cadera,
+			entrepierna: nuevoCuerpo.entrepierna,
+			estatura: nuevoCuerpo.estatura,
+		};
+
+		const convertedData = {
+			name: '',
+			sexo: '',
+			genero: nuevoCuerpo.genero,
+			edad: nuevoCuerpo.edad,
+			tallaHabitual: nuevoCuerpo.talla,
+			medidasCorporales,
+		};
+
+		return convertedData;
+	}
+	nuevoCuerpo = convertToDatasetFormat(nuevoCuerpo);
 
 	//* Paso 2: etiquetas según el tipo seleccionado por el usuario desde el DOM y preparación de los datos
 	let labels;
@@ -769,6 +828,7 @@ function modelLabel(nuevoCuerpo) {
 	/* se encarga de extraer las características de los datos. Toma el conjunto de datos dataset y devuelve un tensor bidimensional 
 	(tensor2d) llamado features que contiene las características de cada objeto en el conjunto de datos. Cada fila del tensor 
 	representa un objeto del conjunto de datos y cada columna representa una característica específica del objeto. */
+
 	const labelsTensor = tf.tensor1d(labels, 'float32');
 	/* Esta línea convierte las etiquetas en un tensor unidimensional (tensor1d) llamado labelsTensor. El tensor labelsTensor 
 	contiene las etiquetas numéricas correspondientes a cada objeto en el conjunto de datos. Las etiquetas se convierten a 
@@ -784,111 +844,36 @@ function modelLabel(nuevoCuerpo) {
 	const numClasses = uniqueLabels.length; // Se define el numero de clases en base a las distintas etiquetas de la base de datos la cantidad de valores que pueda tener "sexo" o "genero"
 
 	//* Paso 4: Crear un modelo secuencial
-	const model = tf.sequential(); //! https://js.tensorflow.org/api/4.7.0/#sequential
-	model.add(tf.layers.dense({ units: 10, activation: 'relu', inputShape: [9] })); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
-	model.add(tf.layers.dense({ units: numClasses, activation: 'softmax' })); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
+	const model = tf.sequential(); // https://js.tensorflow.org/api/4.7.0/#sequential
+	model.add(tf.layers.dense({ units: 10, activation: 'relu', inputShape: [9] })); //REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
+	model.add(tf.layers.dense({ units: numClasses, activation: 'softmax' })); //REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
 
 	//* Paso 5: Compilar el modelo
-	model.compile({ optimizer: 'adam', loss: 'sparseCategoricalCrossentropy' }); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
+	model.compile({ optimizer: 'adam', loss: 'sparseCategoricalCrossentropy' }); //REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
 
 	//* Paso 6: Entrenar el modelo
 	//model.fit(extractFeatures(dataset), encodedLabels, { epochs: 50 });
 	model.fit(features, labelsTensor, { epochs: 50 }); // numero de iteraciones
 
-	//* Paso 7: Realizar las predicciones en los datos de entrada
+	//* Paso 7: Realizar las predicciones en los datos de entrada - nuevoCuerpo
 	//const predictions = model.predict(extractFeatures(dataset));
-	const predictedLabels = model.predict(extractFeatures(dataset));
-	// console.log(predictions);
+	console.log(nuevoCuerpo);
+	const nuevoCuerpoFeatures = extractFeatures([nuevoCuerpo]);
+	const predictions = model.predict(nuevoCuerpoFeatures);
 
 	//* Paso 8: Decodificar las etiquetas predichas
-	// const decodedLabels = encodedLabels.map((encodedLabel) => {
-	// 	return Array.from(labelEncoder.keys()).find((label) => labelEncoder.get(label) === encodedLabel);
-	// });
-	//const decodedLabels = Array.from(predictions.argMax(1).dataSync()); //!REVISAR ESTOS PARAMETROS PARA VER LOS MAS OPTIMOS
-	// console.log(decodedLabels);
-	const predictedLabelsData = Array.from(predictedLabels.dataSync());
-	console.log(predictedLabelsData);
+	const predictedLabelIndex = predictions.argMax(1).dataSync()[0];
+	const predictedLabel = uniqueLabels[predictedLabelIndex]; // Etiqueta predicha
+	const confidence = predictions.dataSync()[predictedLabelIndex] * 100; // Porcentaje prediccion
+	console.log('Etiqueta predicha:', predictedLabel);
+	console.log('Porcentaje de confianza:', confidence);
+	let resultados = {};
+	resultados.predictedLabel = predictedLabel;
+	resultados.confidence = confidence;
+	console.log(resultados);
 
-	//* Paso 9: Asigno los valores de predictions a dataset, creo nuevo dataset con estos valores datasetWithPredictions
-	const datasetWithPredictions = dataset.map((obj, index) => {
-		return {
-			...obj,
-			prediction: predictedLabelsData[index],
-		};
-	});
-
-	//* Paso 9: Obtener los valores de la cadena 'pecho' para ordenar las clases
-	const chestValues = dataset.map((obj) => obj.medidasCorporales.pecho);
-
-	console.log(chestValues);
-
-	//* Paso 10: Agrupar las predicciones y las etiquetas por clase
-	const groupedData = groupDataByClass(predictions, decodedLabels, chestValues);
-
-	console.log(groupedData);
-
-	//* Paso 11: Ordenar las clases por el valor de 'pecho'
-	const sortedData = sortDataByChest(groupedData);
-
-	//* Paso 12: llamar a la función que va a dibujar mis datos o retornar los datos clasificados y ordenados
-	//return sortedData;
-	console.log(sortedData);
-
-	//----
-
-	//----
-
-	//drawPredictionLabel();
-
-	//----
-
-	//----
-
-	// Declaracion de Función para agrupar los datos por clase
-	function groupDataByClass(predictions, labels, chestValues) {
-		const groupedData = {};
-
-		for (let i = 0; i < predictions.length; i++) {
-			const prediction = predictions[i];
-			const label = labels[i];
-			const chestValue = chestValues[i];
-			const data = dataset[i]; //incluye el resto de informacion que no participa en la clasificacion, es decir "edad" , "sexo" o "genero" (según la que no se haya tomado como etiqueta) y "tallaHabitual"
-
-			if (!(label in groupedData)) {
-				groupedData[label] = {
-					predictions: [],
-					chestValues: [],
-					data: [],
-				};
-			}
-
-			groupedData[label].predictions.push(prediction);
-			groupedData[label].chestValues.push(chestValue);
-			groupedData[label].data.push(data);
-		}
-
-		return groupedData;
-	}
-
-	// Función para ordenar los datos por el valor de la cadena "pecho"
-	function sortDataByChest(groupedData) {
-		for (const label in groupedData) {
-			const data = groupedData[label];
-			const predictions = data.predictions;
-			const chestValues = data.chestValues;
-
-			const sortedIndices = chestValues
-				.map((_, i) => i)
-				.sort((a, b) => {
-					return chestValues[a] - chestValues[b];
-				});
-
-			groupedData[label].predictions = sortedIndices.map((index) => predictions[index]);
-			groupedData[label].chestValues = sortedIndices.map((index) => chestValues[index]);
-		}
-
-		return groupedData;
-	}
+	//* Paso 9: llamar a la funcion muestra las prediciones datos o retornar los datos
+	return resultados;
 }
 
 //----------
