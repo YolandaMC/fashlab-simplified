@@ -133,10 +133,15 @@ const actualizarOptionModel = () => {
 			rangeContainer.appendChild(rangeInput);
 		}
 
-		// Limpiamos los elementos creados apra la otra opción
+		//* Limpiamos los elementos creados apra la otra opcion
 		const labelContainer = document.querySelector('#label-container');
-		labelContainer.innerHTML = ''; // Limpiar cualquier contenido anterior
-		labelType = undefined; // Reiniciar el valor de labelType si no se selecciona un input
+		labelContainer.innerHTML = '';
+		const formularioContainer = document.querySelector('#formulario-container');
+		formularioContainer.innerHTML = '';
+		const resultadosContainer = document.querySelector('#resultados-formulario-container');
+		resultadosContainer.innerHTML = ''; // Limpiar cualquier contenido anterior
+		//* Reiniciar el valor de labelType si no se selecciona un input
+		labelType = undefined;
 	} else if (labelModelRadio.checked) {
 		console.log(labelModelRadio.value);
 
@@ -175,9 +180,14 @@ const actualizarOptionModel = () => {
 				//Actualizamos el valor de labelType con al seleccion
 				labelType = this.value;
 				console.log(labelType);
-
-				//! crear aqui formulario para que meta los datos
-				
+				//* Limpiamos los elementos creados apra la otra opcion
+				const formularioContainer = document.querySelector('#formulario-container');
+				formularioContainer.innerHTML = '';
+				const resultadosContainer = document.querySelector('#resultados-formulario-container');
+				resultadosContainer.innerHTML = ''; // Limpiar cualquier contenido anterior
+				//* CREAMOS UN FORMULARIO APRA INTRODUCIR LOS DATOS QUE QUEREMOS PREDECIR EN BASE A LOS DATOS EQIQUETADOS DE LOS QUE DISPONEMOS
+				crearFormulario(labelType);
+				//Funcion para tomar los datos del formulario
 				//TODO
 				//* Funcion del modelo de Tensorflow para clasificar los datos introducidos a través de dataset con datos etiquetados.
 				// Etiqueta la dataset en según la seleccion del usuario haya hecho en el DOM
@@ -187,6 +197,426 @@ const actualizarOptionModel = () => {
 		}
 	}
 };
+
+function crearFormulario(labelType) {
+	const formularioContainer = document.querySelector('#formulario-container');
+	const formularioPrediccion = document.createElement('form');
+	formularioPrediccion.setAttribute('class', 'datos-formulario');
+	formularioPrediccion.setAttribute('id', 'datos-formulario-prediccion');
+	// Crear el elemento fieldset
+	const fieldset = document.createElement('fieldset');
+	if (labelType === 'genero') {
+		// Crear el contenedor select para el campo "Sexo asignado"
+		const selectContainer1 = document.createElement('div');
+		selectContainer1.setAttribute('class', 'selectcontainer');
+
+		const label1 = document.createElement('label');
+		label1.setAttribute('class', 'custom-selector');
+		label1.setAttribute('for', 'sexo');
+		label1.textContent = 'Sexo asignado:\n';
+
+		const select1 = document.createElement('select');
+		select1.setAttribute('name', 'sexo');
+		select1.setAttribute('required', 'true');
+
+		const option1 = document.createElement('option');
+		option1.setAttribute('selected', 'true');
+		option1.setAttribute('value', '');
+		option1.textContent = 'Elige...';
+
+		const option2 = document.createElement('option');
+		option2.setAttribute('value', 'Intersexo');
+		option2.textContent = 'Intersexo';
+
+		const option3 = document.createElement('option');
+		option3.setAttribute('value', 'Femenino');
+		option3.textContent = 'Femenino';
+
+		const option4 = document.createElement('option');
+		option4.setAttribute('value', 'Masculino');
+		option4.textContent = 'Masculino';
+
+		const option5 = document.createElement('option');
+		option5.setAttribute('value', 'Sin-respuesta');
+		option5.textContent = 'No procede';
+
+		// Agregar las opciones al select
+		select1.appendChild(option1);
+		select1.appendChild(option2);
+		select1.appendChild(option3);
+		select1.appendChild(option4);
+		select1.appendChild(option5);
+		// Agregar el select al label
+		label1.appendChild(select1);
+		// Agregar el label al contenedor select
+		selectContainer1.appendChild(label1);
+		// Agregar el contenedor select al fieldset
+		fieldset.appendChild(selectContainer1);
+	} else if (labelType === 'sexo') {
+		// Crear el contenedor select para el campo "Identidad de género"
+		const selectContainer2 = document.createElement('div');
+		selectContainer2.setAttribute('class', 'selectcontainer');
+
+		const label2 = document.createElement('label');
+		label2.setAttribute('class', 'custom-selector');
+		label2.setAttribute('for', 'genero');
+		label2.textContent = 'Identidad de género:\n';
+
+		const select2 = document.createElement('select');
+		select2.setAttribute('name', 'genero');
+		select2.setAttribute('required', 'true');
+
+		const option6 = document.createElement('option');
+		option6.setAttribute('selected', 'true');
+		option6.setAttribute('value', '');
+		option6.textContent = 'Elige...';
+
+		const option7 = document.createElement('option');
+		option7.setAttribute('value', 'No-binario');
+		option7.textContent = 'No-binario/otras opciones';
+
+		const option8 = document.createElement('option');
+		option8.setAttribute('value', 'Mujer');
+		option8.textContent = 'Mujer';
+
+		const option9 = document.createElement('option');
+		option9.setAttribute('value', 'Hombre');
+		option9.textContent = 'Hombre';
+
+		const option10 = document.createElement('option');
+		option10.setAttribute('value', 'Sin-respuesta');
+		option10.textContent = 'No procede';
+
+		// Agregar las opciones al select
+		select2.appendChild(option6);
+		select2.appendChild(option7);
+		select2.appendChild(option8);
+		select2.appendChild(option9);
+		select2.appendChild(option10);
+		// Agregar el select al label
+		label2.appendChild(select2);
+		// Agregar el label al contenedor select
+		selectContainer2.appendChild(label2);
+		// Agregar el contenedor select al fieldset
+		fieldset.appendChild(selectContainer2);
+	} else {
+		console.log('error');
+	}
+
+	//-------Talla
+	// Crear el contenedor radio para el campo "Talla habitual de consumo"
+	const radioContainer = document.createElement('div');
+	radioContainer.setAttribute('class', 'radiocontainer tallacontainer');
+	const labelTalla = document.createElement('label');
+	labelTalla.setAttribute('class', 'custom-radio');
+	labelTalla.setAttribute('for', 'talla');
+	labelTalla.textContent = 'Talla habitual de consumo:\n';
+	const br = document.createElement('br');
+	labelTalla.appendChild(br);
+	const summary = document.createElement('summary');
+	summary.setAttribute('class', 'radios');
+	const sizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', 'otra'];
+	sizes.forEach(function (size) {
+		const input = document.createElement('input');
+		input.setAttribute('type', 'radio');
+		input.setAttribute('name', 'talla');
+		input.setAttribute('value', size);
+		const text = document.createTextNode(' ' + size + '\u00A0'); // \u00A0 representa el espacio en blanco
+		summary.appendChild(input);
+		summary.appendChild(text);
+	});
+	labelTalla.appendChild(summary);
+	// Agregar el label al contenedor radio
+	radioContainer.appendChild(labelTalla);
+	// Agregar el contenedor radio al fieldset
+	fieldset.appendChild(radioContainer);
+
+	//Establecemos los datos que se insertan con sliders
+	const datosEdad = [
+		{ class: 'slidecontainer', for: 'edad', textContent: 'Edad: ', name: 'edad', min: '0', max: '120' },
+	];
+	datosEdad.forEach(function (datos) {
+		const slideContainer = document.createElement('div');
+		slideContainer.setAttribute('class', datos.class);
+
+		const label = document.createElement('label');
+		label.setAttribute('class', 'custom-range');
+		label.setAttribute('for', datos.for);
+
+		const texto = document.createElement('div');
+		texto.textContent = datos.textContent;
+		texto.style.display = 'inline-block';
+		texto.style.marginRigth = '10px';
+
+		const output = document.createElement('output');
+		output.setAttribute('class', 'limit');
+		output.style.display = 'inline-block';
+
+		const unidades = document.createElement('div');
+		unidades.textContent = 'años';
+		unidades.style.display = 'inline-block';
+		unidades.style.marginLeft = '10px';
+
+		const input = document.createElement('input');
+		input.setAttribute('type', 'range');
+		input.setAttribute('name', datos.name);
+		input.setAttribute('min', datos.min);
+		input.setAttribute('max', datos.max);
+		input.setAttribute('value', '0');
+		input.setAttribute('class', 'slider');
+		input.style.display = 'block';
+		input.style.margin = '5px 0';
+
+		// Agregar el div, output y input al label
+		label.appendChild(texto);
+		label.appendChild(output);
+		label.appendChild(unidades);
+		label.appendChild(input);
+
+		// Agregar el label al contenedor slide
+		slideContainer.appendChild(label);
+
+		// Agregar el contenedor slide al fieldset
+		fieldset.appendChild(slideContainer);
+	});
+	const datosRangeHz = [
+		{
+			class: 'slidecontainer',
+			for: 'pecho',
+			textContent: 'Pecho: ',
+			name: 'pecho',
+			min: '0',
+			max: '250',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'cintura',
+			textContent: 'Cintura: ',
+			name: 'cintura',
+			min: '0',
+			max: '250',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'cadera',
+			textContent: 'Cadera: ',
+			name: 'cadera',
+			min: '0',
+			max: '250',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'espalda',
+			textContent: 'Ancho espalda: ',
+			name: 'espalda',
+			min: '0',
+			max: '120',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'seppecho',
+			textContent: 'Separación pecho: ',
+			name: 'seppecho',
+			min: '0',
+			max: '50',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'cuello',
+			textContent: 'Contorno de cuello: ',
+			name: 'cuello',
+			min: '0',
+			max: '50',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'hombro',
+			textContent: 'Largo de hombro: ',
+			name: 'hombro',
+			min: '0',
+			max: '25',
+		},
+	];
+	const datosRangeVr = [
+		{
+			class: 'slidecontainer',
+			for: 'estatura',
+			textContent: 'Estatura: ',
+			name: 'estatura',
+			min: '0',
+			max: '240',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'largespalda',
+			textContent: 'Largo espalda: ',
+			name: 'largespalda',
+			min: '0',
+			max: '150',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'largdelantero',
+			textContent: 'Largo delantero: ',
+			name: 'largdelantero',
+			min: '0',
+			max: '150',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'costadillo',
+			textContent: 'Costadillo: ',
+			name: 'costadillo',
+			min: '0',
+			max: '150',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'pierna',
+			textContent: 'Largo de pierna: ',
+			name: 'pierna',
+			min: '0',
+			max: '150',
+		},
+		{
+			class: 'slidecontainer',
+			for: 'entrepierna',
+			textContent: 'Largo entrepierna: ',
+			name: 'entrepierna',
+			min: '0',
+			max: '130',
+		}, //Largo de brazo
+		{
+			class: 'slidecontainer',
+			for: 'brazo',
+			textContent: 'Largo de brazo: ',
+			name: 'brazo',
+			min: '0',
+			max: '100',
+		},
+	];
+	//---------
+	// Creamos unos divs para estableces las medidas en dos columnas
+	const containerMedidas = document.createElement('div');
+	containerMedidas.style.display = 'flex';
+	containerMedidas.style.flexDirection = 'row';
+	containerMedidas.style.alignItems = 'center';
+	containerMedidas.style.justifyContent = 'center';
+	const containerHz = document.createElement('div');
+	containerHz.style.margin = '0 20px';
+	const containerVr = document.createElement('div');
+	containerVr.style.margin = '0 20px';
+
+	datosRangeHz.forEach(function (datos) {
+		const slideContainer = document.createElement('div');
+		slideContainer.setAttribute('class', datos.class);
+
+		const label = document.createElement('label');
+		label.setAttribute('class', 'custom-range');
+		label.setAttribute('for', datos.for);
+
+		const texto = document.createElement('div');
+		texto.textContent = datos.textContent;
+		texto.style.display = 'inline-block';
+		texto.style.marginRight = '10px';
+
+		const output = document.createElement('output');
+		output.setAttribute('class', 'limit');
+		output.style.display = 'inline-block';
+
+		const unidades = document.createElement('div');
+		unidades.textContent = 'cm';
+		unidades.style.display = 'inline-block';
+		unidades.style.marginLeft = '10px';
+
+		const input = document.createElement('input');
+		input.setAttribute('type', 'range');
+		input.setAttribute('name', datos.name);
+		input.setAttribute('min', datos.min);
+		input.setAttribute('max', datos.max);
+		input.setAttribute('value', '0');
+		input.setAttribute('class', 'slider');
+		input.style.display = 'block';
+		input.style.margin = '5px 0';
+
+		// Agregar input al label
+		label.appendChild(texto);
+		label.appendChild(output);
+		label.appendChild(unidades);
+		label.appendChild(input);
+
+		// Agregar el label al contenedor slide
+		slideContainer.appendChild(label);
+
+		// Agregar el contenedor slide al fieldset
+		containerHz.appendChild(slideContainer);
+	});
+	datosRangeVr.forEach(function (datos) {
+		const slideContainer = document.createElement('div');
+		slideContainer.setAttribute('class', datos.class);
+
+		const label = document.createElement('label');
+		label.setAttribute('class', 'custom-range');
+		label.setAttribute('for', datos.for);
+
+		const texto = document.createElement('div');
+		texto.textContent = datos.textContent;
+		texto.style.display = 'inline-block';
+		texto.style.marginRight = '10px';
+
+		const output = document.createElement('output');
+		output.setAttribute('class', 'limit');
+		output.style.display = 'inline-block';
+
+		const unidades = document.createElement('div');
+		unidades.textContent = 'cm';
+		unidades.style.display = 'inline-block';
+		unidades.style.marginLeft = '10px';
+
+		const input = document.createElement('input');
+		input.setAttribute('type', 'range');
+		input.setAttribute('name', datos.name);
+		input.setAttribute('min', datos.min);
+		input.setAttribute('max', datos.max);
+		input.setAttribute('value', '0');
+		input.setAttribute('class', 'slider');
+		input.style.display = 'block';
+		input.style.margin = '5px 0';
+
+		// Agregar el div, output y input al label
+		label.appendChild(texto);
+		label.appendChild(output);
+		label.appendChild(unidades);
+		label.appendChild(input);
+
+		// Agregar el label al contenedor slide
+		slideContainer.appendChild(label);
+
+		// Agregar el contenedor slide al fieldset
+		containerVr.appendChild(slideContainer);
+	});
+	containerMedidas.appendChild(containerHz);
+	containerMedidas.appendChild(containerVr);
+	fieldset.appendChild(containerMedidas);
+	//* Añadimos fieldset al formulario y este a labelContainer
+	formularioPrediccion.appendChild(fieldset);
+	formularioContainer.appendChild(formularioPrediccion);
+
+	//* FUNCIONES PARA ACTUALIZAR EL VALOR DE LOS SLIDERS
+	function updateRange() {
+		const limit = this.parentElement.getElementsByClassName('limit')[0];
+		//limit.innerHTML = this.value;
+		limit.textContent = this.value;
+	}
+
+	const slideContainers = document.getElementsByClassName('slidecontainer');
+
+	for (let i = 0; i < slideContainers.length; i++) {
+		const slider = slideContainers[i].getElementsByClassName('slider')[0];
+		updateRange.call(slider);
+		slider.oninput = updateRange;
+	}
+}
 
 //* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS SIN ETIQUETAR. CLASIFICADOR KNN
 function modelRanges() {
@@ -282,7 +712,6 @@ function modelRanges() {
 
 //* Declaracion funcion que contendra modelo de Tensorflow para clasificar dataset CON DATOS CON ETIQUETA (SEXO O GENERO SEGUN DECIDA EL USUARIO).
 function modelLabel(nuevoCuerpo) {
-
 	//TODO
 	//No hace falta recuperrar el valor de labeltype porque es una varaible global.Recuperamos el valor de la etiqueta por la que queremos etiquetar los datos que se introduzcan si por sexo o por genero
 	//* Paso 1: Preparar los datos
@@ -348,10 +777,10 @@ function modelLabel(nuevoCuerpo) {
 	//* Paso 9: Asigno los valores de predictions a dataset, creo nuevo dataset con estos valores datasetWithPredictions
 	const datasetWithPredictions = dataset.map((obj, index) => {
 		return {
-		  ...obj,
-		  prediction: predictedLabelsData[index]
+			...obj,
+			prediction: predictedLabelsData[index],
 		};
-	  });
+	});
 
 	//* Paso 9: Obtener los valores de la cadena 'pecho' para ordenar las clases
 	const chestValues = dataset.map((obj) => obj.medidasCorporales.pecho);
@@ -374,7 +803,7 @@ function modelLabel(nuevoCuerpo) {
 
 	//----
 
-	//drawRangesLabel(sortedData);
+	//drawPredictionLabel();
 
 	//----
 
@@ -429,7 +858,7 @@ function modelLabel(nuevoCuerpo) {
 
 //----------
 
-//* FUNCIONES QUE DIBUJAN LOS DATOS
+//* FUNCIONES QUE DIBUJAN LOS DATOS O MUESTRAN PREDICCIONES
 
 //----------
 //*ESTA FUNCION DIBUJA EL DATASET EN ORDEN DE APARICION DE LOS DATOS EN EL Y CUANDO SE ESCOGE numRanges = 1 ES DECIR, QUE SE DECIDDE NO SIVIDIR EL DATASET
@@ -755,6 +1184,7 @@ function drawRanges(clusteredData) {
 	// Calcula el máximo valor acumulado de medidas corporales para el dominio del eje Y
 	const maxMeasure = d3.max(clusteredData, (d) => d3.sum(Object.values(d.medidasCorporales)));
 	const yScale = d3.scaleLinear().domain([0, maxMeasure]).range([height, 0]);
+	//TODO
 
 	// Crea el SVG y establece su tamaño
 	const svg = d3.select('.container-dataset-viewer').append('svg').attr('width', svgWidth).attr('height', svgHeight);
@@ -775,6 +1205,7 @@ function drawRanges(clusteredData) {
 		.stack()
 		.keys(medidasCorporales)
 		.value((d, key) => d.medidasCorporales[key])
+		.order(d3.stackOrderNone)
 		.offset(d3.stackOffsetNone)(
 		clusteredData.map((d) => ({
 			...d,
@@ -800,8 +1231,6 @@ function drawRanges(clusteredData) {
 
 	//* Configuración de colores para cada medida corporal
 	// Crea una escala de saturación para diferenciar las stacks
-	// const numStacks = d3.max(stackedData, (d) => d.length); //!
-	//console.log(numMedidasCorporales);
 	const saturationScale = d3
 		.scaleLinear()
 		.domain([0, clusteredData.length - 1]) //! LAS STACKS DE CADA BARRA PARA LA MISMA MEDIDA CORPORAL SE REPRESENTAN TODAS JUNTAS PRIMERO
@@ -814,13 +1243,16 @@ function drawRanges(clusteredData) {
 		.join('g')
 		.classed('stack', true);
 
+	//http://using-d3js.com/05_06_stacks.html
+	//https://dataviz.unhcr.org/chart_gallery/comparison.html#bar-grouped
+
 	stackGroup
 		.selectAll('rect')
 		.data((d) => d)
 		.join('rect')
 		.attr('x', (d) => xScale(d.data.name))
-		.attr('y', (d) => yScale(d[1])) //.attr('y', (d, i) => yScale(d[1] + (i > 0 ? d[i - 1][1] : 0)))
-		.attr('height', (d) => yScale(d[0]) - yScale(d[1])) //.attr('height', (d) => yScale(d[0]) - yScale(d[1]+ d[0]))
+		.attr('y', (d) => yScale(d[1]))
+		.attr('height', (d) => yScale(d[0]) - yScale(d[1])) //.attr('height', (d) => yScale(d[0]) - yScale(d[1]))
 		.attr('width', xScale.bandwidth()) //.attr('width', xScale.bandwidth());
 		// .attr('fill', (d, i) => clusterColorScale(d.data.clusterLabel));
 		.attr('fill', function (d) {
@@ -885,7 +1317,7 @@ function drawRanges(clusteredData) {
 	const lineGroup = mainGroup.append('g').attr('class', 'line-group');
 
 	// Definir la escala de colores para las lineas de conexion
-	const colorScaleLinesConexion = d3.interpolateRgb('mistyrose', 'hotpink');
+	const colorScaleLinesConexion = d3.interpolateRgb('hotpink', 'mistyrose');
 
 	// Trama las líneas de conexión
 	stackedData.forEach((stack, stackIndex) => {
@@ -957,8 +1389,8 @@ function drawRanges(clusteredData) {
 		const tooltipLeft = (containerWidth - tooltipWidth) / 2;
 
 		// tooltip
-		// 	.style('left', `${event.pageX}px`) // Usamos "event.pageX" en lugar de "d3.event.pageX"
-		// 	.style('top', `${event.pageY}px`) // Usamos "event.pageY" en lugar de "d3.event.pageY"
+		// 	.style('left', `${event.pageX}px`)
+		// 	.style('top', `${event.pageY}px`)
 		// 	.html(tooltipContent)
 		// 	.classed('hidden', false);
 		tooltip
@@ -976,7 +1408,7 @@ function drawRanges(clusteredData) {
 	}
 }
 
-function drawRangesLabel(sortedData) {
+function drawPredictionLabel(sortedData) {
 	//*Seleccionamos el contenedor donde van nuestras visualizaciones
 	const svgContainer = document.querySelector('.container-dataset-viewer');
 	svgContainer.innerHTML = ''; // Elimina todo el contenido dentro del contenedor SVG antes de agregar uno nuevo
@@ -1239,10 +1671,6 @@ function drawRangesLabel(sortedData) {
 
 //-------------
 
-//-------------
-
-//-------------
-
 //* RECUPERACION DE LA BASE DE DATOS E INICIALIZACION DE TODO EL CODIGO*//
 
 /* Llamamos al servidor/ruta para traer los datos, json() nos devuelve una promesa (pertenece a libreria D3.js),
@@ -1258,3 +1686,6 @@ document.addEventListener('DOMContentLoaded', () => {
 //     return fetch(url).then(response => response.json());
 //   }
 // const dataset = await loadJSONData('../../models/dataset-simulated.json'); // otra menera de recuperar los datos del archivo JSON
+
+//*Código JS correspondiente a los slider de html que permite visualizar el número que se está introduciendo
+// Función que actualiza el valor del slider a cada movimiento del usuario

@@ -1,3 +1,6 @@
+//* ESTE ARCHIVO NO SE ESTA USANDO EN ESTA VERSION */
+
+
 //* REGISTRO DE MEDIDAS DESDE EL APARTADO DE INTRODUCCION MANUAL DE MEDIDAS*//
 
 const Cuerpo = require('./cuerpo.js'); //'./poke'

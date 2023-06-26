@@ -1,3 +1,5 @@
+//* ESTE ARCHIVO NO SE ESTA USANDO EN ESTA VERSION */
+
 //* REGISTRO DE MEDIDAS DESDE EL APARTADO DE ESTIMACION DE MEDIDAS*//
 
 const Cuerpoestimado = require('./cuerpoestimado.js'); //'./poke'

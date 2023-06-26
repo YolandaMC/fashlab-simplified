@@ -1,7 +1,6 @@
 'use strict';
 
 //Código JS correcpondiente al botón de html con id #btn-ampliar que permite ampliar y reducir el canvas #lienzo
-
 // const container = document.querySelector('.container');
 // const ampliarLienzo = document.querySelector('#lienzo');
 // const btnAmpliar = document.querySelector('#btn-ampliar');
@@ -57,7 +56,8 @@
 // Función que actualiza el valor del slider a cada movimiento del usuario
 function updateRange() {
 	const limit = this.parentElement.getElementsByClassName('limit')[0];
-	limit.innerHTML = this.value;
+	// limit.innerHTML = this.value;
+	limit.textContent = this.value;
 }
 
 const slideContainers = document.getElementsByClassName('slidecontainer');
@@ -66,16 +66,4 @@ for (let i = 0; i < slideContainers.length; i++) {
 	const slider = slideContainers[i].getElementsByClassName('slider')[0];
 	updateRange.call(slider);
 	slider.oninput = updateRange;
-}
-
-//* Solo para la pagina dataset-viewer
-const range = document.getElementById('range-input');
-if (range) { //! NO FUNCIONA REVISAR
-	function updateRange2() {
-		const eleccion = this.parentElement.getElementById('eleccion');
-		eleccion.innerHTML = this.value;
-	}
-	const rangeContainer = document.getElementById('range-container');
-	updateRange2.call(range);
-	range.oninput = updateRange2;
 }
