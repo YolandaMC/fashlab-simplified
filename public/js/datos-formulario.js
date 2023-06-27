@@ -23,7 +23,7 @@ const bodyPix = window.bodyPix; // BodyPix antiguo NO FUNCIONA
 let datosFormulario; // Variable que contendrá los datos del formualrio. Servira para dibujar el patrón desde body-viewer.js y los scripts de la carpeta construccion-body-viewer
 //let datason; // Varieable que sirve tras implementación del back-end para enviar los datos del formulario en formato JSON
 
-//*Se usan en pantalla-webcam.js
+//* Se usan en pantalla-webcam.js
 // ARREGLOS PARA ALMACENAR LAS CAPTURAS DE PANTALLA Y LOS PUNTOS SELECCIONADOS EN LAS CAPTURAS
 const capturas = [];
 const ptosClave = ['centroDelanteroConCintura', 'pezon', 'lateralConCadera', 'puntaHombro', 'caidaHombro']; // Este arreglo contiene los puntos que el usuario debe seleccioanr tanto en la iamgen de frente como de perfil
@@ -31,12 +31,13 @@ const ptosClave = ['centroDelanteroConCintura', 'pezon', 'lateralConCadera', 'pu
 const ptosFrente = {}; //SON LOS PUUNTOS QUE EL USUARIO SELECCIONA PARA UN FUTURO MODELO
 const ptosPerfil = {};
 
-//*Se usan en images-tensorflow.js
+//* Se usan en images-tensorflow.js
 // Alamcenar a los puntos clave (landmarks) y conexiones del esqueleto despues de usar Pose-detection
+let imgFrente, imgPerfil;//Para rescatar las imagenes de capturas y usarlas en imagenes-tensorflow.js y body-viewer.js
 let posesFrente, posesPerfil; // {score, keypoints, keypoints3D}
 let keypointsFrente, keypointsPerfil; // {x, y, z, score, name} // 
 let keypoints3DFrente, keypoints3DPerfil; // {x, y, z, score, name}
-/* GUARDAREMOS GLOBALMENTE LOS PTOS CLAVE: left_shoulder/right_shoulder/left_hip/right-hip que nos interesa rescatar de poseDetection.*/
+/* GUARDAREMOS GLOBALMENTE LOS PTOS CLAVE OBTENIDOS DE LOS MODELOS: left_shoulder/right_shoulder/left_hip/right-hip que nos interesa rescatar de poseDetection.*/
 const ptosClaveFrente = {};
 const ptosClavePerfil = {};
 // Almacenar segmentacion despues de usar Body-segmentation
@@ -150,11 +151,12 @@ formulario.addEventListener('submit', async (event) => {
 		await pantallaWebcam();
 		console.log('Se han capturado datos en los arreglos capturas, ptosFrente y ptosPerfil');
 		await imagesTensorFlow(); // https://www.youtube.com/watch?v=41VfSbuYBP0
-		/* Aqui realmente te interesaria que imagesTensorFlow() se ejecutase nada mas que  
+		/* Aqui realmente interesa que imagesTensorFlow() se ejecutase nada mas que  
 		pantallaWebcam() capturase en captures las imagenes para hacer la ejecucion del 
 		codigo mas corta, no esperar a que termine pantallaWebcam() para ejecutar el analisis 
 		con modelos declarados en imagesTensorFlow() y que es bastante lento*/
-		await saberPorDondeVamos();
+		saberPorDondeVamos();
+		await bodyViewer();
 	} catch (error) {
 		console.error('Error en la ejecución del formulario', error);
 	}

@@ -40,8 +40,8 @@ async function imagesTensorFlow() {
 
 		//* COMENZAMOS CON EL ANALISIS DE LAS IMAGENES
 		// Cargamos las imágenes capturadas en capturas
-		const imgFrente = document.createElement('img'); // para ello creamos elemtnos img auqnue no lso colocamos en el DOM
-		const imgPerfil = document.createElement('img');
+		imgFrente = document.createElement('img'); // para ello creamos elemtnos img auqnue no lso colocamos en el DOM
+		imgPerfil = document.createElement('img');
 		imgFrente.src = capturas[0]; // Imagen frente está en la primera posición de capturas
 		imgPerfil.src = capturas[1]; // Imagen de perfil está en la segunda posición de capturas
 
@@ -258,27 +258,14 @@ async function imagesTensorFlow() {
 
 			//* PASO 1: OBTENER A PARTIR DE LOS PUNTOS CLAVE DISTANCIAS AL CONTORNO Y PUNTOS DE CONTORNO PARA INTENTAR SABER LA MEDIDA DE CADERA Y MEDIDA DE COSTADILLO
 			// Variables para separar los datos de los puntos clave left_hip, right_hip para las dos imagenes, frente y perfil, y left_shoulder y right_shoulder solo de la iamgen de frente
-			const leftHipFrente = keypointsFrente.left_hip;
-			const rightHipFrente = keypointsFrente.right_hip;
-			const leftHipPerfil = keypointsPerfil.left_hip;
-			const rightHipPerfil = keypointsPerfil.right_hip;
-			const leftShoulderFrente = keypointsFrente.left_shoulder; // Solo evaluamos el punto de hombro en el la imagen de frente
-			const rightShoulderFrente = keypointsFrente.right_shoulder;
-			const leftShoulderPerfil = keypointsPerfil.left_shoulder; // Para obtener la coordenada x coorespondiente al eje lateral de cuerpo
-			const rightShoulderPerfil = keypointsPerfil.right_shoulder;
-
-			console.log(
-				//undefined
-				//NO se obtiene
-				leftHipFrente,
-				rightHipFrente,
-				leftHipPerfil,
-				rightHipPerfil,
-				leftShoulderFrente,
-				rightShoulderFrente,
-				leftShoulderPerfil,
-				rightShoulderPerfil
-			);
+			const leftHipFrente = ptosClaveFrente.left_hip;
+			const rightHipFrente = ptosClaveFrente.right_hip;
+			const leftHipPerfil = ptosClavePerfil.left_hip;
+			const rightHipPerfil = ptosClavePerfil.right_hip;
+			const leftShoulderFrente = ptosClaveFrente.left_shoulder; // Solo evaluamos el punto de hombro en el la imagen de frente
+			const rightShoulderFrente = ptosClaveFrente.right_shoulder;
+			const leftShoulderPerfil = ptosClavePerfil.left_shoulder; // Para obtener la coordenada x coorespondiente al eje lateral de cuerpo
+			const rightShoulderPerfil = ptosClavePerfil.right_shoulder;
 
 			//* Obtener la matriz de segmentacion de segmentacionFrente.data
 			function obtenerMask(segmentacion) {
@@ -488,12 +475,12 @@ async function imagesTensorFlow() {
 			//* LLamamos a la funcion para obtener las mascaras de las iamgenes de frente y perfil
 			maskFrente = obtenerMask(segmentacionFrente);
 			maskPerfil = obtenerMask(segmentacionPerfil);
-			console.log('mascaras', maskFrente, maskPerfil); //TODOPROCESA HASTA AQUI
+			console.log('mascaras', maskFrente, maskPerfil);
 
 			//----------------------------
 
 			//* Buscamos los puntos de borde mas cercanos en direccion horizontal (ambos sentidos) a los puntos de cadera obtenidos tanto para la iamgen de perfil como para la de frente
-			const bordeLeftHipFrente = bordesMaskHz(leftHipFrente, maskFrente); //!Error
+			const bordeLeftHipFrente = bordesMaskHz(leftHipFrente, maskFrente);
 			const bordeRightHipFrente = bordesMaskHz(rightHipFrente, maskFrente);
 			const bordeLeftHipPerfil = bordesMaskHz(leftHipPerfil, maskPerfil);
 			const bordeRightHipPerfil = bordesMaskHz(rightHipPerfil, maskPerfil);
@@ -528,149 +515,315 @@ async function imagesTensorFlow() {
 
 			//----------------------------
 
-			//*
+			//* PASO 2: REPRESENTAR LO OBTENIDO EN SVG SE DIBUJARA EN BODY_VIEWER.JS
+			//Elimianmos el mensaje de espera
+			fondo.removeChild(span);
+			// Cambiamos tamanio fondo
+			fondo.style.height = 'auto';
+			fondo.style.padding = '30px';
+			// Crea un elemento SVG en lugar de los elementos canvas
+			// const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+			// fondo.appendChild(svg);
 
-			//* PASO 2: REPRESENTAR LO OBTENIDO EN CANVAS
-			const canvasFrente = document.createElement('canvas');
-			fondo.appendChild(canvasFrente);
-			const canvasPerfil = document.createElement('canvas');
-			fondo.appendChild(canvasPerfil);
-			const ctxFrente = canvasFrente.getContext('2d');
-			const ctxPerfil = canvasPerfil.getContext('2d');
-			// Establecer el tamaño del canvas según la imagen
-			canvasFrente.width = frenteImg.width;
-			canvasFrente.height = frenteImg.height;
-			canvasPerfil.width = perfilImg.width;
-			canvasPerfil.height = perfilImg.height;
+			// // Establece el tamaño del SVG según las dimensiones de las imágenes
+			// svg.setAttribute('width', imgFrente.width);
+			// svg.setAttribute('height', imgFrente.height);
 
-			// Limpiar el canvas
-			ctxFrente.clearRect(0, 0, canvasFrente.width, canvasFrente.height);
+			// // TODO: Dibujar el contorno
+			// // Recorrer los pixeles de la segmentacionFrente para pintar la máscara en el SVG
+			// for (let y = 0; y < segmentacionFrente.height; y++) {
+			// 	for (let x = 0; x < segmentacionFrente.width; x++) {
+			// 		// Obtener el índice del píxel actual
+			// 		const pixelIndex = y * segmentacionFrente.width + x;
 
-			//TODO Dibujar el contorno
-			//*PINTAR LA SILUETA
-			// Recorrer los pixeles de la segmentacionFrente ME PINTA LA MASCARA DE UN COLOR
-			for (let y = 0; y < segmentacionFrente.height; y++) {
-				for (let x = 0; x < segmentacionFrente.width; x++) {
-					// Obtener el indice del píxel actual
-					const pixelIndex = y * segmentacionFrente.width + x;
+			// 		// Verificar si el píxel corresponde a una parte del cuerpo (no fondo)
+			// 		if (segmentacionFrente.data[pixelIndex] !== 0) {
+			// 			// Crear un elemento rect para representar el píxel en el SVG
+			// 			const siluetaFrente = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+			// 			siluetaFrente.setAttribute('x', x);
+			// 			siluetaFrente.setAttribute('y', y);
+			// 			siluetaFrente.setAttribute('width', 2);
+			// 			siluetaFrente.setAttribute('height', 2);
+			// 			siluetaFrente.setAttribute('fill', 'yellow');
 
-					// Verificar si el pixel corresponde a una parte del cuerpo (no fondo)
-					if (segmentacionFrente.data[pixelIndex] !== 0) {
-						// Dibujar un punto o marca en el canvas en la posicion (x, y)
-						ctxFrente.fillStyle = 'yellow';
-						ctxFrente.fillRect(x, y, 2, 2);
-					}
-				}
-			}
+			// 			// Agregar el rectángulo al SVG
+			// 			svg.appendChild(siluetaFrente);
+			// 		}
+			// 	}
+			// }
 
-			for (let y = 0; y < segmentacionPerfil.height; y++) {
-				for (let x = 0; x < segmentacionPerfil.width; x++) {
-					// Obtener el indice del píxel actual
-					const pixelIndex = y * segmentacionPerfil.width + x;
+			// for (let y = 0; y < segmentacionPerfil.height; y++) {
+			// 	for (let x = 0; x < segmentacionPerfil.width; x++) {
+			// 		// Obtener el indice del píxel actual
+			// 		const pixelIndex = y * segmentacionPerfil.width + x;
 
-					// Verificar si el pixel corresponde a una parte del cuerpo (no fondo)
-					if (segmentacionPerfil.data[pixelIndex] !== 0) {
-						// Dibujar un punto o marca en el canvas en la posicion (x, y)
-						ctxPerfil.fillStyle = 'yellow';
-						ctxPerfil.fillRect(x, y, 2, 2);
-					}
-				}
-			}
+			// 		// Verificar si el pixel corresponde a una parte del cuerpo (no fondo)
+			// 		if (segmentacionPerfil.data[pixelIndex] !== 0) {
+			// 			// Crear un elemento rect para representar el píxel en el SVG
+			// 			const siluetaPerfil = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+			// 			siluetaPerfil.setAttribute('x', x);
+			// 			siluetaPerfil.setAttribute('y', y);
+			// 			siluetaPerfil.setAttribute('width', 2);
+			// 			siluetaPerfil.setAttribute('height', 2);
+			// 			siluetaPerfil.setAttribute('fill', 'yellow');
 
-			//*PINTAR SOLO EL CONTORNO
-			// Recorrer los píxeles de la segmentaciónFrente
-			for (let y = 1; y < segmentacionFrente.height - 1; y++) {
-				for (let x = 1; x < segmentacionFrente.width - 1; x++) {
-					// Obtener los valores de los píxeles vecinos
-					const pixelIndex = y * segmentacionFrente.width + x;
-					const topLeft = segmentacionFrente.data[pixelIndex - segmentacionFrente.width - 1];
-					const topRight = segmentacionFrente.data[pixelIndex - segmentacionFrente.width + 1];
-					const bottomLeft = segmentacionFrente.data[pixelIndex + segmentacionFrente.width - 1];
-					const bottomRight = segmentacionFrente.data[pixelIndex + segmentacionFrente.width + 1];
+			// 			// Agregar el rectángulo al SVG
+			// 			svg.appendChild(siluetaPerfil);
+			// 		}
+			// 	}
+			// }
 
-					// Verificar si alguno de los píxeles vecinos es distinto del píxel actual
-					if (
-						segmentacionFrente.data[pixelIndex] !== topLeft ||
-						segmentacionFrente.data[pixelIndex] !== topRight ||
-						segmentacionFrente.data[pixelIndex] !== bottomLeft ||
-						segmentacionFrente.data[pixelIndex] !== bottomRight
-					) {
-						// Dibujar el contorno en el canvas
-						ctxFrente.fillStyle = 'blue';
-						ctxFrente.fillRect(x, y, 1, 1);
-					}
-				}
-			}
+			// //*PINTAR SOLO EL CONTORNO
+			// // Recorrer los píxeles de la segmentaciónFrente
+			// for (let y = 1; y < segmentacionFrente.height - 1; y++) {
+			// 	for (let x = 1; x < segmentacionFrente.width - 1; x++) {
+			// 		// Obtener los valores de los píxeles vecinos
+			// 		const pixelIndex = y * segmentacionFrente.width + x;
+			// 		const topLeft = segmentacionFrente.data[pixelIndex - segmentacionFrente.width - 1];
+			// 		const topRight = segmentacionFrente.data[pixelIndex - segmentacionFrente.width + 1];
+			// 		const bottomLeft = segmentacionFrente.data[pixelIndex + segmentacionFrente.width - 1];
+			// 		const bottomRight = segmentacionFrente.data[pixelIndex + segmentacionFrente.width + 1];
 
-			for (let y = 1; y < segmentacionPerfil.height - 1; y++) {
-				for (let x = 1; x < segmentacionPerfil.width - 1; x++) {
-					// Obtener los valores de los píxeles vecinos
-					const pixelIndex = y * segmentacionPerfil.width + x;
-					const topLeft = segmentacionPerfil.data[pixelIndex - segmentacionPerfil.width - 1];
-					const topRight = segmentacionPerfil.data[pixelIndex - segmentacionPerfil.width + 1];
-					const bottomLeft = segmentacionPerfil.data[pixelIndex + segmentacionPerfil.width - 1];
-					const bottomRight = segmentacionPerfil.data[pixelIndex + segmentacionPerfil.width + 1];
+			// 		// Verificar si alguno de los píxeles vecinos es distinto del píxel actual
+			// 		if (
+			// 			segmentacionFrente.data[pixelIndex] !== topLeft ||
+			// 			segmentacionFrente.data[pixelIndex] !== topRight ||
+			// 			segmentacionFrente.data[pixelIndex] !== bottomLeft ||
+			// 			segmentacionFrente.data[pixelIndex] !== bottomRight
+			// 		) {
+			// 			// Crear un elemento rect para representar el píxel en el SVG
+			// 			const contornoFrente = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+			// 			contornoFrente.setAttribute('x', x);
+			// 			contornoFrente.setAttribute('y', y);
+			// 			contornoFrente.setAttribute('width', 1);
+			// 			contornoFrente.setAttribute('height', 1);
+			// 			contornoFrente.setAttribute('fill', 'blue');
+			// 			// Agregar el rectángulo al SVG
+			// 			svg.appendChild(contornoFrente);
+			// 		}
+			// 	}
+			// }
 
-					// Verificar si alguno de los píxeles vecinos es distinto del píxel actual
-					if (
-						segmentacionPerfil.data[pixelIndex] !== topLeft ||
-						segmentacionPerfil.data[pixelIndex] !== topRight ||
-						segmentacionPerfil.data[pixelIndex] !== bottomLeft ||
-						segmentacionPerfil.data[pixelIndex] !== bottomRight
-					) {
-						// Dibujar el contorno en el canvas
-						ctxPerfil.fillStyle = 'blue';
-						ctxPerfil.fillRect(x, y, 1, 1);
-					}
-				}
-			}
+			// for (let y = 1; y < segmentacionPerfil.height - 1; y++) {
+			// 	for (let x = 1; x < segmentacionPerfil.width - 1; x++) {
+			// 		// Obtener los valores de los píxeles vecinos
+			// 		const pixelIndex = y * segmentacionPerfil.width + x;
+			// 		const topLeft = segmentacionPerfil.data[pixelIndex - segmentacionPerfil.width - 1];
+			// 		const topRight = segmentacionPerfil.data[pixelIndex - segmentacionPerfil.width + 1];
+			// 		const bottomLeft = segmentacionPerfil.data[pixelIndex + segmentacionPerfil.width - 1];
+			// 		const bottomRight = segmentacionPerfil.data[pixelIndex + segmentacionPerfil.width + 1];
 
-			//* PINTAR PUNTOS CLAVE Y PUNTOS OBTENIDOS
-			//* Dibujar los puntos clave y las líneas hacia los puntos de borde más cercanos
-			// Dibujar puntos encontrados
-			function pintarPtos(punto, ctx) {
-				ctx.fillStyle = 'pink';
-				const x = Math.round(punto.x);
-				const y = Math.round(punto.y);
-				ctx.beginPath();
-				ctx.arc(x, y, 2, 0, 2 * Math.PI);
-				ctx.fill();
-			}
-			// Dibujar puntos clave
-			// CADERA
-			pintarPtos(leftHipFrente, ctxFrente);
-			pintarPtos(rightHipFrente, ctxFrente);
-			pintarPtos(leftHipPerfil, ctxPerfil);
-			pintarPtos(rightHipPerfil, ctxPerfil);
-			// HOMBROS
-			pintarPtos(leftShoulderFrente, ctxFrente);
-			pintarPtos(rightShoulderFrente, ctxFrente);
-			pintarPtos(leftShoulderPerfil, ctxPerfil);
-			pintarPtos(rightShoulderPerfil, ctxPerfil);
+			// 		// Verificar si alguno de los píxeles vecinos es distinto del píxel actual
+			// 		if (
+			// 			segmentacionPerfil.data[pixelIndex] !== topLeft ||
+			// 			segmentacionPerfil.data[pixelIndex] !== topRight ||
+			// 			segmentacionPerfil.data[pixelIndex] !== bottomLeft ||
+			// 			segmentacionPerfil.data[pixelIndex] !== bottomRight
+			// 		) {
+			// 			// Crear un elemento rect para representar el píxel en el SVG
+			// 			const contornoPerfil = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+			// 			contornoPerfil.setAttribute('x', x);
+			// 			contornoPerfil.setAttribute('y', y);
+			// 			contornoPerfil.setAttribute('width', 1);
+			// 			contornoPerfil.setAttribute('height', 1);
+			// 			contornoPerfil.setAttribute('fill', 'blue');
+			// 			// Agregar el rectángulo al SVG
+			// 			svg.appendChild(contornoPerfil);
+			// 		}
+			// 	}
+			// }
 
-			// Pintamos los puntos de borde en las imagenes de frente y perfil de las caderas
-			// Muestra  bordeHip = {borderPointLeftFrente: {x1, y}, borderPointRightFrente: {x2, y}, borderPointLeftPerfil: {x3, y}, borderPointRightPerfil: {x4, y}, distanciaXFrente: valorCaderaFrente, distanciaXPerfil: valorCaderaPerfil}
-			pintarPtos(bordeHip.borderPointLeftFrente, ctxFrente);
-			pintarPtos(bordeHip.borderPointRightFrente, ctxFrente);
-			pintarPtos(bordeHip.borderPointLeftPerfil, ctxPerfil);
-			pintarPtos(bordeHip.borderPointRightPerfil, ctxPerfil);
-			// bordeShoulder = {bordeLeftShoulder: {x1, y}, bordeRightShoulder: {x2, y}}
-			pintarPtos(bordeShoulder.bordeLeftShoulder, ctxFrente);
-			pintarPtos(bordeShoulder.bordeRightShoulder, ctxFrente);
-			// centroDel = {cenDelCad: {x, y1}, cenDelHom: {x, y2}, cenDelX: x}
-			pintarPtos(centroDel.cenDelHom, ctxFrente);
-			pintarPtos(centroDel.cenDelCad, ctxFrente);
-			// centroLat = {cenLatHom: {x, y}, cenLatCad: {x, y}, cenLatX:x}
-			pintarPtos(centroLal.cenLatHom, ctxPerfil);
-			pintarPtos(centroLal.cenLatCad, ctxPerfil);
+			// //* PINTAR PUNTOS CLAVE Y PUNTOS OBTENIDOS
+			// //* Dibujar los puntos clave y las líneas hacia los puntos de borde más cercanos
+			// // Dibujar puntos encontrados
+			// function pintarPtos(punto, svg) {
+			// 	const x = Math.round(punto.x);
+			// 	const y = Math.round(punto.y);
+
+			// 	const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+			// 	circle.setAttribute('cx', x);
+			// 	circle.setAttribute('cy', y);
+			// 	circle.setAttribute('r', 2);
+			// 	circle.setAttribute('fill', 'pink');
+
+			// 	svg.appendChild(circle);
+			// }
+			// // Dibujar puntos clave
+			// // CADERA
+			// pintarPtos(leftHipFrente, svg);
+			// pintarPtos(rightHipFrente, svg);
+			// pintarPtos(leftHipPerfil, svg);
+			// pintarPtos(rightHipPerfil, svg);
+			// // HOMBROS
+			// pintarPtos(leftShoulderFrente, svg);
+			// pintarPtos(rightShoulderFrente, svg);
+			// pintarPtos(leftShoulderPerfil, svg);
+			// pintarPtos(rightShoulderPerfil, svg);
+
+			// // Pintamos los puntos de borde en las imagenes de frente y perfil de las caderas
+			// // Muestra  bordeHip = {borderPointLeftFrente: {x1, y}, borderPointRightFrente: {x2, y}, borderPointLeftPerfil: {x3, y}, borderPointRightPerfil: {x4, y}, distanciaXFrente: valorCaderaFrente, distanciaXPerfil: valorCaderaPerfil}
+			// pintarPtos(bordeHip.borderPointLeftFrente, svg);
+			// pintarPtos(bordeHip.borderPointRightFrente, svg);
+			// pintarPtos(bordeHip.borderPointLeftPerfil, svg);
+			// pintarPtos(bordeHip.borderPointRightPerfil, svg);
+			// // bordeShoulder = {bordeLeftShoulder: {x1, y}, bordeRightShoulder: {x2, y}}
+			// pintarPtos(bordeShoulder.bordeLeftShoulder, svg);
+			// pintarPtos(bordeShoulder.bordeRightShoulder, svg);
+			// // centroDel = {cenDelCad: {x, y1}, cenDelHom: {x, y2}, cenDelX: x}
+			// pintarPtos(centroDel.cenDelHom, svg);
+			// pintarPtos(centroDel.cenDelCad, svg);
+			// // centroLat = {cenLatHom: {x, y}, cenLatCad: {x, y}, cenLatX:x}
+			// pintarPtos(centroLal.cenLatHom, svg);
+			// pintarPtos(centroLal.cenLatCad, svg);
+
+			//-------------------------
+
+			// //* PASO 2: REPRESENTAR LO OBTENIDO EN CANVAS
+			// //Elimianmos el mensaje de espera
+			// fondo.removeChild(span);
+			// // Cambiamos tamanio fondo
+			// fondo.style.height = 'auto';
+			// fondo.style.padding = '30px';
+			// const canvasFrente = document.createElement('canvas');
+			// fondo.appendChild(canvasFrente);
+			// const canvasPerfil = document.createElement('canvas');
+			// fondo.appendChild(canvasPerfil);
+			// const ctxFrente = canvasFrente.getContext('2d');
+			// const ctxPerfil = canvasPerfil.getContext('2d');
+			// // Establecer el tamaño del canvas según la imagen
+			// canvasFrente.width = imgFrente.width;
+			// canvasFrente.height = imgFrente.height;
+			// canvasPerfil.width = imgPerfil.width;
+			// canvasPerfil.height = imgPerfil.height;
+
+			// // Limpiar el canvas
+			// ctxFrente.clearRect(0, 0, canvasFrente.width, canvasFrente.height);
+
+			// //TODO Dibujar el contorno
+			// //*PINTAR LA SILUETA
+			// // Recorrer los pixeles de la segmentacionFrente ME PINTA LA MASCARA DE UN COLOR
+			// for (let y = 0; y < segmentacionFrente.height; y++) {
+			// 	for (let x = 0; x < segmentacionFrente.width; x++) {
+			// 		// Obtener el indice del píxel actual
+			// 		const pixelIndex = y * segmentacionFrente.width + x;
+
+			// 		// Verificar si el pixel corresponde a una parte del cuerpo (no fondo)
+			// 		if (segmentacionFrente.data[pixelIndex] !== 0) {
+			// 			// Dibujar un punto o marca en el canvas en la posicion (x, y)
+			// 			ctxFrente.fillStyle = 'yellow';
+			// 			ctxFrente.fillRect(x, y, 2, 2);
+			// 		}
+			// 	}
+			// }
+
+			// for (let y = 0; y < segmentacionPerfil.height; y++) {
+			// 	for (let x = 0; x < segmentacionPerfil.width; x++) {
+			// 		// Obtener el indice del píxel actual
+			// 		const pixelIndex = y * segmentacionPerfil.width + x;
+
+			// 		// Verificar si el pixel corresponde a una parte del cuerpo (no fondo)
+			// 		if (segmentacionPerfil.data[pixelIndex] !== 0) {
+			// 			// Dibujar un punto o marca en el canvas en la posicion (x, y)
+			// 			ctxPerfil.fillStyle = 'yellow';
+			// 			ctxPerfil.fillRect(x, y, 2, 2);
+			// 		}
+			// 	}
+			// }
+
+			// //*PINTAR SOLO EL CONTORNO
+			// // Recorrer los píxeles de la segmentaciónFrente
+			// for (let y = 1; y < segmentacionFrente.height - 1; y++) {
+			// 	for (let x = 1; x < segmentacionFrente.width - 1; x++) {
+			// 		// Obtener los valores de los píxeles vecinos
+			// 		const pixelIndex = y * segmentacionFrente.width + x;
+			// 		const topLeft = segmentacionFrente.data[pixelIndex - segmentacionFrente.width - 1];
+			// 		const topRight = segmentacionFrente.data[pixelIndex - segmentacionFrente.width + 1];
+			// 		const bottomLeft = segmentacionFrente.data[pixelIndex + segmentacionFrente.width - 1];
+			// 		const bottomRight = segmentacionFrente.data[pixelIndex + segmentacionFrente.width + 1];
+
+			// 		// Verificar si alguno de los píxeles vecinos es distinto del píxel actual
+			// 		if (
+			// 			segmentacionFrente.data[pixelIndex] !== topLeft ||
+			// 			segmentacionFrente.data[pixelIndex] !== topRight ||
+			// 			segmentacionFrente.data[pixelIndex] !== bottomLeft ||
+			// 			segmentacionFrente.data[pixelIndex] !== bottomRight
+			// 		) {
+			// 			// Dibujar el contorno en el canvas
+			// 			ctxFrente.fillStyle = 'blue';
+			// 			ctxFrente.fillRect(x, y, 1, 1);
+			// 		}
+			// 	}
+			// }
+
+			// for (let y = 1; y < segmentacionPerfil.height - 1; y++) {
+			// 	for (let x = 1; x < segmentacionPerfil.width - 1; x++) {
+			// 		// Obtener los valores de los píxeles vecinos
+			// 		const pixelIndex = y * segmentacionPerfil.width + x;
+			// 		const topLeft = segmentacionPerfil.data[pixelIndex - segmentacionPerfil.width - 1];
+			// 		const topRight = segmentacionPerfil.data[pixelIndex - segmentacionPerfil.width + 1];
+			// 		const bottomLeft = segmentacionPerfil.data[pixelIndex + segmentacionPerfil.width - 1];
+			// 		const bottomRight = segmentacionPerfil.data[pixelIndex + segmentacionPerfil.width + 1];
+
+			// 		// Verificar si alguno de los píxeles vecinos es distinto del píxel actual
+			// 		if (
+			// 			segmentacionPerfil.data[pixelIndex] !== topLeft ||
+			// 			segmentacionPerfil.data[pixelIndex] !== topRight ||
+			// 			segmentacionPerfil.data[pixelIndex] !== bottomLeft ||
+			// 			segmentacionPerfil.data[pixelIndex] !== bottomRight
+			// 		) {
+			// 			// Dibujar el contorno en el canvas
+			// 			ctxPerfil.fillStyle = 'blue';
+			// 			ctxPerfil.fillRect(x, y, 1, 1);
+			// 		}
+			// 	}
+			// }
+
+			// //* PINTAR PUNTOS CLAVE Y PUNTOS OBTENIDOS
+			// //* Dibujar los puntos clave y las líneas hacia los puntos de borde más cercanos
+			// // Dibujar puntos encontrados
+			// function pintarPtos(punto, ctx) {
+			// 	ctx.fillStyle = 'pink';
+			// 	const x = Math.round(punto.x);
+			// 	const y = Math.round(punto.y);
+			// 	ctx.beginPath();
+			// 	ctx.arc(x, y, 2, 0, 2 * Math.PI);
+			// 	ctx.fill();
+			// }
+			// // Dibujar puntos clave
+			// // CADERA
+			// pintarPtos(leftHipFrente, ctxFrente);
+			// pintarPtos(rightHipFrente, ctxFrente);
+			// pintarPtos(leftHipPerfil, ctxPerfil);
+			// pintarPtos(rightHipPerfil, ctxPerfil);
+			// // HOMBROS
+			// pintarPtos(leftShoulderFrente, ctxFrente);
+			// pintarPtos(rightShoulderFrente, ctxFrente);
+			// pintarPtos(leftShoulderPerfil, ctxPerfil);
+			// pintarPtos(rightShoulderPerfil, ctxPerfil);
+
+			// // Pintamos los puntos de borde en las imagenes de frente y perfil de las caderas
+			// // Muestra  bordeHip = {borderPointLeftFrente: {x1, y}, borderPointRightFrente: {x2, y}, borderPointLeftPerfil: {x3, y}, borderPointRightPerfil: {x4, y}, distanciaXFrente: valorCaderaFrente, distanciaXPerfil: valorCaderaPerfil}
+			// pintarPtos(bordeHip.borderPointLeftFrente, ctxFrente);
+			// pintarPtos(bordeHip.borderPointRightFrente, ctxFrente);
+			// pintarPtos(bordeHip.borderPointLeftPerfil, ctxPerfil);
+			// pintarPtos(bordeHip.borderPointRightPerfil, ctxPerfil);
+			// // bordeShoulder = {bordeLeftShoulder: {x1, y}, bordeRightShoulder: {x2, y}}
+			// pintarPtos(bordeShoulder.bordeLeftShoulder, ctxFrente);
+			// pintarPtos(bordeShoulder.bordeRightShoulder, ctxFrente);
+			// // centroDel = {cenDelCad: {x, y1}, cenDelHom: {x, y2}, cenDelX: x}
+			// pintarPtos(centroDel.cenDelHom, ctxFrente);
+			// pintarPtos(centroDel.cenDelCad, ctxFrente);
+			// // centroLat = {cenLatHom: {x, y}, cenLatCad: {x, y}, cenLatX:x}
+			// pintarPtos(centroLal.cenLatHom, ctxPerfil);
+			// pintarPtos(centroLal.cenLatCad, ctxPerfil);
 
 			//* PASO 3: ESTIMAR LAS MEDIDAS
 			/* Para el calculo de las medidas se tomaran valores de proporciones canonicas. 
-		SE ESPERAN RESULTADOS POCO FIABLES Y SE CREE MÄS CONVENIENTE EMPLEAR LOS 
-		DATOS QUE SE DISPONEN PARA ENTRENAR UN MODELO DE INFERENCIA DE MEDIDAS
-		QUE COMPARE LOS DATOS OBTENIDOS CON BODYPIX Y POSENET CON LOS QUE HAYA DISPONIBLES
-		EN LA BASE DATOS UNA VEZ ESTA SEA LO SUFICIENTEMENTE GRANDE CON LSO DATOS REGISTRADOS
-		MANUALMENTE*/
+			SE ESPERAN RESULTADOS POCO FIABLES Y SE CREE MÄS CONVENIENTE EMPLEAR LOS 
+			DATOS QUE SE DISPONEN PARA ENTRENAR UN MODELO DE INFERENCIA DE MEDIDAS
+			QUE COMPARE LOS DATOS OBTENIDOS CON BODYPIX Y POSENET CON LOS QUE HAYA DISPONIBLES
+			EN LA BASE DATOS UNA VEZ ESTA SEA LO SUFICIENTEMENTE GRANDE CON LSO DATOS REGISTRADOS
+			MANUALMENTE*/
 		}
 
 		try {
@@ -684,11 +837,9 @@ async function imagesTensorFlow() {
 			//.then (values=>{console.log(values)});
 			procesarKeypoints(); // segun la tienes aqui se ejecuta antes que el resto
 			// Al finalizar todos los procesos de imagesTensorFlow(), resolver la promesa
-			resolve();
+			resolve(); //Se resulve la promesa y se sigue ejecutando el código que hay en datos-formulario.js
 		} catch (error) {
 			console.log('Se ha producido un error ', error);
-			const fondo = document.querySelector('.fondo');
-			const span = document.querySelector('.espera');
 			fondo.removeChild(span);
 			const span2 = document.createElement('span');
 			span2.textContent =
