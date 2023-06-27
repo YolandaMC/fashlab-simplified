@@ -14,23 +14,29 @@ async function bodyViewer() {
 	const SVG_NS = 'http://www.w3.org/2000/svg';
 	const svg = document.createElementNS(SVG_NS, 'svg');
 	svg.setAttribute('class', 'body-viewer');
+	svg.style.width = '100%';
+	svg.style.height = '100%';
 	fondo.appendChild(svg);
 
-	// Establece el tamaño del SVG según las dimensiones de las imágenes
-	svg.setAttribute('width', imgFrente.width);
-	svg.setAttribute('height', imgFrente.height);
-
+	//Ratio para mantener la proporción 640x480 pero poder emplear medidas en cm
+	const ratio = 640/480;
 	// Variable que me permite establecer el tamaño del svg
 	const svgSize = {
 		//medidas en cm
-		width: 100,
-		height: 100,
+		width: 200*ratio,
+		height: 200,
 	};
+	// Establece el tamaño del SVG según las dimensiones de las imágenes
+	// svg.setAttribute('width', imgFrente.width);
+	// svg.setAttribute('height', imgFrente.height);
+	svg.setAttribute('width', svgSize.width);
+	svg.setAttribute('height', svgSize.height);
 
 	// -----------------------
 
 	//* Establezco una escala de transformación para todos los elementos svg para poder trabajar con las unidades en cm y se visualicen en puntos (pt) en la pantalla*//
 	const scale = 28.34645669; //28.34645669 pt = 1cm con pt como unidad por defecto para svg  1cm = 35.43307 pixels
+	//const scale = 35.43307;
 	//TODO Diferencia entre pixel CSS y pixel fisico (tamaño pantalla x ejem) el DPR (Device Pixel Ratio) DPR = pixel fisico/pixel css
 
 	// -----------------------
@@ -44,11 +50,11 @@ async function bodyViewer() {
 	};
 
 	//* Establezco el viweBox del svg *//
-	// svg.setAttribute(
-	// 	'viewBox',
-	// 	svgViewBox.minX + ' ' + svgViewBox.minY + ' ' + svgViewBox.width + ' ' + svgViewBox.height
-	// ); // svg.setAttribute('viewBox', `${svgViewBox.minX} ${svgViewBox.minY} ${svgViewBox.width} ${svgViewBox.height}`);
-
+	svg.setAttribute(
+		'viewBox',
+		svgViewBox.minX + ' ' + svgViewBox.minY + ' ' + svgViewBox.width + ' ' + svgViewBox.height
+	); // svg.setAttribute('viewBox', `${svgViewBox.minX} ${svgViewBox.minY} ${svgViewBox.width} ${svgViewBox.height}`);
+	svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 	try {
 		// -----------------------
 

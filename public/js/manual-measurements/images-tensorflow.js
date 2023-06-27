@@ -510,8 +510,8 @@ async function imagesTensorFlow() {
 			//----------------------------
 
 			//* Buscamos los puntos medios para left_shoulder y right_shoulder de la imagen de perfil para saber la coordenada x del lateral del cuerpo (no usamos el punto medio de la cadera pues en el caso de perfil no nos dara esta cota) como coordenada y tomaremos la ya calculada como punto de borde en bordeShoulder
-			centroLal = ejeLateral(leftShoulderPerfil, rightShoulderPerfil, bordeShoulder, bordeHip); // VARIABLE GLOBAL
-			console.log('centroLat', centroLal); // Muestra centroLat = {cenLatHom: {x, y}, cenLatCad: {x, y}, cenLatX:x}
+			centroLat = ejeLateral(leftShoulderPerfil, rightShoulderPerfil, bordeShoulder, bordeHip); // VARIABLE GLOBAL
+			console.log('centroLat', centroLat); // Muestra centroLat = {cenLatHom: {x, y}, cenLatCad: {x, y}, cenLatX:x}
 
 			//----------------------------
 

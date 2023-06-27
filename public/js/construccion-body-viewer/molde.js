@@ -3,33 +3,8 @@
 // -----------------------
 // -----------------------
 
-// -----------------------
-// -----------------------
 function dibujarMolde() {
-	//TODO ESTOS DOS OBJETOS CON LAS MEDIDAS ES LO UNICO QUE DEBES APORTAR PAR QUE SE GENERE EL PATRON
-	// Definimos las constantes que vamos a utilizar
-	// let datosFormulario = {
-	// 	sexo: 'femenino',
-	// 	genero: 'mujer',
-	// 	talla: 'S',
-	// 	edad: '32',
-	// 	cuello: 36,
-	// 	hombro: 13,
-	// 	estatura: 165,
-	// 	largespalda: 40,
-	// 	largdelantero: 43,
-	// 	costadillo: 38.5,
-	// 	pierna: 96,
-	// 	entrepierna: 71,
-	// 	brazo: 59,
-	// 	pecho: 88,
-	// 	cintura: 72,
-	// 	cadera: 94,
-	// 	espalda: 35,
-	// 	seppecho: 17,
-	// }; //nos sirve por ahora, luego la debemos variar
-
-	// console.log (datos);
+	// Saber que están llegando correctamente los datos
 	console.log('datos' + datosFormulario); //Los datosFormulario de medidas y edad se han pasado a float en el script datos-formulario.js
 
 	// -----------------------
@@ -92,8 +67,8 @@ function dibujarMolde() {
 	const hCin = 1; // valor arbitrario constante. Puede variarse si se desea más holgura en la prenda
 	let anchoMax = medidasHz.pecho + hPecho;
 	/* Establezco que el ancho maximo del patron sera la medida de pecho mas la 
-holgura pero en el siguiente condicional comprobare si hay medidas mayores 
-y como seran los entalles en funcion de ello */
+	holgura pero en el siguiente condicional comprobare si hay medidas mayores 
+	y como seran los entalles en funcion de ello */
 	// -----------------------
 	// -----------------------
 
@@ -147,11 +122,19 @@ y como seran los entalles en funcion de ello */
 	// -----------------------
 
 	//TODO DEBERAS AJUSTAR REFERENCIA EN BASE A EL OTRO DIBUJO
-	//* Establezco el punto de referencia de construcción de mi patrón en base a sus medidas finales para que quede centrado en mi elemetno svg del html *//
+	// /* Para ello debes recuperar el pto de centro delantero con cadera
+	// de la silueta para con el poder situar este patron*/
+	// const cenDelCad = centroDel.cenDelCad;
+	// const refxSilueta = -(svgSize.width * scale) / 2;
+	// const refySilueta = -(svgSize.height * scale) / 2;
+	// const cenDelCadX = cenDelCad.x + refxSilueta
+	// const cenDelCadY = cenDelCad.y +refySilueta
+
+	//* Establezco el punto de referencia de construcción de mi patron en base a sus medidas finales para que quede centrado en mi elemetno svg del html *//
 	//const refx = 0; // (anchoMax - (anchoMax)) / 2 En el caso del eje x la construcción del patrón ya lo ubica en el centro
-	//const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - medidasVr.largcadera;
+	//const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - medidasVr.largcadera; // Para dibujar el patrón solo sin otros elementos
 	const refx = 0; // (anchoMax - (anchoMax)) / 2 En el caso del eje x la construcción del patrón ya lo ubica en el centro
-	const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - medidasVr.largcadera;
+	const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - medidasVr.largcadera / 2; // Tomar como referencia el punto de cadera
 
 	// -----------------------
 	// -----------------------

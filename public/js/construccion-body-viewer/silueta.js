@@ -3,24 +3,37 @@
 'use strict';
 
 function dibujarSilueta() {
-	// //* PASO 2: REPRESENTAR LO OBTENIDO EN SVG
-	// 		//Elimianmos el mensaje de espera
-	//         const fondo = document.querySelector('.fondo');
-	// 		// Cambiamos tamanio fondo
-	// 		fondo.style.height = 'auto';
-	// 		fondo.style.padding = '30px';
-	// 		// Crea un elemento SVG en lugar de los elementos canvas
-	// 		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-	// 		fondo.appendChild(svg);
-
-	// 		// Establece el tamaño del SVG según las dimensiones de las imágenes
-	// 		svg.setAttribute('width', imgFrente.width);
-	// 		svg.setAttribute('height', imgFrente.height);
-    
+	//* PASO 2: REPRESENTAR LO OBTENIDO EN SVG
 	// Recuperamos svg creado en body.viewer.js
 	const svg = document.querySelector('.body-viewer');
 	const SVG_NS = 'http://www.w3.org/2000/svg';
-   
+
+	//Calculemos la escala de representacion en función del svg
+	//Ratio para mantener la proporción 640x480 pero poder emplear medidas en cm
+	const ratio = 640 / 480;
+	// Variable que me permite establecer el tamaño del svg
+	const svgSize = {
+		//medidas en cm
+		width: 200 * ratio,
+		height: 200,
+	};
+	//* Establezco una escala de transformación para todos los elementos svg para poder trabajar con las unidades en cm y se visualicen en puntos (pt) en la pantalla*//
+	const scale = 28.34645669; //28.34645669 pt = 1cm con pt como unidad por defecto para svg
+	const scale2 = 35.43307; // para las imagenes tomadas desde la webcam 1cm = 35.43307 pixels
+	//TODO Diferencia entre pixel CSS y pixel fisico (tamaño pantalla x ejem) el DPR (Device Pixel Ratio) DPR = pixel fisico/pixel css
+	//* Escala silueta
+	const escalaSilueta = (svgSize.height * scale) / imgFrente.height;
+	//* Puntos de referencia para situar el dibujo en el centro
+	/* Para ello debes recuperar el pto de centro delantero con cadera 
+	de la silueta para con el poder situar este patron*/
+	const cenDelCad = centroDel.cenDelCad;
+	const cenDelCadX = cenDelCad.x;
+	const cenDelCadY = cenDelCad.y;
+	const cenLatCad = centroLat.cenLatCad;
+	const cenLatCadX = cenLatCad.x;
+	const refxFrente = -(svgSize.width * scale) / 2 + (cenLatCadX) / 2; //const refxFrente = cenDelCadX - (svgSize.width * scale) / 2;
+	const refxPerfil = -(svgSize.width * scale) / 2;
+	const refy = cenDelCadY- (svgSize.height * scale) / 2;
 
 	//*PINTAR SILUETA
 	// Recorrer los pixeles de la segmentacionFrente para pintar la máscara en el SVG
@@ -33,12 +46,12 @@ function dibujarSilueta() {
 			if (segmentacionFrente.data[pixelIndex] !== 0) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const siluetaFrente = document.createElementNS(SVG_NS, 'rect');
-				siluetaFrente.setAttribute('x', x);
-				siluetaFrente.setAttribute('y', y);
-				siluetaFrente.setAttribute('width', 2);
-				siluetaFrente.setAttribute('height', 2);
+				siluetaFrente.setAttribute('x', x * escalaSilueta + refxFrente);
+				siluetaFrente.setAttribute('y', y * escalaSilueta + refy);
+				siluetaFrente.setAttribute('width', 2 * escalaSilueta);
+				siluetaFrente.setAttribute('height', 2 * escalaSilueta);
 				siluetaFrente.setAttribute('fill', 'yellow');
-                
+
 				// Agregar el rectángulo al SVG
 				svg.appendChild(siluetaFrente);
 			}
@@ -54,10 +67,10 @@ function dibujarSilueta() {
 			if (segmentacionPerfil.data[pixelIndex] !== 0) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const siluetaPerfil = document.createElementNS(SVG_NS, 'rect');
-				siluetaPerfil.setAttribute('x', x);
-				siluetaPerfil.setAttribute('y', y);
-				siluetaPerfil.setAttribute('width', 2);
-				siluetaPerfil.setAttribute('height', 2);
+				siluetaPerfil.setAttribute('x', x * escalaSilueta + refxPerfil);
+				siluetaPerfil.setAttribute('y', y * escalaSilueta + refy);
+				siluetaPerfil.setAttribute('width', 2 * escalaSilueta);
+				siluetaPerfil.setAttribute('height', 2 * escalaSilueta);
 				siluetaPerfil.setAttribute('fill', 'yellow');
 
 				// Agregar el rectángulo al SVG
@@ -86,10 +99,10 @@ function dibujarSilueta() {
 			) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const contornoFrente = document.createElementNS(SVG_NS, 'rect');
-				contornoFrente.setAttribute('x', x);
-				contornoFrente.setAttribute('y', y);
-				contornoFrente.setAttribute('width', 1);
-				contornoFrente.setAttribute('height', 1);
+				contornoFrente.setAttribute('x', x * escalaSilueta + refxFrente);
+				contornoFrente.setAttribute('y', y * escalaSilueta + refy);
+				contornoFrente.setAttribute('width', 1 * escalaSilueta);
+				contornoFrente.setAttribute('height', 1 * escalaSilueta);
 				contornoFrente.setAttribute('fill', 'blue');
 				// Agregar el rectángulo al SVG
 				svg.appendChild(contornoFrente);
@@ -115,10 +128,10 @@ function dibujarSilueta() {
 			) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const contornoPerfil = document.createElementNS(SVG_NS, 'rect');
-				contornoPerfil.setAttribute('x', x);
-				contornoPerfil.setAttribute('y', y);
-				contornoPerfil.setAttribute('width', 1);
-				contornoPerfil.setAttribute('height', 1);
+				contornoPerfil.setAttribute('x', x * escalaSilueta + refxPerfil);
+				contornoPerfil.setAttribute('y', y * escalaSilueta + refy);
+				contornoPerfil.setAttribute('width', 1 * escalaSilueta);
+				contornoPerfil.setAttribute('height', 1 * escalaSilueta);
 				contornoPerfil.setAttribute('fill', 'blue');
 				// Agregar el rectángulo al SVG
 				svg.appendChild(contornoPerfil);
@@ -139,45 +152,45 @@ function dibujarSilueta() {
 
 	//* Dibujar los puntos clave y las líneas hacia los puntos de borde más cercanos
 	// Dibujar puntos encontrados
-	function pintarPtos(punto, svg) {
+	function pintarPtos(punto, svg, refx) {
 		const x = Math.round(punto.x);
 		const y = Math.round(punto.y);
 
 		const circle = document.createElementNS(SVG_NS, 'circle');
-		circle.setAttribute('cx', x);
-		circle.setAttribute('cy', y);
-		circle.setAttribute('r', 2);
+		circle.setAttribute('cx', x * escalaSilueta + refx);
+		circle.setAttribute('cy', y * escalaSilueta + refy);
+		circle.setAttribute('r', 2 * escalaSilueta);
 		circle.setAttribute('fill', 'pink');
 
 		svg.appendChild(circle);
 	}
 	// Dibujar puntos clave
 	// CADERA
-	pintarPtos(leftHipFrente, svg);
-	pintarPtos(rightHipFrente, svg);
-	pintarPtos(leftHipPerfil, svg);
-	pintarPtos(rightHipPerfil, svg);
+	pintarPtos(leftHipFrente, svg, refxFrente);
+	pintarPtos(rightHipFrente, svg, refxFrente);
+	pintarPtos(leftHipPerfil, svg, refxPerfil);
+	pintarPtos(rightHipPerfil, svg, refxPerfil);
 	// HOMBROS
-	pintarPtos(leftShoulderFrente, svg);
-	pintarPtos(rightShoulderFrente, svg);
-	pintarPtos(leftShoulderPerfil, svg);
-	pintarPtos(rightShoulderPerfil, svg);
+	pintarPtos(leftShoulderFrente, svg, refxFrente);
+	pintarPtos(rightShoulderFrente, svg, refxFrente);
+	pintarPtos(leftShoulderPerfil, svg, refxPerfil);
+	pintarPtos(rightShoulderPerfil, svg, refxPerfil);
 
 	// Pintamos los puntos de borde en las imagenes de frente y perfil de las caderas
 	// Muestra  bordeHip = {borderPointLeftFrente: {x1, y}, borderPointRightFrente: {x2, y}, borderPointLeftPerfil: {x3, y}, borderPointRightPerfil: {x4, y}, distanciaXFrente: valorCaderaFrente, distanciaXPerfil: valorCaderaPerfil}
-	pintarPtos(bordeHip.borderPointLeftFrente, svg);
-	pintarPtos(bordeHip.borderPointRightFrente, svg);
-	pintarPtos(bordeHip.borderPointLeftPerfil, svg);
-	pintarPtos(bordeHip.borderPointRightPerfil, svg);
+	pintarPtos(bordeHip.borderPointLeftFrente, svg, refxFrente);
+	pintarPtos(bordeHip.borderPointRightFrente, svg, refxFrente);
+	pintarPtos(bordeHip.borderPointLeftPerfil, svg, refxPerfil);
+	pintarPtos(bordeHip.borderPointRightPerfil, svg, refxPerfil);
 	// bordeShoulder = {bordeLeftShoulder: {x1, y}, bordeRightShoulder: {x2, y}}
-	pintarPtos(bordeShoulder.bordeLeftShoulder, svg);
-	pintarPtos(bordeShoulder.bordeRightShoulder, svg);
+	pintarPtos(bordeShoulder.bordeLeftShoulder, svg, refxFrente);
+	pintarPtos(bordeShoulder.bordeRightShoulder, svg, refxFrente);
 	// centroDel = {cenDelCad: {x, y1}, cenDelHom: {x, y2}, cenDelX: x}
-	pintarPtos(centroDel.cenDelHom, svg);
-	pintarPtos(centroDel.cenDelCad, svg);
+	pintarPtos(centroDel.cenDelHom, svg, refxFrente);
+	pintarPtos(centroDel.cenDelCad, svg, refxFrente);
 	// centroLat = {cenLatHom: {x, y}, cenLatCad: {x, y}, cenLatX:x}
-	pintarPtos(centroLal.cenLatHom, svg);
-	pintarPtos(centroLal.cenLatCad, svg);
+	pintarPtos(centroLat.cenLatHom, svg, refxPerfil);
+	pintarPtos(centroLat.cenLatCad, svg, refxPerfil);
 
 	//-------------------------
 }
