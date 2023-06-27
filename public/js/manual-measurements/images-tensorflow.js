@@ -31,13 +31,12 @@ async function imagesTensorFlow() {
 		const contenedorVideo = document.querySelector('#contenedor-video');
 		// Eliminamos el div contenedorVideo que en el ultimo momento de pantallaWebcam nos estaba mostrando las
 		fondo.removeChild(contenedorVideo);
-
 		//* Metemos una pantalla de espera mientras trabajan los modelos
 		// Crear el elemento del loader
-		const loader = document.createElement('div');
-		// loader.classList.add('loader');
-		loader.class = 'loader';
-		fondo.appendChild(loader);
+		const span = document.createElement('span');
+		span.class = 'espera';
+		span.textContent = 'Espera mientras se ejecutan los modelos de análisis de las imágenes';
+		fondo.appendChild(span);
 
 		//* COMENZAMOS CON EL ANALISIS DE LAS IMAGENES
 		// Cargamos las imágenes capturadas en capturas
@@ -77,9 +76,47 @@ async function imagesTensorFlow() {
 
 			//Imprimimos resultados por consola
 			console.log('Los resultados para pose() con el modelo Pose-Detection son:');
-			console.log('Pose-Detection poses', posesFrente, posesPerfil);
+			// console.log('Pose-Detection poses', posesFrente, posesPerfil);
 			console.log('Pose-Detection keypoints', keypointsFrente, keypointsPerfil);
-			console.log('Pose-Detection keypoints3D', keypoints3DFrente, keypoints3DPerfil);
+			// console.log('Pose-Detection keypoints3D', keypoints3DFrente, keypoints3DPerfil);
+
+			//TODO AÑADIMOS LOS PTOSCLAVE QUE NOS INTERESAN A NUESTRAS VARIABLES
+			//* SOLO NOS INTERESAN LAS PUNTOS DE HOMBRO Y CADERA DE LAS DOS IMAGENES PUES SON LOS ÚNICOS DEL MODELO QUE NOS SIRVEN PARA NUESTRO PROPOSITO
+			// Recorrer los keypoints y extraer los datos de interes Frente
+			for (let i = 0; i < keypointsFrente.length; i++) {
+				const keypoint = keypointsFrente[i];
+				const name = keypoint.name;
+
+				if (name === 'left_shoulder' || name === 'right_shoulder' || name === 'left_hip' || name === 'right_hip') {
+					// Extraer los datos adicionales del keypoint
+					const { score, x, y, z } = keypoint;
+
+					// Crear un objeto con los datos adicionales del keypoint
+					const keypointData = { score, x, y, z };
+
+					// Asignar el objeto al objeto ptosClaveFrente usando el nombre como clave
+					ptosClaveFrente[name] = keypointData;
+				}
+			}
+			// Recorrer los keypoints y extraer los datos de interes Perfil
+			for (let i = 0; i < keypointsPerfil.length; i++) {
+				const keypoint = keypointsPerfil[i];
+				const name = keypoint.name;
+
+				if (name === 'left_shoulder' || name === 'right_shoulder' || name === 'left_hip' || name === 'right_hip') {
+					// Extraer los datos adicionales del keypoint
+					const { score, x, y, z } = keypoint;
+
+					// Crear un objeto con los datos adicionales del keypoint
+					const keypointData = { score, x, y, z };
+
+					// Asignar el objeto al objeto ptosClavePerfil usando el nombre como clave
+					ptosClavePerfil[name] = keypointData;
+				}
+			}
+
+			console.log('ptosClaveFrente ', ptosClaveFrente);
+			console.log('ptosClavePerfil ', ptosClavePerfil);
 		}
 
 		async function bodyMask() {
@@ -112,33 +149,29 @@ async function imagesTensorFlow() {
 			segmentacionFrente = await model.segmentPerson(imgFrente, segmentationConfig); //segmentPerson
 			segmentacionPerfil = await model.segmentPerson(imgPerfil, segmentationConfig); //segmentPerson
 
-			// Obtener la máscara de segmentación dentro del objeto
-			maskFrente = segmentacionFrente.mask;
-			maskPerfil = segmentacionPerfil.mask;
 			//Imprimimos resultados por consola
-			console.log('Los resultados para segmentationParts con el modelo BodyPix son:');
-			console.log('BodyPix segmentationParts', segmentacionFrente, segmentacionPerfil);
-			console.log('BodyPix maskSegmentation', maskFrente, maskPerfil);
+			console.log('Los resultados para segmentación o máscara con el modelo BodyPix antiguo son:');
+			console.log('BodyPix segmentacionParts', segmentacionFrente, segmentacionPerfil);
 
-			//CREO CANVAS PARA VERLO PRUEBA
-			//TODO
-			const canvasFrente = document.createElement('canvas');
-			const canvasPerfil = document.createElement('canvas');
-			fondo.removeChild(loader); // elimino loader
-			fondo.style.height = '100%'; // para que se adapte a lso tamanos de los canvas
-			fondo.appendChild(canvasFrente); // coloco el canvas en el DOM
-			fondo.appendChild(canvasPerfil); // coloco el canvas en el DOM
-			//TODO
-			const coloredPartFrente = bodyPix.toMask(segmentacionFrente);
-			const coloredPartPerfil = bodyPix.toMask(segmentacionPerfil);
-			const opacity = 0.7;
-			const flipHorizontal = false;
-			const maskBlurAmount = 0;
-			// Draw the colored part image on top of the original image onto a canvas.
-			// The colored part image will be drawn semi-transparent, with an opacity of
-			// 0.7, allowing for the original image to be visible under.
-			bodyPix.drawMask(canvasFrente, imgFrente, coloredPartFrente, opacity, maskBlurAmount, flipHorizontal);
-			bodyPix.drawMask(canvasPerfil, imgPerfil, coloredPartPerfil, opacity, maskBlurAmount, flipHorizontal);
+			// //CREO CANVAS PARA VERLO PRUEBA
+			// //TODO
+			// const canvasFrente = document.createElement('canvas');
+			// const canvasPerfil = document.createElement('canvas');
+			// fondo.removeChild(span); // elimino mensaje espera modelos
+			// fondo.style.height = '100%'; // para que se adapte a lso tamanos de los canvas
+			// fondo.appendChild(canvasFrente); // coloco el canvas en el DOM
+			// fondo.appendChild(canvasPerfil); // coloco el canvas en el DOM
+			// //TODO
+			// const coloredPartFrente = bodyPix.toMask(segmentacionFrente);
+			// const coloredPartPerfil = bodyPix.toMask(segmentacionPerfil);
+			// const opacity = 0.7;
+			// const flipHorizontal = false;
+			// const maskBlurAmount = 0;
+			// // Draw the colored part image on top of the original image onto a canvas.
+			// // The colored part image will be drawn semi-transparent, with an opacity of
+			// // 0.7, allowing for the original image to be visible under.
+			// bodyPix.drawMask(canvasFrente, imgFrente, coloredPartFrente, opacity, maskBlurAmount, flipHorizontal);
+			// bodyPix.drawMask(canvasPerfil, imgPerfil, coloredPartPerfil, opacity, maskBlurAmount, flipHorizontal);
 		}
 
 		async function segmentationParts() {
@@ -180,47 +213,48 @@ async function imagesTensorFlow() {
 			); // Obtengo un ImageData
 
 			//Imprimimos resultados por consola
-			console.log('Los resultados para segmentationParts con el modelo BodyPix son:');
+			console.log('Los resultados para segmentationParts con el modelo Body-segmentation-BodyPix son:');
 			console.log('BodyPix segmentationParts', segmentacionPartesFrente, segmentacionPartesPerfil);
 			console.log('BodyPix maskSegmentation', maskPartesFrente, maskPartesPerfil);
 
-			const opacity = 0.7;
-			const flipHorizontal = false;
-			const maskBlurAmount = 0;
+			// const opacity = 0.7;
+			// const flipHorizontal = false;
+			// const maskBlurAmount = 0;
 
 			//CREO CANVAS PARA VERLO PRUEBA
 			//TODO
-			const canvasPartesFrente = document.createElement('canvas');
-			const canvasPartesPerfil = document.createElement('canvas');
-			//fondo.removeChild(loader); // elimino loader
-			fondo.style.height = '100%'; // para que se adapte a lso tamanos de los canvas
-			fondo.appendChild(canvasPartesFrente); // coloco el canvas en el DOM
-			fondo.appendChild(canvasPartesPerfil); // coloco el canvas en el DOM
-			//TODO
-			// Draw the colored part image on top of the original image onto a canvas.
-			// The colored part image will be drawn semi-transparent, with an opacity of
-			// 0.7, allowing for the original image to be visible under.
-			bodySegmentation.drawMask(
-				canvasPartesFrente,
-				imgFrente,
-				maskPartesFrente,
-				opacity,
-				maskBlurAmount,
-				flipHorizontal
-			);
-			bodySegmentation.drawMask(
-				canvasPartesPerfil,
-				imgPerfil,
-				maskPartesPerfil,
-				opacity,
-				maskBlurAmount,
-				flipHorizontal
-			);
+			// const canvasPartesFrente = document.createElement('canvas');
+			// const canvasPartesPerfil = document.createElement('canvas');
+			// //fondo.removeChild(loader); // elimino loader
+			// fondo.style.height = '100%'; // para que se adapte a lso tamanos de los canvas
+			// fondo.appendChild(canvasPartesFrente); // coloco el canvas en el DOM
+			// fondo.appendChild(canvasPartesPerfil); // coloco el canvas en el DOM
+			// //TODO
+			// // Draw the colored part image on top of the original image onto a canvas.
+			// // The colored part image will be drawn semi-transparent, with an opacity of
+			// // 0.7, allowing for the original image to be visible under.
+			// bodySegmentation.drawMask(
+			// 	canvasPartesFrente,
+			// 	imgFrente,
+			// 	maskPartesFrente,
+			// 	opacity,
+			// 	maskBlurAmount,
+			// 	flipHorizontal
+			// );
+			// bodySegmentation.drawMask(
+			// 	canvasPartesPerfil,
+			// 	imgPerfil,
+			// 	maskPartesPerfil,
+			// 	opacity,
+			// 	maskBlurAmount,
+			// 	flipHorizontal
+			// );
 		}
 
 		function procesarKeypoints() {
 			/* LOS MODELOS SOLO NOS APORTAN CUATRO PTOS CLAVE QUE PUEDAN SERVIRNOS 
-    Estos son: left_shoulder/right_shoulder/left_hip/right-hip*/
+    		Estos son: left_shoulder/right_shoulder/left_hip/right-hip*/
+			console.log('PROCESAR PUNTOS YA SE ESTÁ EJECUTANDO');
 
 			//* PASO 1: OBTENER A PARTIR DE LOS PUNTOS CLAVE DISTANCIAS AL CONTORNO Y PUNTOS DE CONTORNO PARA INTENTAR SABER LA MEDIDA DE CADERA Y MEDIDA DE COSTADILLO
 			// Variables para separar los datos de los puntos clave left_hip, right_hip para las dos imagenes, frente y perfil, y left_shoulder y right_shoulder solo de la iamgen de frente
@@ -232,6 +266,19 @@ async function imagesTensorFlow() {
 			const rightShoulderFrente = keypointsFrente.right_shoulder;
 			const leftShoulderPerfil = keypointsPerfil.left_shoulder; // Para obtener la coordenada x coorespondiente al eje lateral de cuerpo
 			const rightShoulderPerfil = keypointsPerfil.right_shoulder;
+
+			console.log(
+				//undefined
+				//NO se obtiene
+				leftHipFrente,
+				rightHipFrente,
+				leftHipPerfil,
+				rightHipPerfil,
+				leftShoulderFrente,
+				rightShoulderFrente,
+				leftShoulderPerfil,
+				rightShoulderPerfil
+			);
 
 			//* Obtener la matriz de segmentacion de segmentacionFrente.data
 			function obtenerMask(segmentacion) {
@@ -255,7 +302,7 @@ async function imagesTensorFlow() {
 			//* Funcion para encontrar el punto de borde de la mascara izquierda y derecha de los puntos clave left_hip, right_hip en als dos imagenes, frente y perfil
 			function bordesMaskHz(puntoClave, mask) {
 				// Filtrar los puntos de mask que tienen la misma coordenada y que puntoClave
-				const puntosMismaY = mask.filter((punto) => punto.y === puntoClave.y);
+				const puntosMismaY = mask.filter((punto) => punto.y === puntoClave.y); //TODO DA ERROR
 
 				if (puntosMismaY.length > 0) {
 					// Encontrar el punto con coordenada x mínima y el punto con coordenada x máxima
@@ -441,12 +488,12 @@ async function imagesTensorFlow() {
 			//* LLamamos a la funcion para obtener las mascaras de las iamgenes de frente y perfil
 			maskFrente = obtenerMask(segmentacionFrente);
 			maskPerfil = obtenerMask(segmentacionPerfil);
-			console.log('mascaras', maskFrente, maskPerfil);
+			console.log('mascaras', maskFrente, maskPerfil); //TODOPROCESA HASTA AQUI
 
 			//----------------------------
 
 			//* Buscamos los puntos de borde mas cercanos en direccion horizontal (ambos sentidos) a los puntos de cadera obtenidos tanto para la iamgen de perfil como para la de frente
-			const bordeLeftHipFrente = bordesMaskHz(leftHipFrente, maskFrente);
+			const bordeLeftHipFrente = bordesMaskHz(leftHipFrente, maskFrente); //!Error
 			const bordeRightHipFrente = bordesMaskHz(rightHipFrente, maskFrente);
 			const bordeLeftHipPerfil = bordesMaskHz(leftHipPerfil, maskPerfil);
 			const bordeRightHipPerfil = bordesMaskHz(rightHipPerfil, maskPerfil);
@@ -635,11 +682,18 @@ async function imagesTensorFlow() {
 			await Promise.all([posePromise, bodyMaskPromise, segmentationPartsPromise]); //bodyMaskPromise el modelo antiguo de BodyPix devulve un error
 			// await Promise.allSettled([posePromise, bodyMaskPromise, segmentationPartsPromise])
 			//.then (values=>{console.log(values)});
-			await procesarKeypoints(); // segun la tienes aqui se ejecuta antes que el resto
+			procesarKeypoints(); // segun la tienes aqui se ejecuta antes que el resto
 			// Al finalizar todos los procesos de imagesTensorFlow(), resolver la promesa
 			resolve();
 		} catch (error) {
 			console.log('Se ha producido un error ', error);
+			const fondo = document.querySelector('.fondo');
+			const span = document.querySelector('.espera');
+			fondo.removeChild(span);
+			const span2 = document.createElement('span');
+			span2.textContent =
+				'Las capturas realizadas no son adecuadas para procesar con los modelos. Recargue la página y comience de nuevo el proceso';
+			fondo.appendChild(span2);
 			// En caso de error, llamar a reject()
 			reject(new Error('No se han ejecutado algunos modelos ni impreso por consola'));
 		}

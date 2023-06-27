@@ -177,7 +177,6 @@ function pantallaWebcam() {
 		function mostrarCapturas() {
 			const span = document.createElement('span');
 			span.textContent = 'Capturas realizadas';
-			// document.body.appendChild(span);
 			contenedorVideo.appendChild(span); //!
 			console.log(capturas);
 			// Retardo para mostrar un mensaje sobre la capturas webcam realizadas con éxito
@@ -268,7 +267,7 @@ function pantallaWebcam() {
 
 		// Función para dibujar un punto en el canvas para marcar visualmente los puntos marcados al usuario
 		function dibujarPunto(x, y) {
-			ctxCapturas.fillStyle = 'red';
+			ctxCapturas.fillStyle = 'pink';
 			ctxCapturas.beginPath();
 			ctxCapturas.arc(x, y, 3, 0, 2 * Math.PI);
 			ctxCapturas.fill();
@@ -285,7 +284,8 @@ function pantallaWebcam() {
 		//Función para crear el elemento <span> que me da un aviso de espera para que se inice la conexión de la webcam
 		function crearMensajeEspera() {
 			mensajeEspera = document.createElement('span');
-			mensajeEspera.innerText = 'Espere un momento...';
+			// mensajeEspera.innerText = 'Espere un momento...';
+			mensajeEspera.textContent = 'Espere un momento...';
 			mensajeEspera.style.display = 'none';
 			contenedorVideo.appendChild(mensajeEspera);
 		}

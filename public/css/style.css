@@ -505,6 +505,9 @@ input[type='radio']:checked:before {
 	color: #878787;
 }
 
+/* Pantalla para la espera el procesamiento de las imagenes por lo modelos imagenes-tensorflow.js*/
+
+
 /* ----------------------------- Footer ----------------------------- */
 footer {
 	display: flex;

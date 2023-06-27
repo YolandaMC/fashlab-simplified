@@ -34,8 +34,11 @@ const ptosPerfil = {};
 //*Se usan en images-tensorflow.js
 // Alamcenar a los puntos clave (landmarks) y conexiones del esqueleto despues de usar Pose-detection
 let posesFrente, posesPerfil; // {score, keypoints, keypoints3D}
-let keypointsFrente, keypointsPerfil; // {x, y, z, score, name}
+let keypointsFrente, keypointsPerfil; // {x, y, z, score, name} // 
 let keypoints3DFrente, keypoints3DPerfil; // {x, y, z, score, name}
+/* GUARDAREMOS GLOBALMENTE LOS PTOS CLAVE: left_shoulder/right_shoulder/left_hip/right-hip que nos interesa rescatar de poseDetection.*/
+const ptosClaveFrente = {};
+const ptosClavePerfil = {};
 // Almacenar segmentacion despues de usar Body-segmentation
 let segmentacionFrente, segmentacionPerfil;
 let maskFrente, maskPerfil;
