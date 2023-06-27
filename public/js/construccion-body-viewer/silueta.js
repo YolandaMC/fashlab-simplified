@@ -22,7 +22,10 @@ function dibujarSilueta() {
 	const scale2 = 35.43307; // para las imagenes tomadas desde la webcam 1cm = 35.43307 pixels
 	//TODO Diferencia entre pixel CSS y pixel fisico (tamaño pantalla x ejem) el DPR (Device Pixel Ratio) DPR = pixel fisico/pixel css
 	//* Escala silueta
-	const escalaSilueta = (svgSize.height * scale) / imgFrente.height;
+	const escalaSilueta = (svgSize.height / imgFrente.height) * ((svgSize.height * scale) / imgFrente.height); //! //const escalaSilueta = (svgSize.height * scale) / imgFrente.height;
+	const escalaSilueta2 = 1 / scale;
+	console.log(escalaSilueta);
+	console.log(escalaSilueta2);
 	//* Puntos de referencia para situar el dibujo en el centro
 	/* Para ello debes recuperar el pto de centro delantero con cadera 
 	de la silueta para con el poder situar este patron*/
@@ -31,9 +34,9 @@ function dibujarSilueta() {
 	const cenDelCadY = cenDelCad.y;
 	const cenLatCad = centroLat.cenLatCad;
 	const cenLatCadX = cenLatCad.x;
-	const refxFrente = -(svgSize.width * scale) / 2 + (cenLatCadX) / 2; //const refxFrente = cenDelCadX - (svgSize.width * scale) / 2;
-	const refxPerfil = -(svgSize.width * scale) / 2;
-	const refy = cenDelCadY- (svgSize.height * scale) / 2;
+	const refxFrente = -imgFrente.width / 2 + cenLatCadX / 2;
+	const refxPerfil = -imgPerfil.width / 2;
+	const refy = -imgFrente.width / 2; //const refy = cenDelCadY - imgFrente.width / 2;
 
 	//*PINTAR SILUETA
 	// Recorrer los pixeles de la segmentacionFrente para pintar la máscara en el SVG
@@ -46,12 +49,12 @@ function dibujarSilueta() {
 			if (segmentacionFrente.data[pixelIndex] !== 0) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const siluetaFrente = document.createElementNS(SVG_NS, 'rect');
-				siluetaFrente.setAttribute('x', x * escalaSilueta + refxFrente);
-				siluetaFrente.setAttribute('y', y * escalaSilueta + refy);
-				siluetaFrente.setAttribute('width', 2 * escalaSilueta);
-				siluetaFrente.setAttribute('height', 2 * escalaSilueta);
+				siluetaFrente.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
+				siluetaFrente.setAttribute('x', x + refxFrente);
+				siluetaFrente.setAttribute('y', y + refy);
+				siluetaFrente.setAttribute('width', 2);
+				siluetaFrente.setAttribute('height', 2);
 				siluetaFrente.setAttribute('fill', 'yellow');
-
 				// Agregar el rectángulo al SVG
 				svg.appendChild(siluetaFrente);
 			}
@@ -67,12 +70,12 @@ function dibujarSilueta() {
 			if (segmentacionPerfil.data[pixelIndex] !== 0) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const siluetaPerfil = document.createElementNS(SVG_NS, 'rect');
-				siluetaPerfil.setAttribute('x', x * escalaSilueta + refxPerfil);
-				siluetaPerfil.setAttribute('y', y * escalaSilueta + refy);
-				siluetaPerfil.setAttribute('width', 2 * escalaSilueta);
-				siluetaPerfil.setAttribute('height', 2 * escalaSilueta);
+				siluetaPerfil.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
+				siluetaPerfil.setAttribute('x', x + refxPerfil);
+				siluetaPerfil.setAttribute('y', y + refy);
+				siluetaPerfil.setAttribute('width', 2);
+				siluetaPerfil.setAttribute('height', 2);
 				siluetaPerfil.setAttribute('fill', 'yellow');
-
 				// Agregar el rectángulo al SVG
 				svg.appendChild(siluetaPerfil);
 			}
@@ -99,10 +102,11 @@ function dibujarSilueta() {
 			) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const contornoFrente = document.createElementNS(SVG_NS, 'rect');
-				contornoFrente.setAttribute('x', x * escalaSilueta + refxFrente);
-				contornoFrente.setAttribute('y', y * escalaSilueta + refy);
-				contornoFrente.setAttribute('width', 1 * escalaSilueta);
-				contornoFrente.setAttribute('height', 1 * escalaSilueta);
+				contornoFrente.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
+				contornoFrente.setAttribute('x', x + refxFrente);
+				contornoFrente.setAttribute('y', y + refy);
+				contornoFrente.setAttribute('width', 1);
+				contornoFrente.setAttribute('height', 1);
 				contornoFrente.setAttribute('fill', 'blue');
 				// Agregar el rectángulo al SVG
 				svg.appendChild(contornoFrente);
@@ -128,10 +132,11 @@ function dibujarSilueta() {
 			) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const contornoPerfil = document.createElementNS(SVG_NS, 'rect');
-				contornoPerfil.setAttribute('x', x * escalaSilueta + refxPerfil);
-				contornoPerfil.setAttribute('y', y * escalaSilueta + refy);
-				contornoPerfil.setAttribute('width', 1 * escalaSilueta);
-				contornoPerfil.setAttribute('height', 1 * escalaSilueta);
+				contornoPerfil.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
+				contornoPerfil.setAttribute('x', x + refxPerfil);
+				contornoPerfil.setAttribute('y', y + refy);
+				contornoPerfil.setAttribute('width', 1);
+				contornoPerfil.setAttribute('height', 1);
 				contornoPerfil.setAttribute('fill', 'blue');
 				// Agregar el rectángulo al SVG
 				svg.appendChild(contornoPerfil);
@@ -157,11 +162,11 @@ function dibujarSilueta() {
 		const y = Math.round(punto.y);
 
 		const circle = document.createElementNS(SVG_NS, 'circle');
-		circle.setAttribute('cx', x * escalaSilueta + refx);
-		circle.setAttribute('cy', y * escalaSilueta + refy);
-		circle.setAttribute('r', 2 * escalaSilueta);
+		circle.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
+		circle.setAttribute('cx', x + refx);
+		circle.setAttribute('cy', y + refy);
+		circle.setAttribute('r', 2);
 		circle.setAttribute('fill', 'pink');
-
 		svg.appendChild(circle);
 	}
 	// Dibujar puntos clave
