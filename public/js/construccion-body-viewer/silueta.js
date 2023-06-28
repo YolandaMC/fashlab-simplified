@@ -56,9 +56,9 @@ function dibujarSilueta() {
 				siluetaFrente.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
 				siluetaFrente.setAttribute('x', x + refxFrente);
 				siluetaFrente.setAttribute('y', y + refy);
-				siluetaFrente.setAttribute('width', 2);
-				siluetaFrente.setAttribute('height', 2);
-				siluetaFrente.setAttribute('fill', 'yellow');
+				siluetaFrente.setAttribute('width', 0.5);
+				siluetaFrente.setAttribute('height', 0.5);
+				siluetaFrente.setAttribute('fill', '#f9f871'); //yellow
 				// Agregar el rectángulo al SVG
 				svg.appendChild(siluetaFrente);
 			}
@@ -77,9 +77,9 @@ function dibujarSilueta() {
 				siluetaPerfil.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
 				siluetaPerfil.setAttribute('x', x + refxPerfil);
 				siluetaPerfil.setAttribute('y', y + refy);
-				siluetaPerfil.setAttribute('width', 2);
-				siluetaPerfil.setAttribute('height', 2);
-				siluetaPerfil.setAttribute('fill', 'yellow');
+				siluetaPerfil.setAttribute('width', 0.5);
+				siluetaPerfil.setAttribute('height', 0.5);
+				siluetaPerfil.setAttribute('fill', '#c1f385'); //yellow
 				// Agregar el rectángulo al SVG
 				svg.appendChild(siluetaPerfil);
 			}
@@ -109,9 +109,9 @@ function dibujarSilueta() {
 				contornoFrente.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
 				contornoFrente.setAttribute('x', x + refxFrente);
 				contornoFrente.setAttribute('y', y + refy);
-				contornoFrente.setAttribute('width', 1);
-				contornoFrente.setAttribute('height', 1);
-				contornoFrente.setAttribute('fill', 'blue');
+				contornoFrente.setAttribute('width', 0.5);
+				contornoFrente.setAttribute('height', 0.5);
+				contornoFrente.setAttribute('fill', '#58cbc0'); //blue
 				// Agregar el rectángulo al SVG
 				svg.appendChild(contornoFrente);
 			}
@@ -139,9 +139,9 @@ function dibujarSilueta() {
 				contornoPerfil.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
 				contornoPerfil.setAttribute('x', x + refxPerfil);
 				contornoPerfil.setAttribute('y', y + refy);
-				contornoPerfil.setAttribute('width', 1);
-				contornoPerfil.setAttribute('height', 1);
-				contornoPerfil.setAttribute('fill', 'blue');
+				contornoPerfil.setAttribute('width', 0.5);
+				contornoPerfil.setAttribute('height', 0.5);
+				contornoPerfil.setAttribute('fill', '#58cbc0'); //blue
 				// Agregar el rectángulo al SVG
 				svg.appendChild(contornoPerfil);
 			}
@@ -161,7 +161,7 @@ function dibujarSilueta() {
 
 	//* Dibujar los puntos clave y las líneas hacia los puntos de borde más cercanos
 	// Dibujar puntos encontrados
-	function pintarPtos(punto, svg, refx) {
+	function pintarPtos(punto, svg, refx, color) {
 		const x = Math.round(punto.x);
 		const y = Math.round(punto.y);
 
@@ -170,36 +170,40 @@ function dibujarSilueta() {
 		circle.setAttribute('cx', x + refx);
 		circle.setAttribute('cy', y + refy);
 		circle.setAttribute('r', 2);
-		circle.setAttribute('fill', 'pink');
+		circle.setAttribute('fill', color);
 		svg.appendChild(circle);
 	}
 	// Dibujar puntos clave
+	const colorPtosIntFrente = 'hotpink';
+	const colorPtosIntPerfil = 'mistyrose';
 	// CADERA
-	pintarPtos(leftHipFrente, svg, refxFrente);
-	pintarPtos(rightHipFrente, svg, refxFrente);
-	pintarPtos(leftHipPerfil, svg, refxPerfil);
-	pintarPtos(rightHipPerfil, svg, refxPerfil);
+	pintarPtos(leftHipFrente, svg, refxFrente, colorPtosIntFrente);
+	pintarPtos(rightHipFrente, svg, refxFrente, colorPtosIntFrente);
+	pintarPtos(leftHipPerfil, svg, refxPerfil, colorPtosIntPerfil);
+	pintarPtos(rightHipPerfil, svg, refxPerfil, colorPtosIntPerfil);
 	// HOMBROS
-	pintarPtos(leftShoulderFrente, svg, refxFrente);
-	pintarPtos(rightShoulderFrente, svg, refxFrente);
-	pintarPtos(leftShoulderPerfil, svg, refxPerfil);
-	pintarPtos(rightShoulderPerfil, svg, refxPerfil);
+	pintarPtos(leftShoulderFrente, svg, refxFrente, colorPtosIntFrente);
+	pintarPtos(rightShoulderFrente, svg, refxFrente, colorPtosIntFrente);
+	pintarPtos(leftShoulderPerfil, svg, refxPerfil, colorPtosIntPerfil);
+	pintarPtos(rightShoulderPerfil, svg, refxPerfil, colorPtosIntPerfil);
 
 	// Pintamos los puntos de borde en las imagenes de frente y perfil de las caderas
+	const colorPtosBorFrente = 'paleturquoise';
+	const colorPtosBorPerfil = 'darkturquoise';
 	// Muestra  bordeHip = {borderPointLeftFrente: {x1, y}, borderPointRightFrente: {x2, y}, borderPointLeftPerfil: {x3, y}, borderPointRightPerfil: {x4, y}, distanciaXFrente: valorCaderaFrente, distanciaXPerfil: valorCaderaPerfil}
-	pintarPtos(bordeHip.borderPointLeftFrente, svg, refxFrente);
-	pintarPtos(bordeHip.borderPointRightFrente, svg, refxFrente);
-	pintarPtos(bordeHip.borderPointLeftPerfil, svg, refxPerfil);
-	pintarPtos(bordeHip.borderPointRightPerfil, svg, refxPerfil);
+	pintarPtos(bordeHip.borderPointLeftFrente, svg, refxFrente, colorPtosBorFrente);
+	pintarPtos(bordeHip.borderPointRightFrente, svg, refxFrente, colorPtosBorFrente);
+	pintarPtos(bordeHip.borderPointLeftPerfil, svg, refxPerfil, colorPtosBorPerfil);
+	pintarPtos(bordeHip.borderPointRightPerfil, svg, refxPerfil, colorPtosBorPerfil);
 	// bordeShoulder = {bordeLeftShoulder: {x1, y}, bordeRightShoulder: {x2, y}}
-	pintarPtos(bordeShoulder.bordeLeftShoulder, svg, refxFrente);
-	pintarPtos(bordeShoulder.bordeRightShoulder, svg, refxFrente);
+	pintarPtos(bordeShoulder.bordeLeftShoulder, svg, refxFrente, colorPtosBorFrente);
+	pintarPtos(bordeShoulder.bordeRightShoulder, svg, refxFrente, colorPtosBorFrente);
 	// centroDel = {cenDelCad: {x, y1}, cenDelHom: {x, y2}, cenDelX: x}
-	pintarPtos(centroDel.cenDelHom, svg, refxFrente);
-	pintarPtos(centroDel.cenDelCad, svg, refxFrente);
+	pintarPtos(centroDel.cenDelHom, svg, refxFrente, colorPtosBorFrente);
+	pintarPtos(centroDel.cenDelCad, svg, refxFrente, colorPtosBorFrente);
 	// centroLat = {cenLatHom: {x, y}, cenLatCad: {x, y}, cenLatX:x}
-	pintarPtos(centroLat.cenLatHom, svg, refxPerfil);
-	pintarPtos(centroLat.cenLatCad, svg, refxPerfil);
+	pintarPtos(centroLat.cenLatHom, svg, refxPerfil, colorPtosBorPerfil);
+	pintarPtos(centroLat.cenLatCad, svg, refxPerfil, colorPtosBorPerfil);
 
 	//-------------------------
 }

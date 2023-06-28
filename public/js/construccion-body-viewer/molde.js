@@ -130,7 +130,7 @@ function dibujarMolde() {
 	//const refx = 0; // (anchoMax - (anchoMax)) / 2 En el caso del eje x la construcción del patrón ya lo ubica en el centro
 	//const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - medidasVr.largcadera; // Para dibujar el patrón solo sin otros elementos
 	const refx = 0; // (anchoMax - (anchoMax)) / 2 En el caso del eje x la construcción del patrón ya lo ubica en el centro
-	const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - (2 * medidasVr.largcadera); // Tomar como referencia el punto de cadera
+	const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - 2 * medidasVr.largcadera; // Tomar como referencia el punto de cadera
 
 	// -----------------------
 	// -----------------------
@@ -707,9 +707,9 @@ function dibujarMolde() {
 		gdelantero = document.createElementNS(SVG_NS, 'g');
 		// Incluimos la transformación de escala para pasar de centimetros a pt
 		gdelantero.setAttributeNS(null, 'transform', 'scale(' + scale + ')'); // grupMarcoDelimi.setAttributeNS(null, 'transform', 'scale('+`${scale}`+')');
-		gdelantero.setAttributeNS(null, 'stroke', '#ff0000');
+		gdelantero.setAttributeNS(null, 'stroke', '#935891');
 		gdelantero.setAttributeNS(null, 'stroke-width', '0.1');
-		gdelantero.setAttributeNS(null, 'fill', '#ff0000');
+		gdelantero.setAttributeNS(null, 'fill', '#935891');
 		gdelantero.setAttributeNS(null, 'fill-opacity', '.4');
 		//!
 		//svg.appendChild(gdelantero); // lo voy a sacar fuera de la función y pongo un return gdelantero
@@ -808,9 +808,9 @@ function dibujarMolde() {
 		gespalda = document.createElementNS(SVG_NS, 'g');
 		// Incluimos la transformación de escala para pasar de centimetros a pt
 		gespalda.setAttributeNS(null, 'transform', 'scale(' + scale + ')'); // grupMarcoDelimi.setAttributeNS(null, 'transform', 'scale('+`${scale}`+')');
-		gespalda.setAttributeNS(null, 'stroke', '#ff0000');
+		gespalda.setAttributeNS(null, 'stroke', '#7b75b4');
 		gespalda.setAttributeNS(null, 'stroke-width', '0.1');
-		gespalda.setAttributeNS(null, 'fill', '#ff0000');
+		gespalda.setAttributeNS(null, 'fill', '#7b75b4');
 		gespalda.setAttributeNS(null, 'fill-opacity', '.4');
 
 		// Genero el path que formará mi molde espalda
@@ -891,9 +891,9 @@ function dibujarMolde() {
 		gEntalles = document.createElementNS(SVG_NS, 'g');
 		// Incluimos la transformación de escala para pasar de centimetros a pt
 		gEntalles.setAttributeNS(null, 'transform', 'scale(' + scale + ')'); // grupMarcoDelimi.setAttributeNS(null, 'transform', 'scale('+`${scale}`+')');
-		gEntalles.setAttributeNS(null, 'stroke', '#00ff00');
+		gEntalles.setAttributeNS(null, 'stroke', '#d90f60');
 		gEntalles.setAttributeNS(null, 'stroke-width', '0.1');
-		gEntalles.setAttributeNS(null, 'fill', '#00ff00');
+		gEntalles.setAttributeNS(null, 'fill', '#d90f60');
 		gEntalles.setAttributeNS(null, 'fill-opacity', '.4');
 
 		//* Genero el path que formara centro mitad de la espalda

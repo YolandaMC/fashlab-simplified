@@ -25,18 +25,18 @@ let labelsTypes = ['sexo', 'genero']; // Establecemos en una lista las etiquetas
 //const colors = ['red', 'green', 'blue', 'yellow'];
 const colors = [
 	// 80 == 50% opacidad
-	'#5eb9c2',
-	'#58cbc0',
-	'#6adbb3',
-	'#90e99e',
-	'#c1f385',
 	'#f9f871',
+	'#c1f385',
+	'#90e99e',
+	'#6adbb3',
+	'#58cbc0',
 	'#5eb9c2',
 	'#4ba6c9',
 	'#5b8fc6',
 	'#7b75b4',
 	'#935891',
 	'#9b3e63',
+	'#d90f60'
 ];
 //-------------
 
