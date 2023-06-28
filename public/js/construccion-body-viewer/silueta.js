@@ -34,9 +34,11 @@ function dibujarSilueta() {
 	const cenDelCadY = cenDelCad.y;
 	const cenLatCad = centroLat.cenLatCad;
 	const cenLatCadX = cenLatCad.x;
-	const refxFrente = -imgFrente.width / 2 + cenLatCadX / 2;
-	const refxPerfil = -imgPerfil.width / 2;
-	const refy = -cenDelCadY; //(-imgFrente.height / 2)+ (cenDelCadY-imgFrente.height / 2)
+	const bordeLeftCad = bordeHip.borderPointLeftFrente;
+	const bordeLeftCadX = bordeLeftCad.x;
+	const refxFrente = -bordeLeftCadX;
+	const refxPerfil = -cenLatCadX;
+	const refy = -cenDelCadY;
 
 	//*PINTAR SILUETA
 	// Recorrer los pixeles de la segmentacionFrente para pintar la máscara en el SVG
