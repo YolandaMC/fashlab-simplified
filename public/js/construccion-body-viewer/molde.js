@@ -122,19 +122,15 @@ function dibujarMolde() {
 	// -----------------------
 
 	//TODO DEBERAS AJUSTAR REFERENCIA EN BASE A EL OTRO DIBUJO
-	// /* Para ello debes recuperar el pto de centro delantero con cadera
-	// de la silueta para con el poder situar este patron*/
-	// const cenDelCad = centroDel.cenDelCad;
-	// const refxSilueta = -(svgSize.width * scale) / 2;
-	// const refySilueta = -(svgSize.height * scale) / 2;
-	// const cenDelCadX = cenDelCad.x + refxSilueta
-	// const cenDelCadY = cenDelCad.y +refySilueta
+	/* Para ello debes recuperar el pto de centro delantero con cadera
+	 La cadera que recoge el modelo Posedetection es nuestra línea de petit hanches
+	 que se encuentra a mitad de camino entre línea de talle y línea de cadera*/
 
 	//* Establezco el punto de referencia de construcción de mi patron en base a sus medidas finales para que quede centrado en mi elemetno svg del html *//
 	//const refx = 0; // (anchoMax - (anchoMax)) / 2 En el caso del eje x la construcción del patrón ya lo ubica en el centro
 	//const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - medidasVr.largcadera; // Para dibujar el patrón solo sin otros elementos
 	const refx = 0; // (anchoMax - (anchoMax)) / 2 En el caso del eje x la construcción del patrón ya lo ubica en el centro
-	const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 + medidasVr.largcadera / 2; // Tomar como referencia el punto de cadera
+	const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - (2 * medidasVr.largcadera); // Tomar como referencia el punto de cadera
 
 	// -----------------------
 	// -----------------------

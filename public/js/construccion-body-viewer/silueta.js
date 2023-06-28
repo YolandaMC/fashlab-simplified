@@ -18,18 +18,14 @@ function dibujarSilueta() {
 		height: 200,
 	};
 	//* Establezco una escala de transformación para todos los elementos svg para poder trabajar con las unidades en cm y se visualicen en puntos (pt) en la pantalla*//
-	let dpr = window.devicePixelRatio;
-	console.log('dpr', dpr); 
-	const scale = 28.34645669; //28.34645669 pt = 1cm con pt como unidad por defecto para svg
-	const scale2 = 35.43307; // para las imagenes tomadas desde la webcam 1cm = 35.43307 pixels
+	let dpr = window.devicePixelRatio; // Quizá lo debas incluir a la escala
+	console.log('dpr', dpr);
+	const scale = 28.34645669; //28.34645669 pt = 1cm con pt como unidad por defecto para svg // para las imagenes tomadas desde la webcam 1cm = 35.43307 pixels
 	//TODO Diferencia entre pixel CSS y pixel fisico (tamaño pantalla x ejem) el DPR (Device Pixel Ratio) DPR = pixel fisico/pixel css
 	//* Escala silueta
-	//const escalaSilueta3 = (svgSize.height / imgFrente.height) * ((svgSize.height * scale) / imgFrente.height); //! //const escalaSilueta = (svgSize.height * scale) / imgFrente.height;
-	//const escalaSilueta2 = 1 / scale;
-	const escalaSilueta = scale / (scale2*3);
+	//const escalaSilueta = (svgSize.height / imgFrente.height) * ((svgSize.height * scale) / imgFrente.height); //! //const escalaSilueta = (svgSize.height * scale) / imgFrente.height;
+	const escalaSilueta = (svgSize.height * scale) / imgFrente.height;
 	console.log('escalaSilueta', escalaSilueta);
-	//console.log(escalaSilueta2);
-	//console.log(escalaSilueta3);
 	//* Puntos de referencia para situar el dibujo en el centro
 	/* Para ello debes recuperar el pto de centro delantero con cadera 
 	de la silueta para con el poder situar este patron*/
@@ -40,7 +36,7 @@ function dibujarSilueta() {
 	const cenLatCadX = cenLatCad.x;
 	const refxFrente = -imgFrente.width / 2 + cenLatCadX / 2;
 	const refxPerfil = -imgPerfil.width / 2;
-	const refy = -imgFrente.width / 2; //const refy = cenDelCadY - imgFrente.width / 2;
+	const refy = -cenDelCadY; //(-imgFrente.height / 2)+ (cenDelCadY-imgFrente.height / 2)
 
 	//*PINTAR SILUETA
 	// Recorrer los pixeles de la segmentacionFrente para pintar la máscara en el SVG
