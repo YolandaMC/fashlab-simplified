@@ -24,11 +24,11 @@ function pantallaWebcam() {
 		//! REORDENAR LAS ELIMINACIONES PARA QUE ESTEN EN LA FUNCIÖN DONDE SE CREARON
 		//* ELIMINAMOS ELEMENTOS DOM INNECESARIOS ANTES DE PASAR A CREAR LOS DE LA PANTALLA TOMA DE CAPTURAS DESDE LA WEBCAM Y DATOS CLICKS *//
 		const fondo = document.querySelector('.fondo');
-		fondo.style.flexDirection = 'column';
 		const sectionLeft = document.querySelector('.section-left');
 		const sectionRight = document.querySelector('.section-right');
 		fondo.removeChild(sectionLeft);
 		fondo.removeChild(sectionRight);
+		fondo.style.flexDirection = 'column'; //!
 		//* CREAMOS LOS ELEMENTOS DEL DOM QUE NOS VAN A PERMITIR TOMAR LAS CAPTURAS DE PANTALLA DE LA WEBCAM Y DATOS CLICKS *//
 		// Creamos el contenedor de video que contendrá el video capurado desde la webcam
 		fondo.style.height = '85vh'; // para que mantenga un tamaño concreto en los siguientes procesos
@@ -173,17 +173,17 @@ function pantallaWebcam() {
 			contenedorVideo.removeChild(video);
 		}
 
-		// Función que indica que se han tomado las capturas y que se va a proceder a colocarlas en el DOM
+		// Funcion que indica que se han tomado las capturas y que se va a proceder a colocarlas en el DOM
 		function mostrarCapturas() {
 			const span = document.createElement('span');
 			span.textContent = 'Capturas realizadas';
-			contenedorVideo.appendChild(span); //!
+			contenedorVideo.appendChild(span);
 			console.log(capturas);
 			// Retardo para mostrar un mensaje sobre la capturas webcam realizadas con éxito
 			setTimeout(function () {
 				//document.body.removeChild(span);
 				contenedorVideo.removeChild(span);
-				//!
+				
 				//* Creo los elementos en el DOM que me permiten mostrar las capturas realizadas
 				canvasCapturas = document.createElement('canvas'); // Lo voy a crear más tarde mediante JS
 				canvasCapturas.id = 'canvas-capturas';
@@ -192,14 +192,35 @@ function pantallaWebcam() {
 				// inicio el canvas con unas medidas
 				canvasCapturas.width = widthCanvasCapturas;
 				canvasCapturas.height = heightCanvasCapturas;
+
+				// Agrego tambien asl imagenes de guia para seleccionar los puntos. Aqui la de frente
+				const fondo = document.querySelector('.fondo');
+				fondo.style.flexDirection = 'row';
+				fondo.style.justifyContent = 'center';
+				fondo.style.alignItems = 'center';
+				const contenedorImgInfo = document.createElement('div');
+				contenedorImgInfo.setAttribute('id', 'contenedor-img-info');
+				contenedorImgInfo.style.height = '100%';
+				contenedorImgInfo.style.width = 'auto';
+				contenedorImgInfo.style.padding = '20px 0';
+				fondo.appendChild(contenedorImgInfo);
+				const imgInfo = document.createElement('img');
+				imgInfo.src = './../assets/img/ptos-clave-frente.png';
+				imgInfo.setAttribute('id', 'img-info');
+				imgInfo.style.objectFit = 'cover';
+				imgInfo.style.objectPosition = 'center';
+				imgInfo.style.height = '100%';
+				imgInfo.style.width = 'auto';
+				contenedorImgInfo.appendChild(imgInfo);
+
 				// Agregar el evento de click al canvas
-				canvasCapturas.addEventListener('click', manejarClickFrente); // Este evento llama primero a la función que debe actuar sobre la primera imagen guardada dentro de ella se llamara a mostrarCapturaEnCanvas() para que muestre la segunda foto y habrá un evento que llame a la funcion manejarClickPerfil para capturas los cliks sobre ella
-				// Llamar a la función que pone una a una las capturas en el canvas
+				canvasCapturas.addEventListener('click', manejarClickFrente);
+				// Llamar a la funcion que pone una a una las capturas en el canvas
 				mostrarCapturaEnCanvas();
 			}, 1000);
 		}
-		//!!!!!!!!!!!!!!!!!!!!!!!!!
-		// Función para mostrar la captura en formato data:image/png  en el elemento canvas
+
+		// Funcion para mostrar la captura en formato data:image/png  en el elemento canvas
 		function mostrarCapturaEnCanvas() {
 			const img = new Image();
 			img.onload = () => {
@@ -209,7 +230,7 @@ function pantallaWebcam() {
 			img.src = capturas[capturaActual];
 		}
 
-		// Función que me permite tomar las coordenadas de los puntos clave de la captura de Frente
+		// Funcion que me permite tomar las coordenadas de los puntos clave de la captura de Frente
 		function manejarClickFrente(event) {
 			const rect = canvasCapturas.getBoundingClientRect();
 			const x = event.clientX - rect.left;
@@ -231,11 +252,20 @@ function pantallaWebcam() {
 					capturaActual++;
 					// Limpiar el canvas
 					ctxCapturas.clearRect(0, 0, canvasCapturas.width, canvasCapturas.height);
-					// Mostrar la siguiente imagen
-					mostrarCapturaEnCanvas();
+
+					// Agrego tambien asl imagenes de guia para seleccionar los puntos. Aqui la de perfil
+					const fondo = document.querySelector('.fondo');
+					const imgInfo = document.querySelector('#img-info');
+					imgInfo.src = './../assets/img/ptos-clave-perfil.png';
+
 					// Cambiar el evento de click para manejar la imagen de perfil
 					canvasCapturas.removeEventListener('click', manejarClickFrente);
 					canvasCapturas.addEventListener('click', manejarClickPerfil);
+					// Mostrar la siguiente imagen
+					mostrarCapturaEnCanvas();
+					// Cambiar el evento de click para manejar la imagen de perfil
+					// canvasCapturas.removeEventListener('click', manejarClickFrente); //! Probar ponerlo antes de mostrarCapturaEnCanvas();
+					// canvasCapturas.addEventListener('click', manejarClickPerfil);
 				}, 500);
 			}
 		}
@@ -260,8 +290,15 @@ function pantallaWebcam() {
 			// Verificar si se han seleccionado todos los puntos clave
 			if (Object.keys(ptosPerfil).length === ptosClave.length) {
 				canvasCapturas.removeEventListener('click', manejarClickPerfil);
+				// Eliminamos el div contenedorVideo que en el ultimo momento de pantallaWebcam nos estaba mostrando las capturas
+				const fondo = document.querySelector('.fondo');
+				const contenedorImgInfo = document.querySelector('#contenedor-img-info');
+				fondo.removeChild(contenedorImgInfo);
+				const contenedorVideo = document.querySelector('#contenedor-video');
+				fondo.removeChild(contenedorVideo);
+				fondo.style.flexDirection = 'column';
+				//Salimos de la función pantallaWebcam llamando a mostrarResultados();
 				mostrarResultados(); // muestra los objetos con ptos capturados por consola
-				//TODO SEGUIR AQUI CON EL RESTO DE CODIGO. SE HA DECIDIDO LLAMAR AL SIGUIETE SCRIPT DESDE datos-formulario.js
 			}
 		}
 

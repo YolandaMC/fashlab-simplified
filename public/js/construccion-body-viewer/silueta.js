@@ -20,7 +20,7 @@ function dibujarSilueta() {
 
 	//* Establezco una escala de transformación para todos los elementos svg para poder trabajar con las unidades en cm y se visualicen en puntos (pt) en la pantalla*//
 	let dpr = window.devicePixelRatio; // Quiza lo debas incluir a la escala //TODO Diferencia entre pixel CSS y pixel fisico (tamaño pantalla x ejem) el DPR (Device Pixel Ratio) DPR = pixel fisico/pixel css
-	console.log('dpr', dpr);
+	console.log('dpr', dpr); //https://www.quirksmode.org/blog/archives/2012/06/devicepixelrati.html
 	const scale = 28.34645669; //28.34645669 pt = 1cm con pt como unidad por defecto para svg // para las imagenes tomadas desde la webcam 1cm = 35.43307 pixels
 
 	//* Escala silueta
@@ -37,6 +37,7 @@ function dibujarSilueta() {
 	const cenLatCadX = cenLatCad.x;
 	const bordeLeftCad = bordeHip.borderPointLeftFrente;
 	const bordeLeftCadX = bordeLeftCad.x;
+	// Referencias
 	const refxFrente = -bordeLeftCadX;
 	const refxPerfil = -cenLatCadX;
 	const refy = -cenDelCadY;

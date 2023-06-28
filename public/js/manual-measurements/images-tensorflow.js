@@ -25,13 +25,8 @@ async function imagesTensorFlow() {
 
 		//----------------------------
 
-		//! REORDENAR LAS ELIMINACIONES PARA QUE ESTEN EN LA FUNCION DONDE SE CREARON
-		//* Eliminamos los elementos del DOM que no necesitamos y creamos los que nos van a servir para ver nuestras imágenes analizadas por los modelos
-		const fondo = document.querySelector('.fondo');
-		const contenedorVideo = document.querySelector('#contenedor-video');
-		// Eliminamos el div contenedorVideo que en el ultimo momento de pantallaWebcam nos estaba mostrando las
-		fondo.removeChild(contenedorVideo);
 		//* Metemos una pantalla de espera mientras trabajan los modelos
+		const fondo = document.querySelector('.fondo');
 		// Crear el elemento del loader
 		const span = document.createElement('span');
 		span.class = 'espera';
