@@ -40,6 +40,7 @@ function pantallaWebcam() {
 		infoCapturas.innerHTML =
 			'Pulse el botón capturar para iniciar la webcam,<br>se tomarán dos imágenes, una de frente y otra de perfil derecho,<br>tiene 10segundos entre captura y captura para colocarse';
 		infoCapturas.style.margin = '20px 30px';
+		infoCapturas.style.fontWeight = '300';
 		infoCapturas.style.textAlign = 'center'; // justificacion texto
 		infoCapturas.style.lineHeight = '1.5'; // interlineado texto
 		contenedorVideo.appendChild(infoCapturas);

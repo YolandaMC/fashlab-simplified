@@ -24,7 +24,7 @@ function dibujarSilueta() {
 	const scale = 28.34645669; //28.34645669 pt = 1cm con pt como unidad por defecto para svg // para las imagenes tomadas desde la webcam 1cm = 35.43307 pixels
 
 	//* Escala silueta
-	const escalaSilueta = (svgSize.height * scale) / imgFrente.height;
+	const escalaSilueta = ((svgSize.height * scale) / (imgFrente.height)); //const escalaSilueta = (svgSize.height * scale) / (imgFrente.height*dpr);
 	console.log('escalaSilueta', escalaSilueta);
 
 	//* Puntos de referencia para situar el dibujo en el centro

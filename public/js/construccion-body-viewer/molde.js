@@ -130,8 +130,8 @@ function dibujarMolde() {
 	//const refx = 0; // (anchoMax - (anchoMax)) / 2 En el caso del eje x la construcción del patrón ya lo ubica en el centro
 	//const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - medidasVr.largcadera; // Para dibujar el patrón solo sin otros elementos
 	const refx = 0; // (anchoMax - (anchoMax)) / 2 En el caso del eje x la construcción del patrón ya lo ubica en el centro
-	const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - 2 * medidasVr.largcadera; // Tomar como referencia el punto de cadera
-
+	const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - (5 * medidasVr.largcadera) / 2; // Tomar como referencia el punto de cadera
+	//const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - 2 * medidasVr.largcadera;
 	// -----------------------
 	// -----------------------
 
