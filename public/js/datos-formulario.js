@@ -48,6 +48,7 @@ let maskPartesFrente, maskPartesPerfil;
 // Para guardar los puntos de borde obtenidos y los centros delantero y lateral
 let bordeHip, bordeShoulder;
 let centroDel, centroLat;
+let estaturaSiluetaFrente, estaturaSiluetaPerfil;
 
 //----------------------------
 

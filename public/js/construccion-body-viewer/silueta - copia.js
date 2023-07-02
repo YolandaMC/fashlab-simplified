@@ -24,10 +24,10 @@ function dibujarSilueta() {
 	const scale = 28.34645669; //28.34645669 pt = 1cm con pt como unidad por defecto para svg // para las imagenes tomadas desde la webcam 1cm = 35.43307 pixels
 
 	//* Escala silueta
-	// const escalaSilueta = ((svgSize.height * scale) / (imgFrente.height));
-	// console.log('escalaSilueta', escalaSilueta);
-	const escalaSiluetaFrente = (datosFormulario.estatura * scale) / estaturaSiluetaFrente; // Escalamos la altura de las siluetas con el dato de estatura obtenido del formulario
-	const escalaSiluetaPerfil = (datosFormulario.estatura * scale) / estaturaSiluetaPerfil; // Escalamos la altura de las siluetas con el dato de estatura obtenido del formulario
+	const escalaSilueta = ((svgSize.height * scale) / (imgFrente.height)); //const escalaSilueta = (svgSize.height * scale) / (imgFrente.height*dpr);
+	console.log('escalaSilueta', escalaSilueta);
+	const escalaSiluetaFrente = ((datosFormulario.estatura * scale) / (estaturaSiluetaFrente));
+	const escalaSiluetaPerfil = ((datosFormulario.estatura * scale) / (estaturaSiluetaPerfil));
 	console.log('escalaSiluetaFrente', escalaSiluetaFrente);
 	console.log('escalaSiluetaPerfil', escalaSiluetaPerfil);
 
@@ -57,7 +57,7 @@ function dibujarSilueta() {
 			if (segmentacionFrente.data[pixelIndex] !== 0) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const siluetaFrente = document.createElementNS(SVG_NS, 'rect');
-				siluetaFrente.setAttributeNS(null, 'transform', 'scale(' + escalaSiluetaFrente + ')');
+				siluetaFrente.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
 				siluetaFrente.setAttribute('x', x + refxFrente);
 				siluetaFrente.setAttribute('y', y + refy);
 				siluetaFrente.setAttribute('width', 0.5);
@@ -78,7 +78,7 @@ function dibujarSilueta() {
 			if (segmentacionPerfil.data[pixelIndex] !== 0) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const siluetaPerfil = document.createElementNS(SVG_NS, 'rect');
-				siluetaPerfil.setAttributeNS(null, 'transform', 'scale(' + escalaSiluetaPerfil + ')');
+				siluetaPerfil.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
 				siluetaPerfil.setAttribute('x', x + refxPerfil);
 				siluetaPerfil.setAttribute('y', y + refy);
 				siluetaPerfil.setAttribute('width', 0.5);
@@ -110,7 +110,7 @@ function dibujarSilueta() {
 			) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const contornoFrente = document.createElementNS(SVG_NS, 'rect');
-				contornoFrente.setAttributeNS(null, 'transform', 'scale(' + escalaSiluetaFrente + ')');
+				contornoFrente.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
 				contornoFrente.setAttribute('x', x + refxFrente);
 				contornoFrente.setAttribute('y', y + refy);
 				contornoFrente.setAttribute('width', 0.5);
@@ -140,7 +140,7 @@ function dibujarSilueta() {
 			) {
 				// Crear un elemento rect para representar el píxel en el SVG
 				const contornoPerfil = document.createElementNS(SVG_NS, 'rect');
-				contornoPerfil.setAttributeNS(null, 'transform', 'scale(' + escalaSiluetaPerfil + ')');
+				contornoPerfil.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
 				contornoPerfil.setAttribute('x', x + refxPerfil);
 				contornoPerfil.setAttribute('y', y + refy);
 				contornoPerfil.setAttribute('width', 0.5);
@@ -165,7 +165,7 @@ function dibujarSilueta() {
 
 	//* Dibujar los puntos clave y las líneas hacia los puntos de borde más cercanos
 	// Dibujar puntos encontrados
-	function pintarPtos(punto, svg, refx, color, escalaSilueta) {
+	function pintarPtos(punto, svg, refx, color) {
 		const x = Math.round(punto.x);
 		const y = Math.round(punto.y);
 
@@ -181,33 +181,33 @@ function dibujarSilueta() {
 	const colorPtosIntFrente = 'hotpink';
 	const colorPtosIntPerfil = 'mistyrose';
 	// CADERA
-	pintarPtos(leftHipFrente, svg, refxFrente, colorPtosIntFrente, escalaSiluetaFrente);
-	pintarPtos(rightHipFrente, svg, refxFrente, colorPtosIntFrente, escalaSiluetaFrente);
-	pintarPtos(leftHipPerfil, svg, refxPerfil, colorPtosIntPerfil, escalaSiluetaPerfil);
-	pintarPtos(rightHipPerfil, svg, refxPerfil, colorPtosIntPerfil, escalaSiluetaPerfil);
+	pintarPtos(leftHipFrente, svg, refxFrente, colorPtosIntFrente);
+	pintarPtos(rightHipFrente, svg, refxFrente, colorPtosIntFrente);
+	pintarPtos(leftHipPerfil, svg, refxPerfil, colorPtosIntPerfil);
+	pintarPtos(rightHipPerfil, svg, refxPerfil, colorPtosIntPerfil);
 	// HOMBROS
-	pintarPtos(leftShoulderFrente, svg, refxFrente, colorPtosIntFrente, escalaSiluetaFrente);
-	pintarPtos(rightShoulderFrente, svg, refxFrente, colorPtosIntFrente, escalaSiluetaFrente);
-	pintarPtos(leftShoulderPerfil, svg, refxPerfil, colorPtosIntPerfil, escalaSiluetaPerfil);
-	pintarPtos(rightShoulderPerfil, svg, refxPerfil, colorPtosIntPerfil, escalaSiluetaPerfil);
+	pintarPtos(leftShoulderFrente, svg, refxFrente, colorPtosIntFrente);
+	pintarPtos(rightShoulderFrente, svg, refxFrente, colorPtosIntFrente);
+	pintarPtos(leftShoulderPerfil, svg, refxPerfil, colorPtosIntPerfil);
+	pintarPtos(rightShoulderPerfil, svg, refxPerfil, colorPtosIntPerfil);
 
 	// Pintamos los puntos de borde en las imagenes de frente y perfil de las caderas
 	const colorPtosBorFrente = 'paleturquoise';
 	const colorPtosBorPerfil = 'darkturquoise';
 	// Muestra  bordeHip = {borderPointLeftFrente: {x1, y}, borderPointRightFrente: {x2, y}, borderPointLeftPerfil: {x3, y}, borderPointRightPerfil: {x4, y}, distanciaXFrente: valorCaderaFrente, distanciaXPerfil: valorCaderaPerfil}
-	pintarPtos(bordeHip.borderPointLeftFrente, svg, refxFrente, colorPtosBorFrente, escalaSiluetaFrente);
-	pintarPtos(bordeHip.borderPointRightFrente, svg, refxFrente, colorPtosBorFrente, escalaSiluetaFrente);
-	pintarPtos(bordeHip.borderPointLeftPerfil, svg, refxPerfil, colorPtosBorPerfil, escalaSiluetaPerfil);
-	pintarPtos(bordeHip.borderPointRightPerfil, svg, refxPerfil, colorPtosBorPerfil, escalaSiluetaPerfil);
+	pintarPtos(bordeHip.borderPointLeftFrente, svg, refxFrente, colorPtosBorFrente);
+	pintarPtos(bordeHip.borderPointRightFrente, svg, refxFrente, colorPtosBorFrente);
+	pintarPtos(bordeHip.borderPointLeftPerfil, svg, refxPerfil, colorPtosBorPerfil);
+	pintarPtos(bordeHip.borderPointRightPerfil, svg, refxPerfil, colorPtosBorPerfil);
 	// bordeShoulder = {bordeLeftShoulder: {x1, y}, bordeRightShoulder: {x2, y}}
-	pintarPtos(bordeShoulder.bordeLeftShoulder, svg, refxFrente, colorPtosBorFrente, escalaSiluetaFrente);
-	pintarPtos(bordeShoulder.bordeRightShoulder, svg, refxFrente, colorPtosBorFrente, escalaSiluetaFrente);
+	pintarPtos(bordeShoulder.bordeLeftShoulder, svg, refxFrente, colorPtosBorFrente);
+	pintarPtos(bordeShoulder.bordeRightShoulder, svg, refxFrente, colorPtosBorFrente);
 	// centroDel = {cenDelCad: {x, y1}, cenDelHom: {x, y2}, cenDelX: x}
-	pintarPtos(centroDel.cenDelHom, svg, refxFrente, colorPtosBorFrente, escalaSiluetaFrente);
-	pintarPtos(centroDel.cenDelCad, svg, refxFrente, colorPtosBorFrente, escalaSiluetaFrente);
+	pintarPtos(centroDel.cenDelHom, svg, refxFrente, colorPtosBorFrente);
+	pintarPtos(centroDel.cenDelCad, svg, refxFrente, colorPtosBorFrente);
 	// centroLat = {cenLatHom: {x, y}, cenLatCad: {x, y}, cenLatX:x}
-	pintarPtos(centroLat.cenLatHom, svg, refxPerfil, colorPtosBorPerfil, escalaSiluetaPerfil);
-	pintarPtos(centroLat.cenLatCad, svg, refxPerfil, colorPtosBorPerfil, escalaSiluetaPerfil);
+	pintarPtos(centroLat.cenLatHom, svg, refxPerfil, colorPtosBorPerfil);
+	pintarPtos(centroLat.cenLatCad, svg, refxPerfil, colorPtosBorPerfil);
 
 	//-------------------------
 }

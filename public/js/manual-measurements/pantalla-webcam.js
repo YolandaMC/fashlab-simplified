@@ -71,7 +71,7 @@ function pantallaWebcam() {
 		// const ptosFrente = {};
 		// const ptosPerfil = {};
 		// Tiempo entre capturas de pantalla
-		const tiempoCapturas = 6000; //TODO AUMENTAR A 10s POR LO MENOS PARA DAR TIEMPO AL USUARIO A COLOCARSE
+		const tiempoCapturas = 10000; //TODO AUMENTAR A 10s POR LO MENOS PARA DAR TIEMPO AL USUARIO A COLOCARSE
 		// Variable para almacenar el índice de la captura actual para poder mostrarlas en el DOM una tras otra
 		let capturaActual = 0;
 

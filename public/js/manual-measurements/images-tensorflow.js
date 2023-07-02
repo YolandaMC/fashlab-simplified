@@ -467,6 +467,27 @@ async function imagesTensorFlow() {
 				return { cenLatHom, cenLatCad, cenLatX };
 			}
 
+			//* Funcion para buscar los puntos con coordenada y mas pequenia y mas grande de la mascara
+			function obtenerEstaturaSilueta(mask) {
+				let minY = Infinity;
+				let maxY = -Infinity;
+
+				// Encuentra las coordenadas y mínima y máxima en la máscara
+				for (const { x, y } of mask) {
+					if (y < minY) {
+						minY = y;
+					}
+					if (y > maxY) {
+						maxY = y;
+					}
+				}
+
+				// Calcula la diferencia de coordenadas y en píxeles
+				const diferenciaYMinYmax = maxY - minY;
+
+				return diferenciaYMinYmax;
+			}
+
 			//* LLamamos a la funcion para obtener las mascaras de las iamgenes de frente y perfil
 			maskFrente = obtenerMask(segmentacionFrente);
 			maskPerfil = obtenerMask(segmentacionPerfil);
@@ -507,6 +528,12 @@ async function imagesTensorFlow() {
 			//* Buscamos los puntos medios para left_shoulder y right_shoulder de la imagen de perfil para saber la coordenada x del lateral del cuerpo (no usamos el punto medio de la cadera pues en el caso de perfil no nos dara esta cota) como coordenada y tomaremos la ya calculada como punto de borde en bordeShoulder
 			centroLat = ejeLateral(leftShoulderPerfil, rightShoulderPerfil, bordeShoulder, bordeHip); // VARIABLE GLOBAL
 			console.log('centroLat', centroLat); // Muestra centroLat = {cenLatHom: {x, y}, cenLatCad: {x, y}, cenLatX:x}
+
+			//----------------------------
+
+			//* Obtenemos la estatura de la silueta, (diferencia entre la coordenada y mas grande y la mas pequenia)
+			estaturaSiluetaFrente = obtenerEstaturaSilueta(maskFrente); // Obtenemos las dimendión en el eje y de la máscara para leugo escalarla con el dato obtenido del formulario
+			estaturaSiluetaPerfil = obtenerEstaturaSilueta(maskPerfil); // Obtenemos las dimendión en el eje y de la máscara para leugo escalarla con el dato obtenido del formulario
 
 			//----------------------------
 
