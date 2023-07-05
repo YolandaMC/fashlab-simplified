@@ -8,16 +8,6 @@ function dibujarSilueta() {
 	const svg = document.querySelector('.body-viewer');
 	const SVG_NS = 'http://www.w3.org/2000/svg';
 
-	//Calculemos la escala de representacion en función del svg
-	//Ratio para mantener la proporción 640x480 pero poder emplear medidas en cm
-	// const ratio = 640 / 480;
-	// // Variable que me permite establecer el tamaño del svg
-	// const svgSize = {
-	// 	//medidas en cm
-	// 	width: 200 * ratio,
-	// 	height: 200,
-	// };
-
 	//* Establezco una escala de transformación para todos los elementos svg para poder trabajar con las unidades en cm y se visualicen en puntos (pt) en la pantalla*//
 	//let dpr = window.devicePixelRatio; //TODO Diferencia entre pixel CSS y pixel fisico (tamaño pantalla x ejem) el DPR (Device Pixel Ratio) DPR = pixel fisico/pixel css
 	//console.log('dpr', dpr); //https://www.quirksmode.org/blog/archives/2012/06/devicepixelrati.html
@@ -210,4 +200,40 @@ function dibujarSilueta() {
 	pintarPtos(centroLat.cenLatCad, svg, refxPerfil, colorPtosBorPerfil, escalaSiluetaPerfil);
 
 	//-------------------------
+
+	//* Pintar puntos clickados por el usuario guardados en las variables ptosFrente y ptosPerfil declaradas en datos-formulario.js
+	function pintarPtosClick(puntos, svg, refx, color, escalaSilueta) {
+		// let index = 1;
+
+		for (let punto in puntos) {
+			const x = Math.round(puntos[punto].x);
+			const y = Math.round(puntos[punto].y);
+
+			const circle = document.createElementNS(SVG_NS, 'circle');
+			circle.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
+			circle.setAttribute('cx', x + refx);
+			circle.setAttribute('cy', y + refy);
+			circle.setAttribute('r', 2);
+			circle.setAttribute('fill', color);
+			circle.setAttribute('stroke-width', '1');
+			svg.appendChild(circle);
+
+			const textCircle = document.createElementNS(SVG_NS, 'text');
+			textCircle.setAttributeNS(null, 'transform', 'scale(' + escalaSilueta + ')');
+			textCircle.setAttributeNS(null, 'x', x + refx + 2);
+			textCircle.setAttributeNS(null, 'y', y + refy);
+			textCircle.setAttributeNS(null, 'font-size', 5);
+			textCircle.setAttributeNS(null, 'font-weight', '600');
+			textCircle.setAttributeNS(null, 'fill', '#878787');
+			// textCircle.textContent = index + 'º';
+			textCircle.textContent = Object.keys(puntos).indexOf(punto) + 1 + 'º';
+			svg.appendChild(textCircle);
+			// index++;
+		}
+	}
+
+	const colorPtosClickFrente = '#7b75b4';
+	const colorPtosClickPerfil = '#5b8fc6';
+	pintarPtosClick(ptosFrente, svg, refxFrente, colorPtosClickFrente, escalaSiluetaFrente);
+	pintarPtosClick(ptosPerfil, svg, refxPerfil, colorPtosClickPerfil, escalaSiluetaPerfil);
 }

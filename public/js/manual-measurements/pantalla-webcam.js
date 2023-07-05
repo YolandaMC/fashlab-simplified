@@ -184,7 +184,7 @@ function pantallaWebcam() {
 			setTimeout(function () {
 				//document.body.removeChild(span);
 				contenedorVideo.removeChild(span);
-				
+
 				//* Creo los elementos en el DOM que me permiten mostrar las capturas realizadas
 				canvasCapturas = document.createElement('canvas'); // Lo voy a crear más tarde mediante JS
 				canvasCapturas.id = 'canvas-capturas';
@@ -244,7 +244,7 @@ function pantallaWebcam() {
 			// Verificar si ya se han seleccionado todos los puntos clave
 			if (Object.keys(ptosFrente).length < ptosClave.length) {
 				const punto = ptosClave[Object.keys(ptosFrente).length];
-				ptosFrente[punto] = [x, y];
+				ptosFrente[punto] = { x, y }; //ptosFrente[punto] = [x, y];
 				dibujarPunto(x, y);
 			}
 
@@ -284,7 +284,7 @@ function pantallaWebcam() {
 			// Verificar si ya se han seleccionado todos los puntos clave
 			if (Object.keys(ptosPerfil).length < ptosClave.length) {
 				const punto = ptosClave[Object.keys(ptosPerfil).length];
-				ptosPerfil[punto] = [x, y];
+				ptosPerfil[punto] = { x, y }; //ptosPerfil[punto] = [x, y];
 				dibujarPunto(x, y);
 			}
 
