@@ -19,7 +19,7 @@ async function bodyViewer() {
 	fondo.appendChild(svg);
 
 	//Ratio para mantener la proporción 640x480 pero poder emplear medidas en cm
-	const ratio = 640/480;
+	const ratio = 640/480; // No necesaria esta proporcion de las imagenes pero se va a usar
 	// Variable que me permite establecer el tamaño del svg
 	const svgSize = {
 		//medidas en cm
@@ -27,8 +27,6 @@ async function bodyViewer() {
 		height: 200,
 	};
 	// Establece el tamaño del SVG según las dimensiones de las imágenes
-	// svg.setAttribute('width', imgFrente.width);
-	// svg.setAttribute('height', imgFrente.height);
 	svg.setAttribute('width', svgSize.width);
 	svg.setAttribute('height', svgSize.height);
 
@@ -36,8 +34,7 @@ async function bodyViewer() {
 
 	//* Establezco una escala de transformación para todos los elementos svg para poder trabajar con las unidades en cm y se visualicen en puntos (pt) en la pantalla*//
 	const scale = 28.34645669; //28.34645669 pt = 1cm con pt como unidad por defecto para svg  1cm = 35.43307 pixels
-	//const scale = 35.43307;
-	//TODO Diferencia entre pixel CSS y pixel fisico (tamaño pantalla x ejem) el DPR (Device Pixel Ratio) DPR = pixel fisico/pixel css
+	// Diferencia entre pixel CSS y pixel fisico (tamaño pantalla x ejem) el DPR (Device Pixel Ratio) DPR = pixel fisico/pixel css
 
 	// -----------------------
 

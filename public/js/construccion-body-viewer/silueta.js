@@ -10,13 +10,13 @@ function dibujarSilueta() {
 
 	//Calculemos la escala de representacion en función del svg
 	//Ratio para mantener la proporción 640x480 pero poder emplear medidas en cm
-	const ratio = 640 / 480;
-	// Variable que me permite establecer el tamaño del svg
-	const svgSize = {
-		//medidas en cm
-		width: 200 * ratio,
-		height: 200,
-	};
+	// const ratio = 640 / 480;
+	// // Variable que me permite establecer el tamaño del svg
+	// const svgSize = {
+	// 	//medidas en cm
+	// 	width: 200 * ratio,
+	// 	height: 200,
+	// };
 
 	//* Establezco una escala de transformación para todos los elementos svg para poder trabajar con las unidades en cm y se visualicen en puntos (pt) en la pantalla*//
 	//let dpr = window.devicePixelRatio; //TODO Diferencia entre pixel CSS y pixel fisico (tamaño pantalla x ejem) el DPR (Device Pixel Ratio) DPR = pixel fisico/pixel css
