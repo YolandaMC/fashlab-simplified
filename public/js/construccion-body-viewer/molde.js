@@ -159,7 +159,9 @@ function dibujarMolde() {
 
 	// -----------------------
 	// -----------------------
-
+	//* Coordenadas para el texto y sus líneas
+	let coorText1 = 50;
+	let coorText2 = 1;
 	// -----------------------
 	// -----------------------
 
@@ -308,9 +310,11 @@ function dibujarMolde() {
 		rectDelInf.setAttributeNS(null, 'width', medidasHz.cadera / 2 + hCad);
 		rectDelInf.setAttributeNS(null, 'height', medidasVr.largcadera);
 		gConstruc.appendChild(rectDelInf);
+
 		// -----------------------
 
 		// -----------------------
+
 		//* Creo línea de sisa
 		let linSisa = document.createElementNS(SVG_NS, 'line');
 		linSisa.setAttributeNS(null, 'x1', refx - anchoMax / 2);
@@ -321,7 +325,7 @@ function dibujarMolde() {
 
 		// Creo línea de sisa descrip
 		let linSisaDes = document.createElementNS(SVG_NS, 'line');
-		linSisaDes.setAttributeNS(null, 'x1', refx - anchoMax / 2 - 50);
+		linSisaDes.setAttributeNS(null, 'x1', refx - anchoMax / 2 - coorText1);
 		linSisaDes.setAttributeNS(null, 'y1', refy - altSisa);
 		linSisaDes.setAttributeNS(null, 'x2', refx - anchoMax / 2);
 		linSisaDes.setAttributeNS(null, 'y2', refy - altSisa);
@@ -329,11 +333,13 @@ function dibujarMolde() {
 
 		// Creo texto línea de sisa descrip
 		let textSisaDes = document.createElementNS(SVG_NS, 'text');
-		textSisaDes.setAttributeNS(null, 'x', refx - anchoMax / 2 - 50);
-		textSisaDes.setAttributeNS(null, 'y', refy - altSisa);
-		textSisaDes.setAttributeNS(null, 'font-size', 12);
+		textSisaDes.setAttributeNS(null, 'x', refx - anchoMax / 2 - coorText1);
+		textSisaDes.setAttributeNS(null, 'y', refy - altSisa - coorText2);
+		textSisaDes.setAttributeNS(null, 'font-size', 2.5);
 		textSisaDes.textContent = 'Línea de sisa';
 		gConstruc.appendChild(textSisaDes);
+
+		// -----------------------
 
 		//* Creo línea de espalda
 		let linEspHz = document.createElementNS(SVG_NS, 'line');
@@ -342,6 +348,24 @@ function dibujarMolde() {
 		linEspHz.setAttributeNS(null, 'x2', refx - anchoMax / 2 + medidasHz.espalda);
 		linEspHz.setAttributeNS(null, 'y2', refy - altEspalda);
 		gConstruc.appendChild(linEspHz);
+
+		// Creo línea de espalda descrip
+		let linEspHzDes = document.createElementNS(SVG_NS, 'line');
+		linEspHzDes.setAttributeNS(null, 'x1', refx - anchoMax / 2 - coorText1);
+		linEspHzDes.setAttributeNS(null, 'y1', refy - altEspalda);
+		linEspHzDes.setAttributeNS(null, 'x2', refx - anchoMax / 2);
+		linEspHzDes.setAttributeNS(null, 'y2', refy - altEspalda);
+		gConstruc.appendChild(linEspHzDes);
+
+		// Creo texto línea de espalda descrip
+		let textEspHzDes = document.createElementNS(SVG_NS, 'text');
+		textEspHzDes.setAttributeNS(null, 'x', refx - anchoMax / 2 - coorText1);
+		textEspHzDes.setAttributeNS(null, 'y', refy - altEspalda - coorText2);
+		textEspHzDes.setAttributeNS(null, 'font-size', 2.5);
+		textEspHzDes.textContent = 'Línea de espalda';
+		gConstruc.appendChild(textEspHzDes);
+
+		// -----------------------
 
 		//* Creo línea de costadillo espalda
 		let linCostaEsp = document.createElementNS(SVG_NS, 'line');
