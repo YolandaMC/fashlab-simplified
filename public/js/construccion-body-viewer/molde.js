@@ -313,6 +313,142 @@ function dibujarMolde() {
 
 		// -----------------------
 
+		// Creo línea de centro espalda descrip
+		let linCenEspDes = document.createElementNS(SVG_NS, 'line');
+		linCenEspDes.setAttributeNS(null, 'x1', refx - anchoMax / 2);
+		linCenEspDes.setAttributeNS(null, 'y1', refy + medidasVr.largcadera);
+		linCenEspDes.setAttributeNS(null, 'x2', refx - anchoMax / 2);
+		linCenEspDes.setAttributeNS(null, 'y2', refy + medidasVr.largcadera + coorText1);
+		gConstruc.appendChild(linCenEspDes);
+
+		// Creo texto línea de centro espalda descrip
+		let textCenEspDes = document.createElementNS(SVG_NS, 'text');
+		textCenEspDes.setAttributeNS(null, 'x', refx - anchoMax / 2 + coorText2);
+		textCenEspDes.setAttributeNS(null, 'y', refy + medidasVr.largcadera + coorText1);
+		textCenEspDes.setAttributeNS(null, 'font-size', 2.5);
+		textCenEspDes.textContent = 'Línea centro espalda';
+		gConstruc.appendChild(textCenEspDes);
+
+		// -----------------------
+
+		// Creo línea de centro delantero descrip
+		let linCenDelDes = document.createElementNS(SVG_NS, 'line');
+		linCenDelDes.setAttributeNS(null, 'x1', refx + anchoMax / 2);
+		linCenDelDes.setAttributeNS(null, 'y1', refy + medidasVr.largcadera);
+		linCenDelDes.setAttributeNS(null, 'x2', refx + anchoMax / 2);
+		linCenDelDes.setAttributeNS(null, 'y2', refy + medidasVr.largcadera + (1 / 5) * coorText1);
+		gConstruc.appendChild(linCenDelDes);
+
+		// Creo texto línea de centro delantero descrip
+		let textCenDelDes = document.createElementNS(SVG_NS, 'text');
+		textCenDelDes.setAttributeNS(null, 'x', refx + anchoMax / 2 + coorText2);
+		textCenDelDes.setAttributeNS(null, 'y', refy + medidasVr.largcadera + (1 / 5) * coorText1);
+		textCenDelDes.setAttributeNS(null, 'font-size', 2.5);
+		textCenDelDes.textContent = 'Línea centro delantero';
+		gConstruc.appendChild(textCenDelDes);
+
+		// -----------------------
+
+		// Creo línea de largo espalda descrip
+		let linLargEspDes = document.createElementNS(SVG_NS, 'line');
+		linLargEspDes.setAttributeNS(null, 'x1', refx - anchoMax / 2);
+		linLargEspDes.setAttributeNS(null, 'y1', refy - medidasVr.largespalda);
+		linLargEspDes.setAttributeNS(null, 'x2', refx - anchoMax / 2 - coorText1);
+		linLargEspDes.setAttributeNS(null, 'y2', refy - medidasVr.largespalda);
+		gConstruc.appendChild(linLargEspDes);
+
+		// Creo texto línea de largo espalda descrip
+		let textLargEspDes = document.createElementNS(SVG_NS, 'text');
+		textLargEspDes.setAttributeNS(null, 'x', refx - anchoMax / 2 - coorText1);
+		textLargEspDes.setAttributeNS(null, 'y', refy - medidasVr.largespalda - coorText2);
+		textLargEspDes.setAttributeNS(null, 'font-size', 2.5);
+		textLargEspDes.textContent = 'Línea largo de talle espalda';
+		gConstruc.appendChild(textLargEspDes);
+
+		// -----------------------
+
+		// Creo línea de largo delantero descrip
+		let linLargDelDes = document.createElementNS(SVG_NS, 'line');
+		linLargDelDes.setAttributeNS(null, 'x1', refx + anchoMax / 2);
+		linLargDelDes.setAttributeNS(null, 'y1', refy - medidasVr.largdelantero);
+		linLargDelDes.setAttributeNS(null, 'x2', refx + anchoMax / 2 + coorText1);
+		linLargDelDes.setAttributeNS(null, 'y2', refy - medidasVr.largdelantero);
+		gConstruc.appendChild(linLargDelDes);
+
+		// Creo texto línea de largo delantero descrip
+		let textLargDelDes = document.createElementNS(SVG_NS, 'text');
+		textLargDelDes.setAttributeNS(null, 'x', refx + anchoMax / 2 + coorText1);
+		textLargDelDes.setAttributeNS(null, 'y', refy - medidasVr.largdelantero - coorText2);
+		textLargDelDes.setAttributeNS(null, 'font-size', 2.5);
+		textLargDelDes.textContent = 'Línea largo de talle delantero';
+		gConstruc.appendChild(textLargDelDes);
+
+		// -----------------------
+
+		// Creo línea de largo talle descrip
+		let linLargTalleDelDes = document.createElementNS(SVG_NS, 'line');
+		linLargTalleDelDes.setAttributeNS(null, 'x1', refx + anchoMax / 2);
+		linLargTalleDelDes.setAttributeNS(null, 'y1', refy);
+		linLargTalleDelDes.setAttributeNS(null, 'x2', refx + anchoMax / 2 + coorText1);
+		linLargTalleDelDes.setAttributeNS(null, 'y2', refy);
+		gConstruc.appendChild(linLargTalleDelDes);
+
+		let linLargTalleEspDes = document.createElementNS(SVG_NS, 'line');
+		linLargTalleEspDes.setAttributeNS(null, 'x1', refx - anchoMax / 2);
+		linLargTalleEspDes.setAttributeNS(null, 'y1', refy);
+		linLargTalleEspDes.setAttributeNS(null, 'x2', refx - anchoMax / 2 - coorText1);
+		linLargTalleEspDes.setAttributeNS(null, 'y2', refy);
+		gConstruc.appendChild(linLargTalleEspDes);
+
+		// Creo texto línea de largo talle descrip
+		let textLargTalleDelDes = document.createElementNS(SVG_NS, 'text');
+		textLargTalleDelDes.setAttributeNS(null, 'x', refx + anchoMax / 2 + coorText1);
+		textLargTalleDelDes.setAttributeNS(null, 'y', refy - coorText2);
+		textLargTalleDelDes.setAttributeNS(null, 'font-size', 2.5);
+		textLargTalleDelDes.textContent = 'Línea de talle';
+		gConstruc.appendChild(textLargTalleDelDes);
+
+		let textLargTalleEspDes = document.createElementNS(SVG_NS, 'text');
+		textLargTalleEspDes.setAttributeNS(null, 'x', refx - anchoMax / 2 - coorText1);
+		textLargTalleEspDes.setAttributeNS(null, 'y', refy - coorText2);
+		textLargTalleEspDes.setAttributeNS(null, 'font-size', 2.5);
+		textLargTalleEspDes.textContent = 'Línea de talle';
+		gConstruc.appendChild(textLargTalleEspDes);
+
+		// -----------------------
+
+		// Creo línea de largo cadera descrip
+		let linLargCadDelDes = document.createElementNS(SVG_NS, 'line');
+		linLargCadDelDes.setAttributeNS(null, 'x1', refx + anchoMax / 2);
+		linLargCadDelDes.setAttributeNS(null, 'y1', refy + medidasVr.largcadera);
+		linLargCadDelDes.setAttributeNS(null, 'x2', refx + anchoMax / 2 + coorText1);
+		linLargCadDelDes.setAttributeNS(null, 'y2', refy + medidasVr.largcadera);
+		gConstruc.appendChild(linLargCadDelDes);
+
+		let linLargCadEspDes = document.createElementNS(SVG_NS, 'line');
+		linLargCadEspDes.setAttributeNS(null, 'x1', refx - anchoMax / 2);
+		linLargCadEspDes.setAttributeNS(null, 'y1', refy + medidasVr.largcadera);
+		linLargCadEspDes.setAttributeNS(null, 'x2', refx - anchoMax / 2 - coorText1);
+		linLargCadEspDes.setAttributeNS(null, 'y2', refy + medidasVr.largcadera);
+		gConstruc.appendChild(linLargCadEspDes);
+
+		// Creo texto línea de largo cadera descrip
+		let textLargCadDelDes = document.createElementNS(SVG_NS, 'text');
+		textLargCadDelDes.setAttributeNS(null, 'x', refx + anchoMax / 2 + coorText1);
+		textLargCadDelDes.setAttributeNS(null, 'y', refy + medidasVr.largcadera - coorText2);
+		textLargCadDelDes.setAttributeNS(null, 'font-size', 2.5);
+		textLargCadDelDes.textContent = 'Línea de cadera';
+		gConstruc.appendChild(textLargCadDelDes);
+
+		let textLargCadEspDes = document.createElementNS(SVG_NS, 'text');
+		textLargCadEspDes.setAttributeNS(null, 'x', refx - anchoMax / 2 - coorText1);
+		textLargCadEspDes.setAttributeNS(null, 'y', refy + medidasVr.largcadera - coorText2);
+		textLargCadEspDes.setAttributeNS(null, 'font-size', 2.5);
+		textLargCadEspDes.textContent = 'Línea de cadera';
+		gConstruc.appendChild(textLargCadEspDes);
+
+		// -----------------------
+
 		// -----------------------
 
 		//* Creo línea de sisa
@@ -375,6 +511,24 @@ function dibujarMolde() {
 		linCostaEsp.setAttributeNS(null, 'y2', refy - medidasVr.largespalda);
 		gConstruc.appendChild(linCostaEsp);
 
+		// Creo línea de costadillo espalda descrip
+		let linCostaEspDes = document.createElementNS(SVG_NS, 'line');
+		linCostaEspDes.setAttributeNS(null, 'x1', refx - anchoMax / 2 + anchoEsp);
+		linCostaEspDes.setAttributeNS(null, 'y1', refy + medidasVr.largcadera);
+		linCostaEspDes.setAttributeNS(null, 'x2', refx - anchoMax / 2 + anchoEsp);
+		linCostaEspDes.setAttributeNS(null, 'y2', refy + medidasVr.largcadera + (4 / 5) * coorText1);
+		gConstruc.appendChild(linCostaEspDes);
+
+		// Creo texto línea de costadillo espalda descrip
+		let textCostaEspDes = document.createElementNS(SVG_NS, 'text');
+		textCostaEspDes.setAttributeNS(null, 'x', refx - anchoMax / 2 + anchoEsp + coorText2);
+		textCostaEspDes.setAttributeNS(null, 'y', refy + medidasVr.largcadera + (4 / 5) * coorText1);
+		textCostaEspDes.setAttributeNS(null, 'font-size', 2.5);
+		textCostaEspDes.textContent = 'Línea de costadillo espalda';
+		gConstruc.appendChild(textCostaEspDes);
+
+		// -----------------------
+
 		//* Creo línea de lateral espalda
 		let linLateralEsp = document.createElementNS(SVG_NS, 'line');
 		linLateralEsp.setAttributeNS(null, 'x1', refx - anchoMax / 2 + anchoEsp + anchoCos / 2); // anchoCos = (2 / 8) * medidasHz.torax + holgura
@@ -387,9 +541,27 @@ function dibujarMolde() {
 		let linLateralDel = document.createElementNS(SVG_NS, 'line');
 		linLateralDel.setAttributeNS(null, 'x1', refx + anchoMax / 2 - (anchoDel + anchoCos / 2));
 		linLateralDel.setAttributeNS(null, 'y1', refy);
-		linLateralDel.setAttributeNS(null, 'x2', refx + anchoMax / 2 - (anchoDel + anchoCos / 2)); //TODO
+		linLateralDel.setAttributeNS(null, 'x2', refx + anchoMax / 2 - (anchoDel + anchoCos / 2));
 		linLateralDel.setAttributeNS(null, 'y2', refy - medidasVr.largdelantero);
 		gConstruc.appendChild(linLateralDel);
+
+		// Creo línea de lateral descrip
+		let linLateralDes = document.createElementNS(SVG_NS, 'line');
+		linLateralDes.setAttributeNS(null, 'x1', refx - anchoMax / 2 + anchoEsp + anchoCos / 2);
+		linLateralDes.setAttributeNS(null, 'y1', refy + medidasVr.largcadera);
+		linLateralDes.setAttributeNS(null, 'x2', refx - anchoMax / 2 + anchoEsp + anchoCos / 2);
+		linLateralDes.setAttributeNS(null, 'y2', refy + medidasVr.largcadera + (3 / 5) * coorText1);
+		gConstruc.appendChild(linLateralDes);
+
+		// Creo texto línea de lateral descrip
+		let textLateralDes = document.createElementNS(SVG_NS, 'text');
+		textLateralDes.setAttributeNS(null, 'x', refx - anchoMax / 2 + anchoEsp + anchoCos / 2 + coorText2);
+		textLateralDes.setAttributeNS(null, 'y', refy + medidasVr.largcadera + (3 / 5) * coorText1);
+		textLateralDes.setAttributeNS(null, 'font-size', 2.5);
+		textLateralDes.textContent = 'Línea de lateral';
+		gConstruc.appendChild(textLateralDes);
+
+		// -----------------------
 
 		//* Creo línea de costadillo delantero
 		let linCostaDel = document.createElementNS(SVG_NS, 'line');
@@ -398,6 +570,24 @@ function dibujarMolde() {
 		linCostaDel.setAttributeNS(null, 'x2', refx + anchoMax / 2 - anchoDel);
 		linCostaDel.setAttributeNS(null, 'y2', refy - medidasVr.largdelantero);
 		gConstruc.appendChild(linCostaDel);
+
+		// Creo línea de costadillo delantero descrip
+		let linCostaDelDes = document.createElementNS(SVG_NS, 'line');
+		linCostaDelDes.setAttributeNS(null, 'x1', refx + anchoMax / 2 - anchoDel);
+		linCostaDelDes.setAttributeNS(null, 'y1', refy + medidasVr.largcadera);
+		linCostaDelDes.setAttributeNS(null, 'x2', refx + anchoMax / 2 - anchoDel);
+		linCostaDelDes.setAttributeNS(null, 'y2', refy + medidasVr.largcadera + (2 / 5) * coorText1);
+		gConstruc.appendChild(linCostaDelDes);
+
+		// Creo texto línea de costadillo delantero descrip
+		let textCostaDelDes = document.createElementNS(SVG_NS, 'text');
+		textCostaDelDes.setAttributeNS(null, 'x', refx + anchoMax / 2 - anchoDel + coorText2);
+		textCostaDelDes.setAttributeNS(null, 'y', refy + medidasVr.largcadera + (2 / 5) * coorText1);
+		textCostaDelDes.setAttributeNS(null, 'font-size', 2.5);
+		textCostaDelDes.textContent = 'Línea de costadillo delantero';
+		gConstruc.appendChild(textCostaDelDes);
+
+		// -----------------------
 
 		//* Creo línea torax delantero
 		let linToxDelAux = document.createElementNS(SVG_NS, 'line');
@@ -457,6 +647,22 @@ function dibujarMolde() {
 		);
 		linSepPDer.setAttributeNS(null, 'y2', refy - medidasVr.largdelantero);
 		gConstruc.appendChild(linSepPDer);
+
+		// Creo línea de separación de pecho descrip
+		let linSepPechoDes = document.createElementNS(SVG_NS, 'line');
+		linSepPechoDes.setAttributeNS(null, 'x1', +anchoMax / 2 - (medidasHz.dhp + medidasHz.seppecho));
+		linSepPechoDes.setAttributeNS(null, 'y1', refy - medidasVr.largdelantero);
+		linSepPechoDes.setAttributeNS(null, 'x2', +anchoMax / 2 - (medidasHz.dhp + medidasHz.seppecho));
+		linSepPechoDes.setAttributeNS(null, 'y2', refy - medidasVr.largdelantero - (1 / 5) * coorText1);
+		gConstruc.appendChild(linSepPechoDes);
+
+		// Creo texto línea de separación de pecho descrip
+		let textSepPechoDes = document.createElementNS(SVG_NS, 'text');
+		textSepPechoDes.setAttributeNS(null, 'x', +anchoMax / 2 - (medidasHz.dhp + medidasHz.seppecho) + coorText2);
+		textSepPechoDes.setAttributeNS(null, 'y', refy - medidasVr.largdelantero - (1 / 5) * coorText1);
+		textSepPechoDes.setAttributeNS(null, 'font-size', 2.5);
+		textSepPechoDes.textContent = 'Línea de separación de pecho';
+		gConstruc.appendChild(textSepPechoDes);
 
 		// -----------------------
 
@@ -722,7 +928,23 @@ function dibujarMolde() {
 		gConstruc.appendChild(linHomDelInf);
 
 		// -----------------------
-		//!
+		// -----------------------
+
+		// Creo línea de largo pecho descrip
+		let linPechoDes = document.createElementNS(SVG_NS, 'line');
+		linPechoDes.setAttributeNS(null, 'x1', refx + anchoMax / 2 - (medidasHz.dhp + medidasHz.seppecho));
+		linPechoDes.setAttributeNS(null, 'y1', refy - altPnz);
+		linPechoDes.setAttributeNS(null, 'x2', refx + anchoMax / 2 + coorText1);
+		linPechoDes.setAttributeNS(null, 'y2', refy - altPnz);
+		gConstruc.appendChild(linPechoDes);
+
+		// Creo texto línea de largo pecho descrip
+		let textPechoDes = document.createElementNS(SVG_NS, 'text');
+		textPechoDes.setAttributeNS(null, 'x', refx + anchoMax / 2 + coorText1);
+		textPechoDes.setAttributeNS(null, 'y', refy - altPnz - coorText2);
+		textPechoDes.setAttributeNS(null, 'font-size', 2.5);
+		textPechoDes.textContent = 'Línea de pecho';
+		gConstruc.appendChild(textPechoDes);
 	}
 
 	// -----------------------
