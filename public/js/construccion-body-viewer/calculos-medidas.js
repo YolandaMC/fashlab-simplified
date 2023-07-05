@@ -79,6 +79,9 @@ function dibujarMolde() {
 
 	// -----------------------
 	// -----------------------
+	//! Seguir revisando el ancho al generar el patrón porque cuando la cintura es grande se solapan los moldes
+	// -----------------------
+	// -----------------------
 
 	//* Calculos para hacer que mi dibujo en la pantalla no se superponga la construcción del molde o patron delantero y espalda *//
 	/* Establezco el ancho de mi dibujo del patrón en base al ancho maximo que 
@@ -107,7 +110,7 @@ function dibujarMolde() {
 		console.log('totalEnt ' + totalEnt);
 	}
 
-	//* Establezco el valor para cada entalle*//
+	//* Establezco el valor apra cada entalle*//
 	let entCentEsp = (3 * totalEnt) / 6;
 	let entCostEsp = (2 * totalEnt) / 6;
 	let entLateral = totalEnt / 6;
@@ -129,7 +132,6 @@ function dibujarMolde() {
 	const refx = 0; // (anchoMax - (anchoMax)) / 2 En el caso del eje x la construcción del patrón ya lo ubica en el centro
 	//const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - (5 * medidasVr.largcadera) / 2; // Tomar como referencia linea de cadera
 	const refy = (medidasVr.largdelantero + medidasVr.largcadera) / 2 - 2 * medidasVr.largcadera; // puntos trackeo cadera silueta en la línea de petit hanches, no la línea de cadera
-
 	// -----------------------
 	// -----------------------
 
@@ -137,13 +139,13 @@ function dibujarMolde() {
 	let anchoEspCos = (4 / 8) * medidasHz.torax + (3 / 2) * holgura;
 	let anchoDelCos = anchoEspCos + medidasHz.dhp;
 
-	//* Medidas verticales construcción patrón
+	// Medidas verticales construcción patrón
 	let altSisa = medidasVr.largespalda / 2;
 	let altEspalda = (3 / 4) * medidasVr.largespalda;
 	let cajaCue = medidasHz.pecho / 8;
 	let altPnz = altSisa - 2.5; //Altura del pezón (2.5 es una medida arbitraria del pezon respecto de la líena de sisa)
 
-	//* Medidas horizontales construcción patrón
+	// Medidas horizontales construcción patrón
 	/* El torax se divide en tres zonas: espalda, costado y delantero, por arbitrariedad/estudio de proporciones del cuerpo humano
 	tomaremos que la espalda comprende 3/8 de la medida de medio contorno de pecho/torax (segun corresponda); el costado le
 	corresponden 2/8, y a al delantero 3/8 más el desarrollo de pecho horizontal en caso de mujeres (dhp). A cada una de estas 
@@ -156,9 +158,6 @@ function dibujarMolde() {
 
 	let subPtaHomEsp = cajaCue / 4;
 	let ptaHomEsp = medidasVr.largespalda + subPtaHomEsp;
-
-	// -----------------------
-	// -----------------------
 
 	// -----------------------
 	// -----------------------
@@ -206,12 +205,20 @@ function dibujarMolde() {
 		(refx +
 			anchoMax / 2 -
 			(medidasHz.dhp + medidasHz.seppecho) -
-			(refx + anchoMax / 2 - (cajaCue + desplinEsternon) - (Math.cos(angHombro) * medidasVr.hombro) / 2) +
+			(refx + anchoMax / 2 - (cajaCue + desplinEsternon) - (Math.cos(angHombro) * medidasVr.hombro) / 2) + //añadido 2 * medidasHz.dhp
 			2 * medidasHz.dhp) /
 			(refy -
 				altPnz -
 				(refy - (medidasVr.costadillo + medidasVr.dvp + subPtaHomEsp) + (Math.sin(angHombro) * medidasVr.hombro) / 2))
 	);
+	// console.log(
+	// 	'a+d ' +
+	// 		(refx +
+	// 			anchoMax / 2 -
+	// 			(medidasHz.dhp + medidasHz.seppecho) -
+	// 			(refx + anchoMax / 2 - (cajaCue + desplinEsternon) - (Math.cos(angHombro) * medidasVr.hombro) / 2) +
+	// 			2 * medidasHz.dhp)
+	// );
 	console.log('angPnzInfV ' + angPnzInfV);
 	console.log('angPnzInfV grados ' + angPnzInfV * (180 / Math.PI));
 
@@ -224,7 +231,8 @@ function dibujarMolde() {
 	// -----------------------
 
 	//* Establezco una escala de transformación para todos los elementos svg para poder trabajar con las unidades en cm y se visualicen en puntos (pt) en la pantalla*//
-	const scale = 28.34645669; //28.34645669 pt = 1cm con pt como unidad por defecto para svg  1cm = 35.43307 pixels
+	const scale = 28.34645669; //28.34645669 pt = 1cm con pt como unidad por defecto para svg  1cm = 35.43307 pixels //Declarada en body-viewer.js
+	//TODO Diferencia entre pixel CSS y pixel fisico (tamaño pantalla x ejem) el DPR (Device Pixel Ratio) DPR = pixel fisico/pixel css
 
 	// -----------------------
 	// -----------------------
@@ -279,9 +287,9 @@ function dibujarMolde() {
 
 		//* Creo un rectangulo que inscribe la espalda superior
 		let rectEspSup = document.createElementNS(SVG_NS, 'rect');
-		rectEspSup.setAttributeNS(null, 'x', refx - anchoMax / 2);
-		rectEspSup.setAttributeNS(null, 'y', refy - medidasVr.largespalda);
-		rectEspSup.setAttributeNS(null, 'width', anchoEspCos); //3/8Tespalda+holguraespalda+1/8T+1/2holguracostado correspondiente solo a medio costado. anchoEspCos = (4 / 8) * medidasHz.torax + (3 / 2) * holgura
+		rectEspSup.setAttributeNS(null, 'x', refx - anchoMax / 2); // rectEspSup.setAttributeNS(null, 'x', refx + '-' + anchoMax / 2);
+		rectEspSup.setAttributeNS(null, 'y', refy - medidasVr.largespalda); // rectEspSup.setAttributeNS(null, 'y', '-' + medidasVr.largespalda);
+		rectEspSup.setAttributeNS(null, 'width', anchoEspCos); //3/8Tespalda+holguraespalda+1/8T+1/2holguracostado correspondiente sólo a medio costado. anchoEspCos = (4 / 8) * medidasHz.torax + (3 / 2) * holgura
 		rectEspSup.setAttributeNS(null, 'height', medidasVr.largespalda);
 		gConstruc.appendChild(rectEspSup);
 
@@ -314,31 +322,15 @@ function dibujarMolde() {
 		//* Creo línea de sisa
 		let linSisa = document.createElementNS(SVG_NS, 'line');
 		linSisa.setAttributeNS(null, 'x1', refx - anchoMax / 2);
-		linSisa.setAttributeNS(null, 'y1', refy - altSisa);
+		linSisa.setAttributeNS(null, 'y1', refy - altSisa); // altSisa = medidasVr.largespalda / 2
 		linSisa.setAttributeNS(null, 'x2', refx + anchoMax / 2);
 		linSisa.setAttributeNS(null, 'y2', refy - altSisa);
 		gConstruc.appendChild(linSisa);
 
-		// Creo línea de sisa descrip
-		let linSisaDes = document.createElementNS(SVG_NS, 'line');
-		linSisaDes.setAttributeNS(null, 'x1', refx - anchoMax / 2 - 50);
-		linSisaDes.setAttributeNS(null, 'y1', refy - altSisa);
-		linSisaDes.setAttributeNS(null, 'x2', refx - anchoMax / 2);
-		linSisaDes.setAttributeNS(null, 'y2', refy - altSisa);
-		gConstruc.appendChild(linSisaDes);
-
-		// Creo texto línea de sisa descrip
-		let textSisaDes = document.createElementNS(SVG_NS, 'text');
-		textSisaDes.setAttributeNS(null, 'x', refx - anchoMax / 2 - 50);
-		textSisaDes.setAttributeNS(null, 'y', refy - altSisa);
-		textSisaDes.setAttributeNS(null, 'font-size', 12);
-		textSisaDes.textContent = 'Línea de sisa';
-		gConstruc.appendChild(textSisaDes);
-
 		//* Creo línea de espalda
 		let linEspHz = document.createElementNS(SVG_NS, 'line');
 		linEspHz.setAttributeNS(null, 'x1', refx - anchoMax / 2);
-		linEspHz.setAttributeNS(null, 'y1', refy - altEspalda);
+		linEspHz.setAttributeNS(null, 'y1', refy - altEspalda); // altEspalda = (3 / 4) * medidasVr.largespalda
 		linEspHz.setAttributeNS(null, 'x2', refx - anchoMax / 2 + medidasHz.espalda);
 		linEspHz.setAttributeNS(null, 'y2', refy - altEspalda);
 		gConstruc.appendChild(linEspHz);
@@ -1013,9 +1005,7 @@ function dibujarMolde() {
 
 	// -----------------------
 	// -----------------------
-
 	//*DIBUJO EN EL SVG
-
 	// Variables para alojar los grupos que formaran el svg del molde
 	let gMarcoDelimi, gConstruc, gdelantero, gespalda, gEntalles;
 	// Creamos las líneas de construcción del patrón
@@ -1029,8 +1019,7 @@ function dibujarMolde() {
 	// -----------------------
 	// Recuperamos svg creado en body-viewer.js
 	const svg = document.querySelector('.body-viewer');
-
-	//* INCLUIMOS TODOS LOS MÓDULOS DE CONSTRUCCION EN EL SVG BODY-VIEWER.js *//
+	//* INCLUIMOS TODOS LOS MÓDULOS DE CONSTRUCCION EN EL SVG BODY-VIEWER *//
 	//svg.appendChild(gMarcoDelimi);
 	svg.appendChild(gConstruc);
 	svg.appendChild(gdelantero);
